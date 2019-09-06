@@ -6,6 +6,8 @@
 #ifndef TUPLE_H
 #define TUPLE_H
 
+const double EPSILON = 0.000001;
+
 class tuple {
     private:
         double x;
@@ -22,10 +24,10 @@ class tuple {
         static tuple vector(double x_, double y_, double z_);
 
         //getter functions
-        double getx();
-        double gety();
-        double getz();
-        double getw();
+        double getx() const;
+        double gety() const;
+        double getz() const;
+        double getw() const;
 
         bool isPoint();
         bool isVector();
@@ -35,6 +37,10 @@ class tuple {
         bool operator== (const tuple &a) const;
         tuple operator+(const tuple &a);
         tuple operator-(const tuple &a);
+        tuple operator-();
+        tuple& operator=(const tuple &a);
+        tuple operator*(const double &scalar);
+        tuple operator/(const double &scalar);
 };
 
 #endif

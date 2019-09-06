@@ -5,7 +5,6 @@
 #include "tuple.h"
 #include "math.h"
 
-const double EPSILON = 0.000001;
 
 //basic constructor
 tuple::tuple(double x_, double y_, double z_, double w_) {
@@ -26,16 +25,16 @@ tuple tuple::vector(double x_, double y_, double z_) {
 }
 
 //getter functions
-double tuple::getx() {
+double tuple::getx() const{
     return x;
 }
-double tuple::gety() {
+double tuple::gety() const{
     return y;
 }
-double tuple::getz() {
+double tuple::getz() const{
     return z;
 }
-double tuple::getw() {
+double tuple::getw() const{
     return w;
 }
 
@@ -73,3 +72,39 @@ tuple tuple::operator-(const tuple &a) {
     tuple out(x - a.x, y - a.y, z - a.z, w - a.w);
     return out;
 }
+
+//operator negate overloading
+tuple tuple::operator-() {
+    tuple out(-x, -y, -z, -w);
+    return out;
+}
+
+//operator assignment overloading
+tuple& tuple::operator=(const tuple &a) {
+    //cheking for self-assignment
+    if (this == &a) {
+        return *this;
+    }
+
+    this -> x = a.x;
+    this -> y = a.y;
+    this -> z = a.z;
+    this -> w = a.w;
+    return *this;
+}
+
+//operator * overload
+tuple tuple::operator*(const double &scalar) {
+    tuple out(x * scalar,
+              y * scalar,
+              z * scalar,
+              w * scalar);
+    return out;
+}
+
+//operator / overload
+tuple tuple::operator/(const double &scalar) {
+    tuple out = *this * (1 / scalar);
+    return out;
+}
+
