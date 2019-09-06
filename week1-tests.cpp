@@ -1,8 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include "catch.hpp"
-#include "baseclass/tuple.h"
-#include "baseclass/tuple_func.cpp"
+#include "baseclass/baseclass_headers.hpp"
 #include "math.h"
 
 TEST_CASE("A tuple with w=1.0 is a point") {
@@ -154,5 +153,36 @@ TEST_CASE("The cross product of two tuples") {
     tuple b = tuple::vector(2, 3, 4);
     tuple crossab = tuple::vector(-1, 2, -1);
     tuple crossba = tuple::vector(1, -2, 1);
-    REQUIRE(((cross(a, b) == crossab) && (cross(b, a) == crossba)) == true);
+    REQUIRE(cross(a, b) == crossab);
+    REQUIRE(cross(b, a) == crossba);
+}
+
+TEST_CASE("Colors are (red, green, blue) tuples") {
+    color a(-0.5, 0.4, 1.7);
+    REQUIRE(a.getR() == -0.5);
+    REQUIRE(a.getG() == 0.4);
+    REQUIRE(a.getB() == 1.7);
+}
+
+TEST_CASE("Adding colors") {
+    color c1(0.9, 0.6, 0.75);
+    color c2(0.7, 0.1, 0.25);
+    REQUIRE(c1 + c2 == color(1.6, 0.7, 1.0));
+}
+
+TEST_CASE("Subtracting colors") {
+    color c1(0.9, 0.6, 0.75);
+    color c2(0.7, 0.1, 0.25);
+    REQUIRE(c1 - c2 == color(0.2, 0.5, 0.5));
+}
+
+TEST_CASE("Multiplying a color by a scalar") {
+    color c(0.2, 0.3, 0.4);
+    REQUIRE(c * 2 == color(0.4, 0.6, 0.8));
+}
+
+TEST_CASE("Multiplying colors") {
+    color c1(1, 0.2, 0.4);
+    color c2(0.9, 1, 0.1);
+    REQUIRE(c1 * c2 == color(0.9, 0.2, 0.04));
 }

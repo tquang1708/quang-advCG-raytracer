@@ -2,8 +2,16 @@
  * Quang Tran - 9/4/2019
  * */
 
-#include "tuple.h"
+#include "headers/tuple.hpp"
 #include "math.h"
+
+//default constructor
+tuple::tuple() {
+    x = 0;
+    y = 0;
+    z = 0;
+    w = 0;
+}
 
 
 //basic constructor

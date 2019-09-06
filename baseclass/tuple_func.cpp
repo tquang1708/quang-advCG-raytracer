@@ -2,7 +2,8 @@
 //
 //Quang Tran - 9/5/2019
 
-#include "tuple.h"
+#include "headers/tuple.hpp"
+#include "headers/tuple_func.hpp"
 #include "math.h"
 
 //calculations

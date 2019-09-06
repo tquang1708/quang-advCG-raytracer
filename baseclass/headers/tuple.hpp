@@ -9,13 +9,16 @@
 const double EPSILON = 0.000001;
 
 class tuple {
-    private:
+    protected:
         double x;
         double y;
         double z;
         double w; //w=1 is point, w=0 is vect
 
     public:
+        //default constructor
+        tuple();
+
         //named constructor idiom found at
         //https://isocpp.org/wiki/faq/ctors#named-ctor-idiom
         tuple(double x_, double y_, double z_, double w_);
