@@ -1,4 +1,4 @@
-//tuple_func.cpp - collection of tuple functions like dot and cross products
+//Tuple_func.cpp - collection of Tuple functions like dot and cross products
 //
 //Quang Tran - 9/5/2019
 
@@ -8,7 +8,7 @@
 
 //calculations
 //finds magnitude of vector
-double magnitude(tuple a) {
+double magnitude(Tuple a) {
     double out = sqrt(a.getx() * a.getx() +
                       a.gety() * a.gety() +
                       a.getz() * a.getz());
@@ -16,13 +16,13 @@ double magnitude(tuple a) {
 }
 
 //normalize a vector (magn = 1)
-tuple normalize(tuple a) {
+Tuple normalize(Tuple a) {
     double mag = magnitude(a);
-    return tuple(a.getx() / mag, a.gety() / mag, a.getz() / mag, 0.0);
+    return Tuple(a.getx() / mag, a.gety() / mag, a.getz() / mag, 0.0);
 }
 
 //dot product of two vectors
-double dot(tuple a, tuple b) {
+double dot(Tuple a, Tuple b) {
     return (a.getx() * b.getx() +
             a.gety() * b.gety() +
             a.getz() * b.getz() +
@@ -30,8 +30,8 @@ double dot(tuple a, tuple b) {
 }
 
 //cross product of two vectors
-tuple cross(tuple a, tuple b) {
-    tuple out = tuple::vector(a.gety() * b.getz() - a.getz() * b.gety(),
+Tuple cross(Tuple a, Tuple b) {
+    Tuple out = Tuple::Vector(a.gety() * b.getz() - a.getz() * b.gety(),
                               a.getz() * b.getx() - a.getx() * b.getz(),
                               a.getx() * b.gety() - a.gety() * b.getx());
     return out;

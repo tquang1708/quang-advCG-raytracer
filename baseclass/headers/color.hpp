@@ -8,7 +8,7 @@
 
 #include "tuple.hpp"
 
-class color : public tuple {
+class color : public Tuple {
     public:
         color();
         color(double red_, double green_, double blue_);

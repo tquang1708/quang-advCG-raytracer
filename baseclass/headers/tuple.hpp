@@ -8,7 +8,7 @@
 
 const double EPSILON = 0.000001;
 
-class tuple {
+class Tuple {
     protected:
         double x;
         double y;
@@ -17,14 +17,14 @@ class tuple {
 
     public:
         //default constructor
-        tuple();
+        Tuple();
 
         //named constructor idiom found at
         //https://isocpp.org/wiki/faq/ctors#named-ctor-idiom
-        tuple(double x_, double y_, double z_, double w_);
+        Tuple(double x_, double y_, double z_, double w_);
 
-        static tuple point(double x_, double y_, double z_);
-        static tuple vector(double x_, double y_, double z_);
+        static Tuple Point(double x_, double y_, double z_);
+        static Tuple Vector(double x_, double y_, double z_);
 
         //getter functions
         double getx() const;
@@ -37,13 +37,13 @@ class tuple {
 
         //a lot of help with operator overloading taken from
         //http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
-        bool operator== (const tuple &a) const;
-        tuple operator+(const tuple &a);
-        tuple operator-(const tuple &a);
-        tuple operator-();
-        tuple& operator=(const tuple &a);
-        tuple operator*(const double &scalar);
-        tuple operator/(const double &scalar);
+        bool operator== (const Tuple &a) const;
+        Tuple operator+(const Tuple &a);
+        Tuple operator-(const Tuple &a);
+        Tuple operator-();
+        Tuple& operator=(const Tuple &a);
+        Tuple operator*(const double &scalar);
+        Tuple operator/(const double &scalar);
 };
 
 #endif

@@ -6,7 +6,7 @@
 #include "math.h"
 
 //default constructor
-tuple::tuple() {
+Tuple::Tuple() {
     x = 0;
     y = 0;
     z = 0;
@@ -15,7 +15,7 @@ tuple::tuple() {
 
 
 //basic constructor
-tuple::tuple(double x_, double y_, double z_, double w_) {
+Tuple::Tuple(double x_, double y_, double z_, double w_) {
     x = x_;
     y = y_;
     z = z_;
@@ -23,43 +23,43 @@ tuple::tuple(double x_, double y_, double z_, double w_) {
 }
 
 //point
-tuple tuple::point(double x_, double y_, double z_) {
-    return tuple(x_, y_, z_, 1.0);
+Tuple Tuple::Point(double x_, double y_, double z_) {
+    return Tuple(x_, y_, z_, 1.0);
 }
 
 //vector
-tuple tuple::vector(double x_, double y_, double z_) {
-    return tuple(x_, y_, z_, 0.0);
+Tuple Tuple::Vector(double x_, double y_, double z_) {
+    return Tuple(x_, y_, z_, 0.0);
 }
 
 //getter functions
-double tuple::getx() const{
+double Tuple::getx() const{
     return x;
 }
-double tuple::gety() const{
+double Tuple::gety() const{
     return y;
 }
-double tuple::getz() const{
+double Tuple::getz() const{
     return z;
 }
-double tuple::getw() const{
+double Tuple::getw() const{
     return w;
 }
 
 //isPoint check
-bool tuple::isPoint() {
+bool Tuple::isPoint() {
     if (w == 0.0) return false;
     else return true;
 }
 
 //isVector check
-bool tuple::isVector() {
+bool Tuple::isVector() {
     if (w == 1.0) return false;
     else return true;
 }
 
 //operator == overloading
-bool tuple::operator==(const tuple &a) const{
+bool Tuple::operator==(const Tuple &a) const{
     if ((abs(x - a.x) <= EPSILON) &&
         (abs(y - a.y) <= EPSILON) &&
         (abs(z - a.z) <= EPSILON) &&
@@ -70,25 +70,25 @@ bool tuple::operator==(const tuple &a) const{
 }
 
 //operator + overloading
-tuple tuple::operator+(const tuple &a) {
-    tuple out(x + a.x, y + a.y, z + a.z, w + a.w);
+Tuple Tuple::operator+(const Tuple &a) {
+    Tuple out(x + a.x, y + a.y, z + a.z, w + a.w);
     return out;
 }
 
 //operator - overloading
-tuple tuple::operator-(const tuple &a) {
-    tuple out(x - a.x, y - a.y, z - a.z, w - a.w);
+Tuple Tuple::operator-(const Tuple &a) {
+    Tuple out(x - a.x, y - a.y, z - a.z, w - a.w);
     return out;
 }
 
 //operator negate overloading
-tuple tuple::operator-() {
-    tuple out(-x, -y, -z, -w);
+Tuple Tuple::operator-() {
+    Tuple out(-x, -y, -z, -w);
     return out;
 }
 
 //operator assignment overloading
-tuple& tuple::operator=(const tuple &a) {
+Tuple& Tuple::operator=(const Tuple &a) {
     //cheking for self-assignment
     if (this == &a) {
         return *this;
@@ -102,8 +102,8 @@ tuple& tuple::operator=(const tuple &a) {
 }
 
 //operator * overload
-tuple tuple::operator*(const double &scalar) {
-    tuple out(x * scalar,
+Tuple Tuple::operator*(const double &scalar) {
+    Tuple out(x * scalar,
               y * scalar,
               z * scalar,
               w * scalar);
@@ -111,8 +111,8 @@ tuple tuple::operator*(const double &scalar) {
 }
 
 //operator / overload
-tuple tuple::operator/(const double &scalar) {
-    tuple out = *this * (1 / scalar);
+Tuple Tuple::operator/(const double &scalar) {
+    Tuple out = *this * (1 / scalar);
     return out;
 }
 

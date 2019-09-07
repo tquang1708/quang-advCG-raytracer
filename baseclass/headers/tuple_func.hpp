@@ -8,9 +8,9 @@
 
 #include "tuple.hpp"
 
-double magnitude(tuple a);
-tuple normalize(tuple a);
-double dot(tuple a, tuple b);
-tuple cross(tuple a, tuple b);
+double magnitude(Tuple a);
+Tuple normalize(Tuple a);
+double dot(Tuple a, Tuple b);
+Tuple cross(Tuple a, Tuple b);
 
 #endif
