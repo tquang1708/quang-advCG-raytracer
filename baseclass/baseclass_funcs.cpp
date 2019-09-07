@@ -1,9 +1,9 @@
-//Tuple_func.cpp - collection of Tuple functions like dot and cross products
-//
-//Quang Tran - 9/5/2019
+/* baseclass_funcs.cpp - functions that interacts with classes
+ * in the baseclass folder
+ * Quang Tran - 9/7/2019
+ * */
 
-#include "headers/tuple.hpp"
-#include "headers/tuple_func.hpp"
+#include "baseclass_headers.hpp"
 #include "math.h"
 
 //calculations
@@ -36,3 +36,10 @@ Tuple cross(Tuple a, Tuple b) {
                               a.getx() * b.gety() - a.gety() * b.getx());
     return out;
 }
+
+//find the position of ray's origin after time following direction
+Tuple position(Ray r, double time) {
+    Tuple out = r.getOrigin() + r.getDirection() * time;
+    return out;
+}
+

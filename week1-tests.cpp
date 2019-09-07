@@ -186,3 +186,19 @@ TEST_CASE("Multiplying colors") {
     color c2(0.9, 1, 0.1);
     REQUIRE(c1 * c2 == color(0.9, 0.2, 0.04));
 }
+
+TEST_CASE("Creating and querying a ray") {
+    Tuple origin = Tuple::Point(1, 2, 3);
+    Tuple direction = Tuple::Vector(4, 5, 6);
+    Ray r(origin, direction);
+    REQUIRE(r.getOrigin() == origin);
+    REQUIRE(r.getDirection() == direction);
+}
+
+TEST_CASE("Computing a point from a distance") {
+    Ray r(Tuple::Point(2, 3, 4), Tuple::Vector(1, 0, 0));
+    REQUIRE(position(r, 0) == Tuple::Point(2, 3, 4));
+    REQUIRE(position(r, 1) == Tuple::Point(3, 3, 4));
+    REQUIRE(position(r, -1) == Tuple::Point(1, 3, 4));
+    REQUIRE(position(r, 2.5) == Tuple::Point(4.5, 3, 4));
+}

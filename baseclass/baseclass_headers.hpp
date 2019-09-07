@@ -8,6 +8,7 @@
 
 #include "headers/color.hpp"
 #include "headers/tuple.hpp"
-#include "headers/tuple_func.hpp"
+#include "headers/ray.hpp"
+#include "headers/baseclass_funcs.hpp"
 
 #endif
