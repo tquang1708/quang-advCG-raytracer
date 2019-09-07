@@ -70,19 +70,19 @@ bool Tuple::operator==(const Tuple &a) const{
 }
 
 //operator + overloading
-Tuple Tuple::operator+(const Tuple &a) {
+Tuple Tuple::operator+(const Tuple &a) const{
     Tuple out(x + a.x, y + a.y, z + a.z, w + a.w);
     return out;
 }
 
 //operator - overloading
-Tuple Tuple::operator-(const Tuple &a) {
+Tuple Tuple::operator-(const Tuple &a) const{
     Tuple out(x - a.x, y - a.y, z - a.z, w - a.w);
     return out;
 }
 
 //operator negate overloading
-Tuple Tuple::operator-() {
+Tuple Tuple::operator-() const{
     Tuple out(-x, -y, -z, -w);
     return out;
 }
@@ -102,7 +102,7 @@ Tuple& Tuple::operator=(const Tuple &a) {
 }
 
 //operator * overload
-Tuple Tuple::operator*(const double &scalar) {
+Tuple Tuple::operator*(const double &scalar) const{
     Tuple out(x * scalar,
               y * scalar,
               z * scalar,
@@ -111,8 +111,20 @@ Tuple Tuple::operator*(const double &scalar) {
 }
 
 //operator / overload
-Tuple Tuple::operator/(const double &scalar) {
+Tuple Tuple::operator/(const double &scalar) const{
     Tuple out = *this * (1 / scalar);
     return out;
 }
 
+//other functions: calculations
+//finds magnitude of vector
+double Tuple::magnitude() const{
+    double out = sqrt(x*x + y*y + z*z);
+    return out;
+}
+
+//normalize a vector (magn = 1)
+Tuple Tuple::normalize() const{
+    double mag = this -> magnitude();
+    return Tuple(x / mag, y / mag, z / mag, 0.0);
+}

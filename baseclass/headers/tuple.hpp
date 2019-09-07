@@ -38,12 +38,16 @@ class Tuple {
         //a lot of help with operator overloading taken from
         //http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
         bool operator== (const Tuple &a) const;
-        Tuple operator+(const Tuple &a);
-        Tuple operator-(const Tuple &a);
-        Tuple operator-();
+        Tuple operator+(const Tuple &a) const;
+        Tuple operator-(const Tuple &a) const;
+        Tuple operator-() const;
         Tuple& operator=(const Tuple &a);
-        Tuple operator*(const double &scalar);
-        Tuple operator/(const double &scalar);
+        Tuple operator*(const double &scalar) const;
+        Tuple operator/(const double &scalar) const;
+
+        //other functions
+        double magnitude() const;
+        Tuple normalize() const;
 };
 
 #endif

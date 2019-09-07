@@ -101,45 +101,45 @@ TEST_CASE("Dividing a Tuple by a scalar") {
 
 TEST_CASE("Computing the magnitude of Vector(1, 0 ,0)") {
     Tuple v = Tuple::Vector(1, 0, 0);
-    REQUIRE(magnitude(v) == 1);
+    REQUIRE(v.magnitude() == 1);
 }
 
 TEST_CASE("Computing the magnitude of Vector(0, 1 ,0)") {
     Tuple v = Tuple::Vector(0, 1, 0);
-    REQUIRE(magnitude(v) == 1);
+    REQUIRE(v.magnitude() == 1);
 }
 
 TEST_CASE("Computing the magnitude of Vector(0, 0 ,1)") {
     Tuple v = Tuple::Vector(0, 0, 1);
-    REQUIRE(magnitude(v) == 1);
+    REQUIRE(v.magnitude() == 1);
 }
 
 TEST_CASE("Computing the magnitude of Vector(1, 2 ,3)") {
     Tuple v = Tuple::Vector(1, 2, 3);
-    REQUIRE(magnitude(v) == sqrt(14));
+    REQUIRE(v.magnitude() == sqrt(14));
 }
 
 TEST_CASE("Computing the magnitude of Vector(-1, -2, -3)") {
     Tuple v = Tuple::Vector(-1, -2, -3);
-    REQUIRE(magnitude(v) == sqrt(14));
+    REQUIRE(v.magnitude() == sqrt(14));
 }
 
 TEST_CASE("Normalizing Vector (4, 0, 0) gives (1, 0, 0)") {
     Tuple v = Tuple::Vector(4, 0, 0);
     Tuple res = Tuple::Vector(1, 0, 0);
-    REQUIRE(normalize(v) == res);
+    REQUIRE(v.normalize() == res);
 }
 
 TEST_CASE("Normalizing Vector (1, 2, 3)") {
     Tuple v = Tuple::Vector(1, 2, 3);
     Tuple res = Tuple::Vector(1/sqrt(14), 2/sqrt(14), 3/sqrt(14));
-    REQUIRE(normalize(v) == res);
+    REQUIRE(v.normalize() == res);
 }
 
 TEST_CASE("The magnitude of a normalized Vector") {
     Tuple v = Tuple::Vector(1, 2, 3);
-    Tuple norm = normalize(v);
-    REQUIRE(magnitude(norm) == 1);
+    Tuple norm = v.normalize();
+    REQUIRE(norm.magnitude() == 1);
 }
 
 TEST_CASE("The dot product of two Tuples") {
@@ -197,8 +197,8 @@ TEST_CASE("Creating and querying a ray") {
 
 TEST_CASE("Computing a point from a distance") {
     Ray r(Tuple::Point(2, 3, 4), Tuple::Vector(1, 0, 0));
-    REQUIRE(position(r, 0) == Tuple::Point(2, 3, 4));
-    REQUIRE(position(r, 1) == Tuple::Point(3, 3, 4));
-    REQUIRE(position(r, -1) == Tuple::Point(1, 3, 4));
-    REQUIRE(position(r, 2.5) == Tuple::Point(4.5, 3, 4));
+    REQUIRE(r.position(0) == Tuple::Point(2, 3, 4));
+    REQUIRE(r.position(1) == Tuple::Point(3, 3, 4));
+    REQUIRE(r.position(-1) == Tuple::Point(1, 3, 4));
+    REQUIRE(r.position(2.5) == Tuple::Point(4.5, 3, 4));
 }

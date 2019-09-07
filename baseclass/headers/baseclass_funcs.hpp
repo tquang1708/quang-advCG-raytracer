@@ -9,11 +9,7 @@
 #include "tuple.hpp"
 #include "ray.hpp"
 
-double magnitude(Tuple a);
-Tuple normalize(Tuple a);
 double dot(Tuple a, Tuple b);
 Tuple cross(Tuple a, Tuple b);
-
-Tuple position(Ray r, double time);
 
 #endif

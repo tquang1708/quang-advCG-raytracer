@@ -19,6 +19,9 @@ class Ray {
         //getter funcs
         Tuple getOrigin() const;
         Tuple getDirection() const;
+
+        //other funcs
+        Tuple position(double time) const;
 };
 
 #endif

@@ -25,3 +25,10 @@ Tuple Ray::getOrigin() const{
 Tuple Ray::getDirection() const{
     return direction;
 }
+
+//other functions
+//find the position of ray's origin after time following direction
+Tuple Ray::position(double time) const{
+    Tuple out = origin + direction * time;
+    return out;
+}
