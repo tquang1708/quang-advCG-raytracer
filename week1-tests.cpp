@@ -2,7 +2,9 @@
 
 #include "catch.hpp"
 #include "baseclass/baseclass_headers.hpp"
-#include "math.h"
+#include <math.h>
+#include <vector>
+#include <string>
 
 TEST_CASE("A Tuple with w=1.0 is a Point") {
     Tuple a(4.3, -4.2, 3.1, 1.0);
@@ -158,33 +160,33 @@ TEST_CASE("The cross product of two Tuples") {
 }
 
 TEST_CASE("Colors are (red, green, blue) Tuples") {
-    color a(-0.5, 0.4, 1.7);
+    Color a(-0.5, 0.4, 1.7);
     REQUIRE(a.getR() == -0.5);
     REQUIRE(a.getG() == 0.4);
     REQUIRE(a.getB() == 1.7);
 }
 
 TEST_CASE("Adding colors") {
-    color c1(0.9, 0.6, 0.75);
-    color c2(0.7, 0.1, 0.25);
-    REQUIRE(c1 + c2 == color(1.6, 0.7, 1.0));
+    Color c1(0.9, 0.6, 0.75);
+    Color c2(0.7, 0.1, 0.25);
+    REQUIRE(c1 + c2 == Color(1.6, 0.7, 1.0));
 }
 
 TEST_CASE("Subtracting colors") {
-    color c1(0.9, 0.6, 0.75);
-    color c2(0.7, 0.1, 0.25);
-    REQUIRE(c1 - c2 == color(0.2, 0.5, 0.5));
+    Color c1(0.9, 0.6, 0.75);
+    Color c2(0.7, 0.1, 0.25);
+    REQUIRE(c1 - c2 == Color(0.2, 0.5, 0.5));
 }
 
 TEST_CASE("Multiplying a color by a scalar") {
-    color c(0.2, 0.3, 0.4);
-    REQUIRE(c * 2 == color(0.4, 0.6, 0.8));
+    Color c(0.2, 0.3, 0.4);
+    REQUIRE(c * 2 == Color(0.4, 0.6, 0.8));
 }
 
 TEST_CASE("Multiplying colors") {
-    color c1(1, 0.2, 0.4);
-    color c2(0.9, 1, 0.1);
-    REQUIRE(c1 * c2 == color(0.9, 0.2, 0.04));
+    Color c1(1, 0.2, 0.4);
+    Color c2(0.9, 1, 0.1);
+    REQUIRE(c1 * c2 == Color(0.9, 0.2, 0.04));
 }
 
 TEST_CASE("Creating and querying a ray") {
@@ -201,4 +203,103 @@ TEST_CASE("Computing a point from a distance") {
     REQUIRE(r.position(1) == Tuple::Point(3, 3, 4));
     REQUIRE(r.position(-1) == Tuple::Point(1, 3, 4));
     REQUIRE(r.position(2.5) == Tuple::Point(4.5, 3, 4));
+}
+
+TEST_CASE("A ray intersects a sphere at two points") {
+    Ray r(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
+    Sphere s;
+    std::vector<double> xs = s.intersect(r);
+    REQUIRE(xs.size() == 2);
+    REQUIRE(xs[0] == 4.0);
+    REQUIRE(xs[1] == 6.0);
+}
+
+TEST_CASE("A ray intersects a sphere at a tangent") {
+    Ray r(Tuple::Point(0, 1, -5), Tuple::Vector(0, 0, 1));
+    Sphere s;
+    std::vector<double> xs = s.intersect(r);
+    REQUIRE(xs.size() == 2);
+    REQUIRE(xs[0] == 5.0);
+    REQUIRE(xs[1] == 5.0);
+}
+
+TEST_CASE("A ray misses a sphere") {
+    Ray r(Tuple::Point(0, 2, -5), Tuple::Vector(0, 0, 1));
+    Sphere s;
+    std::vector<double> xs = s.intersect(r);
+    REQUIRE(xs.size() == 0);
+}
+
+TEST_CASE("A ray originates inside a sphere") {
+    Ray r(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
+    Sphere s;
+    std::vector<double> xs = s.intersect(r);
+    REQUIRE(xs.size() == 2);
+    REQUIRE(xs[0] == -1.0);
+    REQUIRE(xs[1] == 1.0);
+}
+
+TEST_CASE("A sphere is behind a ray") {
+    Ray r(Tuple::Point(0, 0, 5), Tuple::Vector(0, 0, 1));
+    Sphere s;
+    std::vector<double> xs = s.intersect(r);
+    REQUIRE(xs.size() == 2);
+    REQUIRE(xs[0] == -6.0);
+    REQUIRE(xs[1] == -4.0);
+}
+
+TEST_CASE("Creating a canvas") {
+    Canvas c(10, 20);
+    REQUIRE(c.getWidth() == 10);
+    REQUIRE(c.getHeight() == 20);
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 20; j++) {
+            REQUIRE(c.pixel_at(i, j) == Color(0, 0, 0));
+        }
+    }
+}
+
+TEST_CASE("Writing pixels to a canvas") {
+    Canvas c(10, 20);
+    Color red(1, 0, 0);
+    c.write_pixel(2, 3, red);
+    REQUIRE(c.pixel_at(2, 3) == red);
+}
+
+TEST_CASE("Constructing the PPM header") {
+    Canvas c(5, 3);
+    std::string str = c.toPPM();
+    REQUIRE(str == R"(P3
+5 3
+255
+)");
+}
+
+TEST_CASE("Constructing the PPM pixel data") {
+    Canvas c(5, 3);
+    Color c1(1.5, 0, 0);
+    Color c2(0, 0.5, 0);
+    Color c3(-0.5, 0, 1);
+    c.write_pixel(0, 0, c1);
+    c.write_pixel(2, 1, c2);
+    c.write_pixel(4, 2, c3);
+    std::string str = c.toPPM();
+    REQUIRE(str == R"(255 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 128 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 255)");
+}
+
+TEST_CASE("Splitting long lines in PPM files") {
+    Canvas c(10, 2);
+    Color col(1, 0.8, 0.6);
+    for (int h = 0; h < 2; h++) {
+        for (int w = 0; w < 10; w++) {
+            c.write_pixel(w, h, col);
+        }
+    }
+    std::string str = c.toPPM();
+    REQUIRE(str == R"(255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+153 255 204 153 255 204 153 255 204 153 255 204 153
+255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+153 255 204 153 255 204 153 255 204 153 255 204 153)");
 }

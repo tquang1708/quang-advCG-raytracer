@@ -9,6 +9,8 @@
 #include "headers/color.hpp"
 #include "headers/tuple.hpp"
 #include "headers/ray.hpp"
+#include "headers/sphere.hpp"
+#include "headers/canvas.hpp"
 #include "headers/baseclass_funcs.hpp"
 
 #endif

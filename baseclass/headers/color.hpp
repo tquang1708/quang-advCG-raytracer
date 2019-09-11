@@ -8,10 +8,10 @@
 
 #include "tuple.hpp"
 
-class color : public Tuple {
+class Color : public Tuple {
     public:
-        color();
-        color(double red_, double green_, double blue_);
+        Color();
+        Color(double red_, double green_, double blue_);
 
         //getter function
         double getR() const;
@@ -19,8 +19,8 @@ class color : public Tuple {
         double getB() const;
 
         //special operator overloading for color
-        color operator*(const double &scalar);
-        color operator*(const color &a);
+        Color operator*(const double &scalar);
+        Color operator*(const Color &a);
 };
 
 #endif

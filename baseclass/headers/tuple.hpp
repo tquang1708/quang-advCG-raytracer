@@ -50,4 +50,16 @@ class Tuple {
         Tuple normalize() const;
 };
 
+//point
+//inline vectors since it is a small function that is called a lot
+//constructor and all
+inline Tuple Tuple::Point(double x_, double y_, double z_) {
+    return Tuple(x_, y_, z_, 1.0);
+}
+
+//vector
+inline Tuple Tuple::Vector(double x_, double y_, double z_) {
+    return Tuple(x_, y_, z_, 0.0);
+}
+
 #endif

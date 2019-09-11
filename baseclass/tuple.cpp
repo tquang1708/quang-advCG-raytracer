@@ -13,23 +13,12 @@ Tuple::Tuple() {
     w = 0;
 }
 
-
 //basic constructor
 Tuple::Tuple(double x_, double y_, double z_, double w_) {
     x = x_;
     y = y_;
     z = z_;
     w = w_;
-}
-
-//point
-Tuple Tuple::Point(double x_, double y_, double z_) {
-    return Tuple(x_, y_, z_, 1.0);
-}
-
-//vector
-Tuple Tuple::Vector(double x_, double y_, double z_) {
-    return Tuple(x_, y_, z_, 0.0);
 }
 
 //getter functions
