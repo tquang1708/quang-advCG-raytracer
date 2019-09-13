@@ -3,15 +3,46 @@
  * */
 
 #include "baseclass/baseclass_headers.hpp"
+#include <vector>
 
+//first image rendering
+//translated directly from slide's pseudocode
+//and the book's hints
 int main() {
-    Canvas c(5, 3);
-    Color c1(1.5, 0, 0);
-    Color c2(0, 0.5, 0);
-    Color c3(-0.5, 0, 1);
-    c.write_pixel(0, 0, c1);
-    c.write_pixel(2, 1, c2);
-    c.write_pixel(4, 2, c3);
-    c.toPPM();
+    //making a 100x100 canvas
+    Canvas canvas(100, 100);
+    //define red
+    Color red(1, 0, 0);
+    //make a sphere
+    Sphere sphere;
+
+    int x, y;
+    for (int j = 0; j < 100; j++) {
+        //calculating world y
+        y = 2 - j / 25;
+        for (int i = 0; i < 100; i++) {
+            //Catching intersections
+            //calculating world x
+            x = -2 + i / 25;
+            Tuple origin = Tuple::Point(x, y, -5);
+            Tuple direction = Tuple::Vector(0, 0, 1);
+            Ray ray(origin, direction);
+            std::vector<double> ints = sphere.intersect(ray);
+
+            //Checking hits
+            bool wasHit = false;
+            for (unsigned long t = 0; t < ints.size(); t++) {
+                if (ints[t] > 0) {
+                    wasHit = true;
+                }
+            }
+
+            if (wasHit) {
+                canvas.write_pixel(i, j, red);
+            }
+        }
+    }
+    canvas.toPPM();
+
     return 0;
 }
