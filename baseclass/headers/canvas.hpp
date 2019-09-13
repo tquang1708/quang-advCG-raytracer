@@ -1,4 +1,5 @@
 /* canvas.hpp - header file for canvas, the object to draw pixels on to
+ *
  * Quang Tran - 9/11/19
  * */
 
@@ -25,8 +26,7 @@ class Canvas {
 
         //other functions
         void write_pixel(int w, int h, Color c);
-        //void toPPM();
-        std::string toPPM();
+        void toPPM();
 };
 
 #endif

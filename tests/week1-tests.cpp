@@ -266,40 +266,42 @@ TEST_CASE("Writing pixels to a canvas") {
     REQUIRE(c.pixel_at(2, 3) == red);
 }
 
-TEST_CASE("Constructing the PPM header") {
-    Canvas c(5, 3);
-    std::string str = c.toPPM();
-    REQUIRE(str == R"(P3
-5 3
-255
-)");
-}
-
-TEST_CASE("Constructing the PPM pixel data") {
-    Canvas c(5, 3);
-    Color c1(1.5, 0, 0);
-    Color c2(0, 0.5, 0);
-    Color c3(-0.5, 0, 1);
-    c.write_pixel(0, 0, c1);
-    c.write_pixel(2, 1, c2);
-    c.write_pixel(4, 2, c3);
-    std::string str = c.toPPM();
-    REQUIRE(str == R"(255 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 128 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 255)");
-}
-
-TEST_CASE("Splitting long lines in PPM files") {
-    Canvas c(10, 2);
-    Color col(1, 0.8, 0.6);
-    for (int h = 0; h < 2; h++) {
-        for (int w = 0; w < 10; w++) {
-            c.write_pixel(w, h, col);
-        }
-    }
-    std::string str = c.toPPM();
-    REQUIRE(str == R"(255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
-153 255 204 153 255 204 153 255 204 153 255 204 153
-255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
-153 255 204 153 255 204 153 255 204 153 255 204 153)");
-}
+//Test cases created to compare with string output during testing
+//Actual file now exports PPM file instead
+//TEST_CASE("Constructing the PPM header") {
+//    Canvas c(5, 3);
+//    std::string str = c.toPPM();
+//    REQUIRE(str == R"(P3
+//5 3
+//255
+//)");
+//}
+//
+//TEST_CASE("Constructing the PPM pixel data") {
+//    Canvas c(5, 3);
+//    Color c1(1.5, 0, 0);
+//    Color c2(0, 0.5, 0);
+//    Color c3(-0.5, 0, 1);
+//    c.write_pixel(0, 0, c1);
+//    c.write_pixel(2, 1, c2);
+//    c.write_pixel(4, 2, c3);
+//    std::string str = c.toPPM();
+//    REQUIRE(str == R"(255 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+//0 0 0 0 0 0 0 128 0 0 0 0 0 0 0
+//0 0 0 0 0 0 0 0 0 0 0 0 0 0 255)");
+//}
+//
+//TEST_CASE("Splitting long lines in PPM files") {
+//    Canvas c(10, 2);
+//    Color col(1, 0.8, 0.6);
+//    for (int h = 0; h < 2; h++) {
+//        for (int w = 0; w < 10; w++) {
+//            c.write_pixel(w, h, col);
+//        }
+//    }
+//    std::string str = c.toPPM();
+//    REQUIRE(str == R"(255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+//153 255 204 153 255 204 153 255 204 153 255 204 153
+//255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+//153 255 204 153 255 204 153 255 204 153 255 204 153)");
+//}

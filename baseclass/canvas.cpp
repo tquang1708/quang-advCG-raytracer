@@ -40,12 +40,11 @@ void Canvas::write_pixel(int w, int h, Color c) {
 
 //toPPM
 //void Canvas::toPPM() {
-std::string Canvas::toPPM() {
+void Canvas::toPPM() {
     //file handling found here
     //http://www.cplusplus.com/doc/tutorial/files/
-    //std::ofstream outPPM("out.ppm");
-    std::ostringstream outPPM;
-    //outPPM << "P3\n" << width << " " << height << "\n" << "255\n";
+    std::ofstream outPPM("out.ppm");
+    outPPM << "P3\n" << width << " " << height << "\n" << "255\n";
     for (int h = 0; h < height; h++) {
         std::ostringstream lineStr;
         for (int w = 0; w < width; w++) {
@@ -85,8 +84,28 @@ std::string Canvas::toPPM() {
         }
         //a lot of help with string splitting from here
         //http://www.cplusplus.com/forum/general/195355/
-        outPPM << lineStr.str() << std::endl;
+        //istringstream for splitting into words
+        std::istringstream splitter(lineStr.str());
+        std::string word;
+        int lineLen = 70;
+        while(splitter >> word) {
+            //if linelen - lenword - 1(space) > 0
+            //append word to outPPM
+            //else
+            //seek back and remove trailing space
+            //append newline, then append word
+            //reset linelen to 70
+            if ((lineLen - int(word.length()) - 1) > 0) {
+                outPPM << word << " ";
+                lineLen = lineLen - word.length() - 1;
+            } else {
+                outPPM.seekp(-1, outPPM.cur);
+                outPPM << "\n" << word << " ";
+                lineLen = 70;
+            }
+        }
+        outPPM.seekp(-1, outPPM.cur);
+        outPPM << std::endl;
     }
-    return outPPM.str();
-    //outPPM.close();
+    outPPM.close();
 }
