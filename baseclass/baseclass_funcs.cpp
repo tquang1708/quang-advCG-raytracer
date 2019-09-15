@@ -5,6 +5,7 @@
 
 #include "baseclass_headers.hpp"
 #include "math.h"
+#include <iostream>
 
 //dot product of two vectors
 double dot(Tuple a, Tuple b){
@@ -23,6 +24,10 @@ Tuple cross(Tuple a, Tuple b){
 }
 
 //lighting objects
-Color lighting(Material m, PointLight light, Tuple position, Tuple normalv) {
-    //
+Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv) {
+    Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
+    double lightIntensity = dot(normalv, unitVectorToLight);
+    Color out = m.getColor() * light.getIntensity() * lightIntensity;
+    std::cout << out.getR() << out.getG() << out.getB();
+    return out;
 }

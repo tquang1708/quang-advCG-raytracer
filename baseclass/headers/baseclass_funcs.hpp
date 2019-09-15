@@ -8,8 +8,12 @@
 
 #include "tuple.hpp"
 #include "ray.hpp"
+#include "color.hpp"
+#include "material.hpp"
+#include "pointlight.hpp"
 
 double dot(Tuple a, Tuple b);
 Tuple cross(Tuple a, Tuple b);
+Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv);
 
 #endif
