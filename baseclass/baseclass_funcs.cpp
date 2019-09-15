@@ -21,3 +21,8 @@ Tuple cross(Tuple a, Tuple b){
                               a.getx() * b.gety() - a.gety() * b.getx());
     return out;
 }
+
+//lighting objects
+Color lighting(Material m, PointLight light, Tuple position, Tuple normalv) {
+    //
+}

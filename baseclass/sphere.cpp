@@ -61,3 +61,13 @@ Tuple Sphere::normalAt(Tuple point) const{
     Tuple origin = Tuple::Point(0, 0, 0);
     return (point - origin).normalize();
 }
+
+//getter
+Material Sphere::getMaterial() const {
+    return material;
+}
+
+//setter
+void Sphere::setMaterial(Material m) {
+    material = m;
+}

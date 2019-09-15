@@ -43,14 +43,14 @@ TEST_CASE("The normal is a normalized vector") {
     REQUIRE(n == n.normalize());
 }
 
-//TEST_CASE("A sphere may be assigned a material") {
-//    Sphere s;
-//    Material m;
-//    Color c(0, 0, 1);
-//    m.setColor(c);
-//    s.setMaterial(m);
-//    REQUIRE(s.getMaterial == m);
-//}
+TEST_CASE("A sphere may be assigned a material") {
+    Sphere s;
+    Material m;
+    Color c(0, 0, 1);
+    m.setColor(c);
+    s.setMaterial(m);
+    REQUIRE(s.getMaterial() == m);
+}
 
 TEST_CASE("A point light has a position and intensity") {
     Color intensity(1, 1, 1);
@@ -58,4 +58,33 @@ TEST_CASE("A point light has a position and intensity") {
     PointLight light(position, intensity);
     REQUIRE(light.getPosition() == position);
     REQUIRE(light.getIntensity() == intensity);
+}
+
+TEST_CASE("Feature: Materials") {
+    Material m;
+    Tuple position = Tuple::Point(0, 0, 0);
+    Tuple normalv = Tuple::Vector(0, 0, -1);
+
+    SECTION("The default material") {
+        REQUIRE(m.getColor() == Color(1, 1, 1));
+        REQUIRE(m.getDiffuse() == 1);
+    }
+
+    SECTION("Lighting with the eye between the light and the surface") {
+        PointLight light(Tuple::Point(0, 0, -10), Color(1, 1, 1));
+        Color result = lighting(m, light, position, normalv);
+        REQUIRE(result == Color(1, 1, 1));
+    }
+
+    SECTION("Lighting with the eye opposite surface, light offset 45 deg") {
+        PointLight light(Tuple::Point(0, 10, -10), Color(1, 1, 1));
+        Color result = lighting(m, light, position, normalv);
+        REQUIRE(result == Color(0.7364, 0.7364, 0.7364));
+    }
+
+    SECTION("Lighting with the light behind the surface") {
+        PointLight light(Tuple::Point(0, 0, 10), Color(1, 1, 1));
+        Color result = lighting(m, light, position, normalv);
+        REQUIRE(result == Color(0, 0, 0));
+    }
 }
