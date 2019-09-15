@@ -56,3 +56,8 @@ std::vector<double> Sphere::intersect(Ray r) const {
         return intersections;
     }
 }
+
+Tuple Sphere::normalAt(Tuple point) const{
+    Tuple origin = Tuple::Point(0, 0, 0);
+    return (point - origin).normalize();
+}

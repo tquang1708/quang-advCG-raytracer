@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "ray.hpp"
+#include "tuple.hpp"
 
 class Sphere {
     private:
@@ -15,6 +16,7 @@ class Sphere {
     public:
         Sphere();
         std::vector<double> intersect(Ray r) const;
+        Tuple normalAt(Tuple point) const;
 };
 
 

@@ -11,6 +11,10 @@
 #include "headers/ray.hpp"
 #include "headers/sphere.hpp"
 #include "headers/canvas.hpp"
+
+#include "headers/material.hpp"
+#include "headers/pointlight.hpp"
+
 #include "headers/baseclass_funcs.hpp"
 
 #endif
