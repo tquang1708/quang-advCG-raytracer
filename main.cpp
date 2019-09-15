@@ -24,7 +24,7 @@ int main() {
             //Catching intersections
             //calculating world x
             x = -2 + i / 25;
-            Tuple origin = Tuple::Point(x, y, -5);
+            Tuple origin = Tuple::Point(2, -.4, -5);
             Tuple direction = Tuple::Vector(0, 0, 1);
             Ray ray(origin, direction);
             std::vector<double> ints = sphere.intersect(ray);
