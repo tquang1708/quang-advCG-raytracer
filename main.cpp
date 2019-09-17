@@ -16,15 +16,15 @@ int main() {
     //make a sphere
     Sphere sphere;
 
-    int x, y;
-    for (int j = 0; j < 100; j++) {
+    double x, y;
+    for (double j = 0; j < 100; j++) {
         //calculating world y
         y = 2 - j / 25;
-        for (int i = 0; i < 100; i++) {
+        for (double i = 0; i < 100; i++) {
             //Catching intersections
             //calculating world x
             x = -2 + i / 25;
-            Tuple origin = Tuple::Point(2, -.4, -5);
+            Tuple origin = Tuple::Point(x, y, -5);
             Tuple direction = Tuple::Vector(0, 0, 1);
             Ray ray(origin, direction);
             std::vector<double> ints = sphere.intersect(ray);
