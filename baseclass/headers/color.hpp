@@ -18,6 +18,11 @@ class Color : public Tuple {
         double getG() const;
         double getB() const;
 
+        //setter funcs
+        void setR(const double newR);
+        void setG(const double newR);
+        void setB(const double newR);
+
         //special operator overloading for color
         Color operator*(const double &scalar);
         Color operator*(const Color &a);

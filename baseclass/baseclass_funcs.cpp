@@ -28,6 +28,14 @@ Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv) {
     Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
     double lightIntensity = dot(normalv, unitVectorToLight);
     Color out = m.getColor() * light.getIntensity() * lightIntensity;
-    std::cout << out.getR() << out.getG() << out.getB();
+    if (out.getR() < 0) {
+        out.setR(0);
+    }
+    if (out.getG() < 0) {
+        out.setG(0);
+    }
+    if (out.getB() < 0) {
+        out.setB(0);
+    }
     return out;
 }

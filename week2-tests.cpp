@@ -79,7 +79,7 @@ TEST_CASE("Feature: Materials") {
     SECTION("Lighting with the eye opposite surface, light offset 45 deg") {
         PointLight light(Tuple::Point(0, 10, -10), Color(1, 1, 1));
         Color result = lighting(m, light, position, normalv);
-        REQUIRE(result == Color(0.7364, 0.7364, 0.7364));
+        REQUIRE(result == Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
     }
 
     SECTION("Lighting with the light behind the surface") {

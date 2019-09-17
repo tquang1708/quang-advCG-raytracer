@@ -32,6 +32,17 @@ double Color::getB() const {
     return z;
 }
 
+//setter funcs
+void Color::setR(const double newR) {
+    x = newR;
+}
+void Color::setG(const double newG) {
+    y = newG;
+}
+void Color::setB(const double newB) {
+    z = newB;
+}
+
 //operator * overloading
 Color Color::operator*(const Color &a) {
     Color out(x * a.getx(), y * a.gety(), z * a.getz());
