@@ -12,9 +12,8 @@ Ray::Ray() {
     direction = Tuple();
 }
 
-Ray::Ray(Tuple origin_, Tuple direction_) {
-    origin = origin_;
-    direction = direction_;
+//initializer list as suggested by Satchel
+Ray::Ray(Tuple o, Tuple d): origin(o), direction(d) {
 }
 
 //basic getter functions implementation

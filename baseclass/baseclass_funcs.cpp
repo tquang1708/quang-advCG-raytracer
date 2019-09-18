@@ -11,7 +11,7 @@
 double dot(Tuple a, Tuple b){
     return (a.getx() * b.getx() +
             a.gety() * b.gety() +
-            a.getz() * b.getz() +
+a.getz() * b.getz() +
             a.getw() * b.getw());
 }
 

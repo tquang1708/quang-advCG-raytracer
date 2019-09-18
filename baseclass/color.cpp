@@ -13,10 +13,10 @@ Color::Color() {
 }
 
 //basic constructor
-Color::Color(double red_, double green_, double blue_) {
-    x = red_;
-    y = green_;
-    z = blue_;
+Color::Color(double red, double green, double blue) {
+    x = red;
+    y = green;
+    z = blue;
 }
 
 //getter functions

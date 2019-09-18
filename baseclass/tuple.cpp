@@ -14,11 +14,8 @@ Tuple::Tuple() {
 }
 
 //basic constructor
-Tuple::Tuple(double x_, double y_, double z_, double w_) {
-    x = x_;
-    y = y_;
-    z = z_;
-    w = w_;
+//initializer list as suggested by Satchel
+Tuple::Tuple(double x, double y, double z, double w): x(x), y(y), z(z), w(w) {
 }
 
 //getter functions

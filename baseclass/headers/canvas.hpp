@@ -26,7 +26,7 @@ class Canvas {
 
         //other functions
         void write_pixel(int w, int h, Color c);
-        void toPPM();
+        void toPPM(std::string filename);
 };
 
 #endif

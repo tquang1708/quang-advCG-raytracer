@@ -42,7 +42,7 @@ int main() {
             }
         }
     }
-    canvas.toPPM();
+    canvas.toPPM("out.ppm");
 
     return 0;
 }

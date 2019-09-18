@@ -11,9 +11,7 @@
 #include <string>
 #include <sstream>
 
-Canvas::Canvas(int width_, int height_) {
-    width = width_;
-    height = height_;
+Canvas::Canvas(int w, int h): width(w), height(h) {
     //vector array resizing found here
     //https://stackoverflow.com/questions/20047684/how-can-i-resize-a-2d-c-vector?rq=1
     pixel_grid.resize(width, std::vector<Color>(height, Color(0, 0, 0)));
@@ -40,10 +38,11 @@ void Canvas::write_pixel(int w, int h, Color c) {
 
 //toPPM
 //void Canvas::toPPM() {
-void Canvas::toPPM() {
+//suggestion on not hard coding filename from Ulysses
+void Canvas::toPPM(std::string filename) {
     //file handling found here
     //http://www.cplusplus.com/doc/tutorial/files/
-    std::ofstream outPPM("out.ppm");
+    std::ofstream outPPM(filename);
     outPPM << "P3\n" << width << " " << height << "\n" << "255\n";
     for (int h = 0; h < height; h++) {
         std::ostringstream lineStr;

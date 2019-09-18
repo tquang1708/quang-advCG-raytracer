@@ -4,9 +4,7 @@
 
 #include "headers/pointlight.hpp"
 
-PointLight::PointLight(Tuple position_, Color intensity_) {
-    position = position_;
-    intensity = intensity_;
+PointLight::PointLight(Tuple pos, Color intensity): position(pos), intensity(intensity) {
 }
 
 Tuple PointLight::getPosition() const {
