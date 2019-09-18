@@ -5,14 +5,18 @@
 #include "baseclass/baseclass_headers.hpp"
 #include <vector>
 
-//first image rendering
+//defining canvas size in pixels
+const int CANVAS_X = 1280;
+const int CANVAS_Y = 720;
+//defining world's dimension
+const float WORLD_X = 16;
+const float WORLD_Y = 9;
+
 //translated directly from slide's pseudocode
 //and the book's hints
 int main() {
     //making a 100x100 canvas
-    Canvas canvas(1000, 1000);
-    //defining a world edge's length (size)
-    const float WORLD_SIZE = 3;
+    Canvas canvas(CANVAS_X, CANVAS_Y);
     //define red
     Color red(1, 0, 0);
     //define white
@@ -28,14 +32,14 @@ int main() {
     PointLight light(Tuple::Point(-2, 2, 5), white);
 
     double x, y;
-    for (double j = 0; j < 1000; j++) {
+    for (double j = 0; j < CANVAS_Y; j++) {
         //iterating over vertical pixels
         //calculating world y
-        y = (WORLD_SIZE / 2) - j / (1000 / WORLD_SIZE);
-        for (double i = 0; i < 1000; i++) {
+        y = (WORLD_Y / 2) - j / (CANVAS_Y / WORLD_Y);
+        for (double i = 0; i < CANVAS_X; i++) {
             //Catching intersections
             //calculating world x
-            x = -(WORLD_SIZE / 2) + i / (1000 / WORLD_SIZE);
+            x = -(WORLD_X / 2) + i / (CANVAS_X / WORLD_X);
             Tuple origin = Tuple::Point(x, y, -5);
             Tuple direction = Tuple::Vector(0, 0, 1);
             Ray ray(origin, direction);
