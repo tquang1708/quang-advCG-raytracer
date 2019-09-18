@@ -36,6 +36,14 @@ void Canvas::write_pixel(int w, int h, Color c) {
     pixel_grid[w][h] = c;
 }
 
+//clamp value
+//for clamping pixels
+int Canvas::clampValue(int val) {
+    val > 255 ? val = 255 : val;
+    val < 0 ? val = 0 : val;
+    return val;
+}
+
 //toPPM
 //void Canvas::toPPM() {
 //suggestion on not hard coding filename from Ulysses
@@ -48,38 +56,9 @@ void Canvas::toPPM(std::string filename) {
         std::ostringstream lineStr;
         for (int w = 0; w < width; w++) {
             Color color255 = pixel_grid[w][h] * 255;
-            //Red
-            if (color255.getR() > 255) {
-                lineStr << "255 ";
-            }
-            else if (color255.getR() < 0) {
-                lineStr << "0 ";
-            }
-            else {
-                lineStr << round(color255.getR()) << " ";
-            }
-
-            //Green
-            if (color255.getG() > 255) {
-                lineStr << "255 ";
-            }
-            else if (color255.getG() < 0) {
-                lineStr << "0 ";
-            }
-            else {
-                lineStr << round(color255.getG()) << " ";
-            }
-
-            //Blue
-            if (color255.getB() > 255) {
-                lineStr << "255 ";
-            }
-            else if (color255.getB() < 0) {
-                lineStr << "0 ";
-            }
-            else {
-                lineStr << round(color255.getB()) << " ";
-            }
+            lineStr << clampValue(color255.getR()) << " ";
+            lineStr << clampValue(color255.getG()) << " ";
+            lineStr << clampValue(color255.getB()) << " ";
         }
         //a lot of help with string splitting from here
         //http://www.cplusplus.com/forum/general/195355/

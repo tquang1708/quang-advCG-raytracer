@@ -26,6 +26,7 @@ class Canvas {
 
         //other functions
         void write_pixel(int w, int h, Color c);
+        int clampValue(int val);
         void toPPM(std::string filename);
 };
 
