@@ -11,16 +11,17 @@
 class Material {
     private:
         Color color;
-        int diffuse;
+        double diffuse;
     public:
         Material();
 
         //getter funcs
         Color getColor() const;
-        int getDiffuse() const;
+        double getDiffuse() const;
 
         //setter funcs
         void setColor(Color c);
+        void setDiffuse(double d);
 
         //operator overloading
         bool operator== (const Material &m) const;

@@ -7,7 +7,7 @@
 Material::Material() {
     Color color_(1, 1, 1);
     color = color_;
-    diffuse = 1;
+    diffuse = 1.0;
 }
 
 Color Material::getColor() const {
@@ -15,13 +15,17 @@ Color Material::getColor() const {
 }
 
 //getter
-int Material::getDiffuse() const {
+double Material::getDiffuse() const {
     return diffuse;
 }
 
 //setter
 void Material::setColor(Color c) {
     color = c;
+}
+
+void Material::setDiffuse(double d) {
+    diffuse = d;
 }
 
 //operator overloading

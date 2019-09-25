@@ -26,10 +26,11 @@ int main() {
     //setting a material
     Material m;
     m.setColor(red);
+    m.setDiffuse(1);
     sphere.setMaterial(m);
 
     //light
-    PointLight light(Tuple::Point(0, 0, 5), white);
+    PointLight light(Tuple::Point(-2, 2, 5), white);
 
     double x, y;
     for (double j = 0; j < CANVAS_Y; j++) {

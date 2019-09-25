@@ -72,3 +72,117 @@ TEST_CASE("Matrix equality with different matrices") {
     B.fillMatrix(valB);
     REQUIRE(A != B);
 }
+
+TEST_CASE("Multiplying two matrices") {
+    Matrix A(4);
+    Matrix B(4);
+    Matrix AB(4);
+    double valA[16] = {1, 2, 3, 4,
+                       5, 6, 7, 8,
+                       9, 8, 7, 6,
+                       0, 0, 0, 1};
+    double valB[16] = {-2, 1, 2, 3,
+                       3, 2, 1, -1,
+                       4, 3, 6, 5,
+                       0, 0, 0, 1};
+    double valAB[16] = {16, 14, 22, 20,
+                       36, 38, 58, 52,
+                       34, 46, 68, 60,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    B.fillMatrix(valB);
+    AB.fillMatrix(valAB);
+    REQUIRE(A * B == AB);
+}
+
+TEST_CASE("A matrix multiplied by a tuple") {
+    Matrix A(4);
+    Tuple b(1, 2, 3, 1);
+    Tuple Ab(18, 24, 33, 1);
+    double valA[16] = {1, 2, 3, 4,
+                       2, 4, 4, 2,
+                       8, 6, 4, 1,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    REQUIRE(A * b == Ab);
+}
+
+TEST_CASE("Multiplying a matrix by the identity matrix") {
+    Matrix A(4);
+    Matrix ident(4);
+    double valA[16] = {0, 1, 2, 4,
+                       1, 2, 4, 8,
+                       2, 4, 8, 16,
+                       0, 0, 0, 1};
+    double val_ident[16] = {1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1};
+    A.fillMatrix(valA);
+    ident.fillMatrix(val_ident);
+    REQUIRE(A * ident == A);
+}
+
+TEST_CASE("Multiplying the identity matrix by a tuple") {
+    Tuple b(1, 2, 3, 4);
+    Matrix ident(4);
+    double val_ident[16] = {1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1};
+    ident.fillMatrix(val_ident);
+    REQUIRE(ident * b == b);
+}
+
+TEST_CASE("Calculating the determinant of a 2x2 matrix") {
+    Matrix A(2);
+    double valA[4] = {1, 5,
+                      -3, 2};
+    A.fillMatrix(valA);
+    REQUIRE(A.determinant() == 17);
+}
+
+TEST_CASE("A submatrix of a 3x3 matrix is a 2x2 matrix") {
+    Matrix A(3);
+    double valA[9] = {1, 5, 0,
+                      -3, 2, 7,
+                      0, 6, -3};
+    A.fillMatrix(valA);
+    Matrix subA(2);
+    double valSubA[4] = {-3, 2,
+                         0, 6};
+    subA.fillMatrix(valSubA);
+    REQUIRE(A.submatrix(0, 2) == subA);
+}
+
+TEST_CASE("Calculating a cofactor of a 3x3 matrix") {
+    Matrix A(3);
+    double valA[9] = {3, 5, 0,
+                      2, -1, -7,
+                      6, -1, 5};
+    A.fillMatrix(valA);
+    REQUIRE(A.cofactor(0, 0) == -12);
+    REQUIRE(A.cofactor(1, 0) == -25);
+}
+
+TEST_CASE("Calculating the determinant of a 3x3 matrix") {
+    Matrix A(3);
+    double valA[9] = {1, 2, 6,
+                      -5, 8, -4,
+                      2, 6, 4};
+    A.fillMatrix(valA);
+    REQUIRE(A.cofactor(0, 0) == 56);
+    REQUIRE(A.cofactor(0, 1) == 12);
+    REQUIRE(A.cofactor(0, 2) == -46);
+    REQUIRE(A.determinant() == -196);
+}
+
+TEST_CASE("Calculating the determinant of a 4x4 matrix") {
+    Matrix A(4);
+    double valA[16] = {-2, -8, 3, 5,
+                   -3, 1, 7, 3,
+                   1, 2, -9, 6,
+                   0, 0, 0, 1};
+    A.fillMatrix(valA);
+    REQUIRE(A.determinant() == 185);
+}
