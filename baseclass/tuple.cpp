@@ -55,6 +55,10 @@ bool Tuple::operator==(const Tuple &a) const{
     else return false;
 }
 
+bool Tuple::operator!=(const Tuple &a) const{
+    return !(*this == a);
+}
+
 //operator + overloading
 Tuple Tuple::operator+(const Tuple &a) const{
     Tuple out(x + a.x, y + a.y, z + a.z, w + a.w);

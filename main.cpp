@@ -15,7 +15,7 @@ const float WORLD_Y = 9;
 //translated directly from slide's pseudocode
 //and the book's hints
 int main() {
-    //making a 100x100 canvas
+    //making a canvas
     Canvas canvas(CANVAS_X, CANVAS_Y);
     //define red
     Color red(1, 0, 0);
@@ -29,7 +29,7 @@ int main() {
     sphere.setMaterial(m);
 
     //light
-    PointLight light(Tuple::Point(-2, 2, 5), white);
+    PointLight light(Tuple::Point(0, 0, 5), white);
 
     double x, y;
     for (double j = 0; j < CANVAS_Y; j++) {

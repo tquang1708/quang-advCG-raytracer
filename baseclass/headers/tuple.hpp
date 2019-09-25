@@ -38,6 +38,7 @@ class Tuple {
         //a lot of help with operator overloading taken from
         //http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
         bool operator== (const Tuple &a) const;
+        bool operator!= (const Tuple &a) const;
         Tuple operator+(const Tuple &a) const;
         Tuple operator-(const Tuple &a) const;
         Tuple operator-() const;

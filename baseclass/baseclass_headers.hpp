@@ -15,6 +15,8 @@
 #include "headers/material.hpp"
 #include "headers/pointlight.hpp"
 
+#include "headers/matrix.hpp"
+
 #include "headers/baseclass_funcs.hpp"
 
 #endif
