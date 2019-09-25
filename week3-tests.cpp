@@ -186,3 +186,58 @@ TEST_CASE("Calculating the determinant of a 4x4 matrix") {
     A.fillMatrix(valA);
     REQUIRE(A.determinant() == 185);
 }
+
+TEST_CASE("Testing an invertible matrix for invertibility") {
+    Matrix A(4);
+    double valA[16] = {6, 4, 4, 4,
+                       5, 5, 7, 6,
+                       4, -9, 3, -7,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    REQUIRE(A.determinant() == 260);
+}
+
+TEST_CASE("Testing a noninvertible matrix for invertibility") {
+    Matrix A(4);
+    double valA[16] = {-4, 2, 0, -3,
+                       9, 6, 0, 6,
+                       0, -5, 0, -5,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    REQUIRE(A.determinant() == 0);
+    REQUIRE(A.inverse() == NULL);
+}
+
+TEST_CASE("Calculating the inverse of a matrix") {
+    Matrix A(4);
+    double valA[16] = {-5, 2, 6, -8,
+                       1, -5, 1, 8,
+                       7, 7, -6, -7,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    Matrix B(4);
+    double valB[16] = {0.14110, 0.33129, 0.19632, -0.14724,
+                       0.07975, -0.07362, 0.06748, 1.69939,
+                       0.25767, 0.30061, 0.14110, 0.64417,
+                       0.0, 0.0, 0.0, 1.0};
+    B.fillMatrix(valB);
+    REQUIRE(A.inverse() == B);
+}
+
+TEST_CASE("Multiplying a product by its inverse") {
+    Matrix A(4);
+    Matrix B(4);
+    Matrix C(4);
+    double valA[16] = {3, -9, 7, 3,
+                       3, -8, 2, -9,
+                       -4, 4, 4, 1,
+                       0, 0, 0, 1};
+    double valB[16] = {8, 2, 2, 2,
+                       3, -1, 7, 0,
+                       7, 0, 5, 4,
+                       0, 0, 0, 1};
+    A.fillMatrix(valA);
+    B.fillMatrix(valB);
+    C = A * B;
+    REQUIRE(C * B.inverse() == A);
+}

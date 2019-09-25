@@ -34,7 +34,7 @@ int Matrix::getSize() const {
 bool Matrix::operator==(const Matrix &m) const {
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            if (matrix_grid[i][j] != m.accessMatrix(i, j)) {
+            if ((matrix_grid[i][j] - m.accessMatrix(i, j)) > EPSILON) {
                 return false;
             }
         }
@@ -86,6 +86,20 @@ Tuple Matrix::operator* (const Tuple &t) const {
     }
     Tuple out(val_out[0], val_out[1], val_out[2], val_out[3]);
 
+    return out;
+}
+
+Matrix Matrix::operator* (const double &d) const {
+    Matrix out(size);
+    double val_out[size * size];
+    int arrayIndex = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            val_out[arrayIndex] = matrix_grid[i][j] * d;
+            arrayIndex++;
+        }
+    }
+    out.fillMatrix(val_out);
     return out;
 }
 
@@ -150,8 +164,51 @@ double Matrix::cofactor(int row, int col) const {
     return submatrix(row, col).determinant() * sign;
 }
 
+//inverse
+Matrix Matrix::inverse() {
+    determinant();
+    if (det == 0) {
+        return NULL;
+    }
+    else if (inversion != NULL) {
+        return *inversion;
+    }
+    else {
+        Matrix out(size);
+        double valOut[size * size];
+
+        int arrayIndex = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                valOut[arrayIndex] = (1 / det) * cofactor(j, i);
+                arrayIndex++;
+            }
+        }
+        out.fillMatrix(valOut);
+        inversion = &out;
+        return out;
+    }
+}
+
 //array mult helper func for tuples
 double Matrix::multMatRowTuple(const std::vector<double> matRow, const Tuple &t) const{
     return matRow[0] * t.getx() + matRow[1] * t.gety() +
            matRow[2] * t.getz() + matRow[3] * t.getw();
+}
+
+//transpose helper function for inverse
+Matrix Matrix::transpose() const {
+    Matrix out(size);
+    double valOut[size * size];
+
+    int arrayIndex = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            valOut[arrayIndex] = matrix_grid[j][i];
+            arrayIndex++;
+        }
+    }
+
+    out.fillMatrix(valOut);
+    return out;
 }

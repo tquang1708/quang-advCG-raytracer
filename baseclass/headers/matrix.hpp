@@ -13,6 +13,7 @@ class Matrix {
         int size;
         int detCalc = 0;
         double det;
+        Matrix* inversion = NULL;
         std::vector<std::vector<double>> matrix_grid;
     public:
         //constructors
@@ -32,14 +33,19 @@ class Matrix {
         //operator * overload
         Matrix operator* (const Matrix &m) const;
         Tuple operator* (const Tuple &t) const;
+        Matrix operator* (const double &d) const;
         
         //calculation function
         double determinant();
         Matrix submatrix(int row, int col) const;
         double cofactor(int row, int col) const;
 
+        //inverse
+        Matrix inverse();
+
         //helper function
         double multMatRowTuple(const std::vector<double> matRow, const Tuple &t) const;
+        Matrix transpose() const;
 };
 
 #endif
