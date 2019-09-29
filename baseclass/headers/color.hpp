@@ -24,8 +24,9 @@ class Color : public Tuple {
         void setB(const double newR);
 
         //special operator overloading for color
-        Color operator*(const double &scalar);
-        Color operator*(const Color &a);
+        Color operator*(const double &scalar) const;
+        Color operator*(const Color &a) const;
+        Color operator+(const Color &a) const;
 };
 
 #endif

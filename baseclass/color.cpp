@@ -44,13 +44,19 @@ void Color::setB(const double newB) {
 }
 
 //operator * overloading
-Color Color::operator*(const Color &a) {
+Color Color::operator*(const Color &a) const{
     Color out(x * a.getx(), y * a.gety(), z * a.getz());
     return out;
 }
 
 //operator * overloading for scalar multiplication
-Color Color::operator*(const double &scalar) {
+Color Color::operator*(const double &scalar) const{
     Color out(x * scalar, y * scalar, z * scalar);
+    return out;
+}
+
+//operator + overload specifically for colors
+Color Color::operator+(const Color &a) const {
+    Color out(x + a.getR(), y + a.getG(), z + a.getB());
     return out;
 }

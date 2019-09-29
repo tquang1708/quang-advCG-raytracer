@@ -25,9 +25,24 @@ Tuple cross(Tuple a, Tuple b){
 
 //lighting objects
 Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv) {
+    //calculate diffuse
     Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
     double lightIntensity = dot(normalv, unitVectorToLight);
-    Color out = m.getColor() * light.getIntensity() * lightIntensity;
+    Color diffuse = m.getColor() * light.getIntensity() * lightIntensity * m.getDiffuse();
+
+    //calculate ambient
+    Color ambient = m.getColor() * light.getIntensity() * m.getAmbient();
+
+    //calculate emission
+    Color emission = m.getColor() * m.getEmission();
+
+    //calculate specular
+    //Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
+    //double specularIntensity = dot(reflectionVector, unitVectorToLight);
+    //Color specular = m.getColor() * specularIntensity;
+
+    //final color
+    Color out = diffuse + ambient + emission;
     if (out.getR() < 0) {
         out.setR(0);
     }

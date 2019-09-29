@@ -27,6 +27,9 @@ int main() {
     Material m;
     m.setColor(red);
     m.setDiffuse(1);
+    m.setAmbient(0.2);
+    m.setShininess(0.8);
+    m.setEmission(0);
     sphere.setMaterial(m);
 
     //light
@@ -59,7 +62,7 @@ int main() {
             }
         }
     }
-    canvas.toPPM("out.ppm");
+    canvas.toPPM("out0.ppm");
 
     return 0;
 }
