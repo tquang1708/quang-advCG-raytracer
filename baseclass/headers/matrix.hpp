@@ -19,6 +19,11 @@ class Matrix {
         //constructors
         Matrix(int size_);
 
+        //special named constructors
+        static Matrix Identity();
+        static Matrix Translation(double x, double y, double z);
+        static Matrix Scaling(double x, double y, double z);
+
         //filler
         void fillMatrix(double* valArray);
 
@@ -47,5 +52,35 @@ class Matrix {
         double multMatRowTuple(const std::vector<double> matRow, const Tuple &t) const;
         Matrix transpose() const;
 };
+
+inline Matrix Matrix::Translation(double x, double y, double z) {
+    Matrix out(4);
+    double valArray[16] = {1, 0, 0, x,
+                           0, 1, 0, y,
+                           0, 0, 1, z,
+                           0, 0, 0, 1};
+    out.fillMatrix(valArray);
+    return out;
+}
+
+inline Matrix Matrix::Scaling(double x, double y, double z) {
+    Matrix out(4);
+    double valArray[16] = {x, 0, 0, 0,
+                           0, y, 0, 0,
+                           0, 0, z, 0,
+                           0, 0, 0, 1};
+    out.fillMatrix(valArray);
+    return out;
+}
+
+inline Matrix Matrix::Identity() {
+    Matrix identity(4);
+    double valArray[16] = {1, 0, 0, 0,
+                           0, 1, 0, 0,
+                           0, 0, 1, 0,
+                           0, 0, 0, 1};
+    identity.fillMatrix(valArray);
+    return identity;
+}
 
 #endif

@@ -6,6 +6,7 @@
 #define RAY_HPP
 
 #include "tuple.hpp"
+#include "matrix.hpp"
 
 class Ray {
     protected:
@@ -22,6 +23,7 @@ class Ray {
 
         //other funcs
         Tuple position(double time) const;
+        Ray transform(Matrix m) const;
 };
 
 #endif

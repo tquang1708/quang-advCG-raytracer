@@ -212,3 +212,4 @@ Matrix Matrix::transpose() const {
     out.fillMatrix(valOut);
     return out;
 }
+

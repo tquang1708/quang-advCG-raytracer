@@ -5,7 +5,6 @@
 #include "headers/ray.hpp"
 #include "headers/tuple.hpp"
 
-
 //basic implementation of constructos
 Ray::Ray() {
     origin = Tuple();
@@ -29,5 +28,13 @@ Tuple Ray::getDirection() const{
 //find the position of ray's origin after time following direction
 Tuple Ray::position(double time) const{
     Tuple out = origin + direction * time;
+    return out;
+}
+
+//transform a ray
+Ray Ray::transform(Matrix m) const {
+    Tuple newOrigin = m * origin;
+    Tuple newDir = m * direction;
+    Ray out(newOrigin, newDir);
     return out;
 }
