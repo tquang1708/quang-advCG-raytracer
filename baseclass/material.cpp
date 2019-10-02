@@ -8,7 +8,8 @@ Material::Material() {
     color = Color(1, 1, 1);
     ambient = 0.2;
     diffuse = 1.0;
-    shininess = 0.8;
+    specular = 0.4;
+    shininess = 100;
 }
 
 Color Material::getColor() const {
@@ -28,6 +29,10 @@ double Material::getShininess() const {
     return shininess;
 }
 
+double Material::getSpecular() const {
+    return specular;
+}
+
 //setter
 void Material::setColor(Color c) {
     color = c;
@@ -43,6 +48,10 @@ void Material::setAmbient(double a) {
 
 void Material::setShininess(double s) {
     shininess = s;
+}
+
+void Material::setSpecular(double s) {
+    specular = s;
 }
 
 //operator overloading

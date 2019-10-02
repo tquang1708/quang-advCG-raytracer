@@ -14,6 +14,7 @@ class Material {
         double ambient;
         double diffuse;
         double shininess;
+        double specular;
     public:
         Material();
 
@@ -22,12 +23,14 @@ class Material {
         double getDiffuse() const;
         double getAmbient() const;
         double getShininess() const;
+        double getSpecular() const;
 
         //setter funcs
         void setColor(Color c);
         void setDiffuse(double d);
         void setAmbient(double a);
         void setShininess(double s);
+        void setSpecular(double s);
         //operator overloading
         bool operator== (const Material &m) const;
 };
