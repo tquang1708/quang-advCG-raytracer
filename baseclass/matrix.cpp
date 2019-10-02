@@ -174,7 +174,7 @@ Matrix Matrix::inverse() {
         return *inversion;
     }
     else {
-        Matrix out(size);
+        static Matrix out(size);
         double valOut[size * size];
 
         int arrayIndex = 0;

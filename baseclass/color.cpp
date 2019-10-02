@@ -60,3 +60,13 @@ Color Color::operator+(const Color &a) const {
     Color out(x + a.getR(), y + a.getG(), z + a.getB());
     return out;
 }
+
+//color clamping
+void Color::clamp() {
+    x > 1 ? x = 1 : x;
+    x < 0 ? x = 0 : x;
+    y > 1 ? y = 1 : y;
+    y < 0 ? y = 0 : y;
+    z > 1 ? z = 1 : z;
+    z < 0 ? z = 0 : z;
+}

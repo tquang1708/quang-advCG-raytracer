@@ -14,6 +14,6 @@
 
 double dot(Tuple a, Tuple b);
 Tuple cross(Tuple a, Tuple b);
-Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv);
+Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tuple camera);
 
 #endif

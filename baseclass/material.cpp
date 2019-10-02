@@ -9,7 +9,6 @@ Material::Material() {
     ambient = 0.2;
     diffuse = 1.0;
     shininess = 0.8;
-    emission = 0.0;
 }
 
 Color Material::getColor() const {
@@ -29,10 +28,6 @@ double Material::getShininess() const {
     return shininess;
 }
 
-double Material::getEmission() const {
-    return emission;
-}
-
 //setter
 void Material::setColor(Color c) {
     color = c;
@@ -48,10 +43,6 @@ void Material::setAmbient(double a) {
 
 void Material::setShininess(double s) {
     shininess = s;
-}
-
-void Material::setEmission(double e) {
-    emission = e;
 }
 
 //operator overloading

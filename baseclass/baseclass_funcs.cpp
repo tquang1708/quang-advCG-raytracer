@@ -24,33 +24,28 @@ Tuple cross(Tuple a, Tuple b){
 }
 
 //lighting objects
-Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv) {
+Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye) {
     //calculate diffuse
     Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
     double lightIntensity = dot(normalv, unitVectorToLight);
+    //clamping light
+    if (lightIntensity < 0) {
+        lightIntensity = 0;
+    }
     Color diffuse = m.getColor() * light.getIntensity() * lightIntensity * m.getDiffuse();
 
     //calculate ambient
     Color ambient = m.getColor() * light.getIntensity() * m.getAmbient();
 
-    //calculate emission
-    Color emission = m.getColor() * m.getEmission();
-
     //calculate specular
-    //Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
-    //double specularIntensity = dot(reflectionVector, unitVectorToLight);
-    //Color specular = m.getColor() * specularIntensity;
+    Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
+    Tuple unitVectorToEye = (eye - hitPoint).normalize();
+    double specularIntensity = dot(reflectionVector, unitVectorToEye);
+    Color specular = m.getColor() * specularIntensity * m.getShininess();
 
     //final color
-    Color out = diffuse + ambient + emission;
-    if (out.getR() < 0) {
-        out.setR(0);
-    }
-    if (out.getG() < 0) {
-        out.setG(0);
-    }
-    if (out.getB() < 0) {
-        out.setB(0);
-    }
+    Color out = diffuse + ambient + specular;
+    //Color out = diffuse + ambient + emission;
+    out.clamp();
     return out;
 }

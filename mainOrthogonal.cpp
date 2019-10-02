@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc; i++) {
         a.push_back(atof(argv[i]));
     }
-
+    
     //making a canvas
     Canvas canvas(CANVAS_X, CANVAS_Y);
     //define red
@@ -36,13 +36,9 @@ int main(int argc, char** argv) {
     m.setDiffuse(1.0);
     m.setShininess(0.0);
     sphere.setMaterial(m);
-    sphere.setTransform(Matrix::Translation(a[0], a[1], a[2]));
 
     //light
     PointLight light(Tuple::Point(-2, 2, -5), white);
-
-    //camera
-    Tuple camera = Tuple::Point(0, 0, -5);
 
     double x, y;
     for (double j = 0; j < CANVAS_Y; j++) {
@@ -53,9 +49,9 @@ int main(int argc, char** argv) {
             //Catching intersections
             //calculating world x
             x = -(WORLD_X / 2) + i / (CANVAS_X / WORLD_X);
-            Tuple currPoint = Tuple::Point(x, y, 0);
-            Tuple direction = (currPoint - camera).normalize();
-            Ray ray(camera, direction);
+            Tuple origin = Tuple::Point(x, y, -5);
+            Tuple direction = Tuple::Vector(0, 0, 1);
+            Ray ray(origin, direction);
             std::vector<double> ints = sphere.intersect(ray);
 
             //Checking hits
@@ -73,7 +69,7 @@ int main(int argc, char** argv) {
             }
         }
     }
-    canvas.toPPM("out.ppm");
+    canvas.toPPM("out0.ppm");
 
     return 0;
 }
