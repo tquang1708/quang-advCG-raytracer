@@ -6,20 +6,13 @@
 #include <math.h>
 
 #include "headers/sphere.hpp"
-#include "headers/ray.hpp"
 #include "headers/tuple.hpp"
 #include "headers/baseclass_funcs.hpp"
 
-//defining static var
-int Sphere::id_count = 0;
-
-//giving each sphere an unique id
 Sphere::Sphere() {
-    id = id_count;
-    id_count += 1;
 }
 
-std::vector<double> Sphere::intersect(Ray r) {
+std::vector<double> Sphere::intersect(const Ray r){
     std::vector<double> intersections;
 
     //inverse is not const
@@ -63,25 +56,9 @@ std::vector<double> Sphere::intersect(Ray r) {
     }
 }
 
-Tuple Sphere::normalAt(Tuple point) const{
+Tuple Sphere::normalAt(const Tuple point) {
     Tuple origin = Tuple::Point(0, 0, 0);
-    return (point - origin).normalize();
-}
-
-//getter
-Material Sphere::getMaterial() const {
-    return material;
-}
-
-Matrix Sphere::getTransform() const {
-    return transform;
-}
-
-//setter
-void Sphere::setMaterial(Material m) {
-    material = m;
-}
-
-void Sphere::setTransform(Matrix t) {
-    transform = t;
+    Tuple objNormal = (point - origin).normalize();
+    Tuple worldNormal = (transform.inverse().transpose() * objNormal).normalize();
+    return worldNormal;
 }

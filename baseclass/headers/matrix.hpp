@@ -6,6 +6,7 @@
 #define MATRIX_HPP
 
 #include <vector>
+#include <math.h>
 #include "tuple.hpp"
 
 class Matrix {
@@ -17,12 +18,14 @@ class Matrix {
         std::vector<std::vector<double>> matrix_grid;
     public:
         //constructors
+        Matrix();
         Matrix(int size_);
 
         //special named constructors
         static Matrix Identity();
         static Matrix Translation(double x, double y, double z);
         static Matrix Scaling(double x, double y, double z);
+        static Matrix Rotation(char axis, double angleDeg);
 
         //filler
         void fillMatrix(double* valArray);
@@ -81,6 +84,33 @@ inline Matrix Matrix::Identity() {
                            0, 0, 0, 1};
     identity.fillMatrix(valArray);
     return identity;
+}
+
+inline Matrix Matrix::Rotation(char axis, double angleDeg) {
+    Matrix rotation(4);
+    double a = angleDeg * M_PI / 180.0; //angleRad
+    if (axis == 'x') {
+        double valArray[16] = {1, 0, 0, 0,
+                               0, cos(a), sin(a), 0,
+                               0, -sin(a), cos(a), 0,
+                               0, 0, 0, 1};
+        rotation.fillMatrix(valArray);
+    }
+    else if (axis == 'y') {
+        double valArray[16] = {cos(a), 0, -sin(a), 0,
+                               0, 1, 0, 0,
+                               sin(a), 0, cos(a), 0,
+                               0, 0, 0, 1};
+        rotation.fillMatrix(valArray);
+    }
+    else if (axis == 'z') {
+        double valArray[16] = {cos(a), sin(a), 0, 0,
+                               -sin(a), cos(a), 0, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1};
+        rotation.fillMatrix(valArray);
+    }
+    return rotation;
 }
 
 #endif

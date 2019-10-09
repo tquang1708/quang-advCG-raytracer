@@ -7,6 +7,11 @@
 #include <iostream>
 #include "headers/tuple.hpp"
 
+//default constructor defaults to 4
+Matrix::Matrix() {
+    Matrix(4);
+}
+
 Matrix::Matrix(int s): size(s) {
     //initialize the matrix with all 0s
     matrix_grid.resize(s, std::vector<double>(s, 0));

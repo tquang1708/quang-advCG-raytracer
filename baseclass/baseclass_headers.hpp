@@ -9,13 +9,16 @@
 #include "headers/color.hpp"
 #include "headers/tuple.hpp"
 #include "headers/ray.hpp"
-#include "headers/sphere.hpp"
 #include "headers/canvas.hpp"
+#include "headers/matrix.hpp"
 
 #include "headers/material.hpp"
 #include "headers/pointlight.hpp"
 
-#include "headers/matrix.hpp"
+#include "headers/object.hpp"
+#include "headers/sphere.hpp"
+
+#include "headers/world.hpp"
 
 #include "headers/baseclass_funcs.hpp"
 

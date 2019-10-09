@@ -7,28 +7,14 @@
 
 #include <vector>
 #include "ray.hpp"
-#include "tuple.hpp"
-#include "material.hpp"
-#include "matrix.hpp"
+#include "object.hpp"
 
-class Sphere {
-    private:
-        static int id_count;
-        int id;
-        Material material;
-        Matrix transform = Matrix::Identity();
+class Sphere : public Object {
     public:
         Sphere();
-        std::vector<double> intersect(Ray r);
-        Tuple normalAt(Tuple point) const;
-
-        //getter func
-        Material getMaterial() const;
-        Matrix getTransform() const;
-
-        //setter func
-        void setMaterial(Material m);
-        void setTransform(Matrix t);
+        //specifically saying we want to derive from the func in Object
+        std::vector<double> intersect(const Ray r);
+        Tuple normalAt(const Tuple point);
 };
 
 
