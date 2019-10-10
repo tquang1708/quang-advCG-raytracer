@@ -8,6 +8,7 @@
 #include "sphere.hpp"
 #include "pointlight.hpp"
 #include "ray.hpp"
+#include "intersection.hpp"
 #include <vector>
 
 class World {
@@ -22,8 +23,12 @@ class World {
         void addLight(PointLight* pl);
         void addObject(Object* o);
 
+        //getter funcs
+        Object getObject(int index) const;
+        PointLight getLight(int index) const;
+
         //world functions
-        std::vector<double> intersectWorld(const Ray r);
+        std::vector<Intersection> intersectWorld(const Ray r);
 };
 
 inline World World::DefaultWorld() {

@@ -32,6 +32,11 @@ double Tuple::getw() const{
     return w;
 }
 
+//setter
+void Tuple::setw(double neww) {
+    w = neww;
+}
+
 //isPoint check
 bool Tuple::isPoint() {
     if (w == 0.0) return false;

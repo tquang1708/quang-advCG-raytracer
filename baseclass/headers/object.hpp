@@ -24,7 +24,12 @@ class Object{
         void setMaterial(Material m);
         void setTransform(Matrix t);
 
+        //disable clang warnings
+        //https://useyourloaf.com/blog/disabling-clang-compiler-warnings/
         //virtual func
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type"
         virtual std::vector<double> intersect(Ray r){};
         virtual Tuple normalAt(Tuple point){};
+#pragma clang diagnostic pop
 };

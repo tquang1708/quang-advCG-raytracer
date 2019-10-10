@@ -57,8 +57,11 @@ std::vector<double> Sphere::intersect(const Ray r){
 }
 
 Tuple Sphere::normalAt(const Tuple point) {
+    Tuple objectPoint = transform.inverse() * point;
     Tuple origin = Tuple::Point(0, 0, 0);
-    Tuple objNormal = (point - origin).normalize();
-    Tuple worldNormal = (transform.inverse().transpose() * objNormal).normalize();
+    Tuple objNormal = objectPoint - origin;
+    Tuple worldNormal = (transform.inverse().transpose() * objNormal);
+    worldNormal.setw(0);
+    worldNormal.normalize();
     return worldNormal;
 }

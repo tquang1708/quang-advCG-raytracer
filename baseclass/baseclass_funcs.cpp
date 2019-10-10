@@ -35,7 +35,7 @@ Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tupl
     if (lightIntensity > 0) {
         //calc diffuse if lightInt > 0
         diffuse = m.getColor() * light.getIntensity() * lightIntensity * m.getDiffuse();
-        
+
         //calculate specular
         Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
         Tuple unitVectorToEye = (eye - hitPoint).normalize();
@@ -48,7 +48,7 @@ Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tupl
 
     //calculate ambient
     Color ambient = m.getColor() * light.getIntensity() * m.getAmbient();
-    
+
     //final color
     Color out = diffuse + ambient + specular;
     out.clamp();

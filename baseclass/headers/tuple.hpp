@@ -32,6 +32,8 @@ class Tuple {
         double getz() const;
         double getw() const;
 
+        void setw(double neww);
+
         bool isPoint();
         bool isVector();
 
