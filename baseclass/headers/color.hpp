@@ -27,6 +27,7 @@ class Color : public Tuple {
         Color operator*(const double &scalar) const;
         Color operator*(const Color &a) const;
         Color operator+(const Color &a) const;
+        Color& operator=(const Color &a);
 
         //color clamping
         void clamp();

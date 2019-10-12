@@ -47,6 +47,7 @@ class Tuple {
         Tuple& operator=(const Tuple &a);
         Tuple operator*(const double &scalar) const;
         Tuple operator/(const double &scalar) const;
+        Tuple& operator+=(const Tuple &a);
 
         //other functions
         double magnitude() const;

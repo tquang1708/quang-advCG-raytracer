@@ -61,6 +61,19 @@ Color Color::operator+(const Color &a) const {
     return out;
 }
 
+//assignment operator overload for Colors
+Color& Color::operator=(const Color &a) {
+    //checking for self assignment
+    if(*this == a) {
+        return *this;
+    }
+
+    this -> x = a.getR();
+    this -> y = a.getR();
+    this -> z = a.getR();
+    return *this;
+}
+
 //color clamping
 void Color::clamp() {
     x > 1 ? x = 1 : x;

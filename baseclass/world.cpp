@@ -41,3 +41,40 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
     std::sort(worldInts.begin(), worldInts.end());
     return worldInts;
 }
+
+Color World::shadeHit(const Ray r, const Intersection inter) const {
+    //preparing
+    Object o = inter.getObject();
+    double t = inter.getTime();
+    Tuple hit = r.position(t);
+    Tuple normalv = o.normalAt(hit);
+    Tuple eye = r.getOrigin();
+    Tuple eyev = -r.getDirection();
+
+    //checking inside
+    if (dot(normalv, eyev) < 0) {
+        normalv = -normalv;
+    }
+
+    Color c(0, 0, 0);
+    //iterate over lights
+    for (size_t i = 0; i < lightsArray.size(); i++) {
+        PointLight currLight = *lightsArray[i];
+        c += lighting(o.getMaterial(), currLight, hit, normalv, eye);
+    }
+
+    c.clamp();
+    return c;
+}
+
+Color World::colorAt(const Ray r) {
+    std::vector<Intersection> ints = this -> intersectWorld(r);
+    if (ints.size() == 0) {
+        Color black(0, 0, 0);
+        return black;
+    }
+    else {
+        //only calculate the color at closest inter
+        return this -> shadeHit(r, ints[0]);
+    }
+}

@@ -111,6 +111,12 @@ Tuple Tuple::operator/(const double &scalar) const{
     return out;
 }
 
+//operator += overload
+Tuple& Tuple::operator+=(const Tuple &a) {
+    *this = *this + a;
+    return *this;
+}
+
 //other functions: calculations
 //finds magnitude of vector
 double Tuple::magnitude() const{

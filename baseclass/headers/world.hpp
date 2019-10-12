@@ -29,6 +29,8 @@ class World {
 
         //world functions
         std::vector<Intersection> intersectWorld(const Ray r);
+        Color shadeHit(const Ray r, const Intersection i) const;
+        Color colorAt(const Ray r);
 };
 
 inline World World::DefaultWorld() {
