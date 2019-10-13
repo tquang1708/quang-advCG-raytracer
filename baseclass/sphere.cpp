@@ -62,6 +62,6 @@ Tuple Sphere::normalAt(const Tuple point) {
     Tuple objNormal = objectPoint - origin;
     Tuple worldNormal = (transform.inverse().transpose() * objNormal);
     worldNormal.setw(0);
-    worldNormal.normalize();
+    worldNormal = worldNormal.normalize();
     return worldNormal;
 }

@@ -45,6 +45,7 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
 Color World::shadeHit(const Ray r, const Intersection inter) const {
     //preparing
     Object* o = inter.getObject();
+    Material m = o -> getMaterial();
     double t = inter.getTime();
     Tuple hit = r.position(t);
     Tuple normalv = o -> normalAt(hit);
@@ -60,7 +61,7 @@ Color World::shadeHit(const Ray r, const Intersection inter) const {
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
-        c += lighting(o -> getMaterial(), currLight, hit, normalv, eye);
+        c += lighting(m, currLight, hit, normalv, eye);
     }
 
     c.clamp();

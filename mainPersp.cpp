@@ -34,9 +34,11 @@ int main(int argc, char** argv) {
     Sphere sphere1;
     //setting a material
     Material m1;
-    m1.setColor(red);
+    m1.setColor(Color(0.8, 1.0, 0.6));
+    m1.setDiffuse(0.7);
+    m1.setSpecular(0.2);
     sphere1.setMaterial(m1);
-    sphere1.setTransform(Matrix::Scaling(2, 1, 1));
+    //sphere1.setTransform(Matrix::Scaling(2, 1, 1));
 
     //2nd Sphere
     Sphere sphere2;
@@ -48,10 +50,10 @@ int main(int argc, char** argv) {
     sphere2.setTransform(Matrix::Translation(1, 1, 2));
 
     //light
-    PointLight light(Tuple::Point(1, 1, -4), white);
+    PointLight light(Tuple::Point(-10, 10, -10), white);
 
     //camera
-    Tuple camera = Tuple::Point(0, 0, -3);
+    Tuple camera = Tuple::Point(0, 0, -5);
 
     double x, y;
     for (double j = 0; j < CANVAS_Y; j++) {
@@ -62,7 +64,7 @@ int main(int argc, char** argv) {
             //Catching intersections
             //calculating world x
             x = -(WORLD_X / 2) + i / (CANVAS_X / WORLD_X);
-            Tuple currPoint = Tuple::Point(x, y, -2);
+            Tuple currPoint = Tuple::Point(x, y, 0);
             Tuple direction = (currPoint - camera).normalize();
             Ray ray(camera, direction);
             std::vector<double> ints = sphere1.intersect(ray);
