@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     Material m1;
     m1.setColor(red);
     sphere1.setMaterial(m1);
-    sphere1.setTransform(Matrix::Rotation('y', 60) * Matrix::Scaling(2, 1, 1));
+    sphere1.setTransform(Matrix::Scaling(2, 1, 1));
 
     //2nd Sphere
     Sphere sphere2;
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     sphere2.setTransform(Matrix::Translation(1, 1, 2));
 
     //light
-    PointLight light(Tuple::Point(-10, 10, -10), white);
+    PointLight light(Tuple::Point(1, 1, -4), white);
 
     //camera
     Tuple camera = Tuple::Point(0, 0, -3);

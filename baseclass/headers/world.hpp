@@ -24,8 +24,8 @@ class World {
         void addObject(Object* o);
 
         //getter funcs
-        Object getObject(int index) const;
-        PointLight getLight(int index) const;
+        Object* getObject(int) const;
+        PointLight* getLight(int) const;
 
         //world functions
         std::vector<Intersection> intersectWorld(const Ray r);
@@ -40,7 +40,8 @@ inline World World::DefaultWorld() {
 
     static Sphere s1;
     Material m;
-    m.setColor(Color(0.8, 1.0, 0.6));
+    Color c(0.8, 1.0, 0.6);
+    m.setColor(c);
     m.setDiffuse(0.7);
     m.setSpecular(0.2);
     s1.setMaterial(m);

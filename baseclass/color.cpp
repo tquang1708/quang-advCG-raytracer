@@ -69,8 +69,8 @@ Color& Color::operator=(const Color &a) {
     }
 
     this -> x = a.getR();
-    this -> y = a.getR();
-    this -> z = a.getR();
+    this -> y = a.getG();
+    this -> z = a.getB();
     return *this;
 }
 

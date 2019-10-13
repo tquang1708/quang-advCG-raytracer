@@ -19,12 +19,12 @@ void World::addObject(Object* o) {
 }
 
 //getter funcs
-Object World::getObject(int index) const {
-    return *objectsArray[index];
+Object* World::getObject(int index) const {
+    return objectsArray[index];
 }
 
-PointLight World::getLight(int index) const {
-    return *lightsArray[index];
+PointLight* World::getLight(int index) const {
+    return lightsArray[index];
 }
 
 //world functions
@@ -44,10 +44,10 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
 
 Color World::shadeHit(const Ray r, const Intersection inter) const {
     //preparing
-    Object o = inter.getObject();
+    Object* o = inter.getObject();
     double t = inter.getTime();
     Tuple hit = r.position(t);
-    Tuple normalv = o.normalAt(hit);
+    Tuple normalv = o -> normalAt(hit);
     Tuple eye = r.getOrigin();
     Tuple eyev = -r.getDirection();
 
@@ -60,7 +60,7 @@ Color World::shadeHit(const Ray r, const Intersection inter) const {
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
-        c += lighting(o.getMaterial(), currLight, hit, normalv, eye);
+        c += lighting(o -> getMaterial(), currLight, hit, normalv, eye);
     }
 
     c.clamp();

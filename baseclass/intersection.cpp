@@ -11,8 +11,8 @@ double Intersection::getTime() const {
     return time;
 }
 
-Object Intersection::getObject() const {
-    return *object;
+Object* Intersection::getObject() const {
+    return object;
 }
 
 bool Intersection::operator<(const Intersection &i) const {

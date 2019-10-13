@@ -15,7 +15,7 @@ class Intersection {
 
         //getter funcs
         double getTime() const;
-        Object getObject() const;
+        Object* getObject() const;
 
         //for use with sort
         bool operator<(const Intersection &i) const;
