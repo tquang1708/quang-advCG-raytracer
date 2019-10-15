@@ -40,13 +40,17 @@ inline World World::DefaultWorld() {
 
     static Sphere s1;
     Material m;
-    Color c(0.8, 1.0, 0.6);
+    Color c(1, 1.0, 0.6);
     m.setColor(c);
     m.setDiffuse(0.7);
     m.setSpecular(0.2);
     s1.setMaterial(m);
 
     static Sphere s2;
+    //Material m2;
+    //Color c2(1, 0, 0);
+    //m2.setColor(c2);
+    //s2.setMaterial(m2);
     s2.setTransform(Matrix::Scaling(0.5, 0.5, 0.5));
 
     defaultWorld.addObject(&s1);

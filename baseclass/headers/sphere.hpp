@@ -17,5 +17,4 @@ class Sphere : public Object {
         Tuple normalAt(const Tuple point);
 };
 
-
 #endif

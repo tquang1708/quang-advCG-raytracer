@@ -27,8 +27,8 @@ TEST_CASE("Shading an intersection") {
 
 TEST_CASE("Shading an intersection from the inside") {
     World w = World::DefaultWorld();
-    static PointLight pl(Tuple::Point(0, 0.25, 0), Color(1, 1, 1));
-    w.addLight(&pl);
+    //static PointLight pl(Tuple::Point(0, 0.25, 0), Color(1, 1, 1));
+    //w.addLight(&pl);
     Ray r(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
     Object* shape = w.getObject(1);
     Intersection i(0.5, shape);
@@ -53,9 +53,13 @@ TEST_CASE("The color when a ray hits") {
 TEST_CASE("The color with an intersection behind the ray"){
     World w = World::DefaultWorld();
     Object* outer = w.getObject(0);
-    outer -> getMaterial().setAmbient(1);
+    Material m1 = outer -> getMaterial();
+    m1.setAmbient(1);
+    outer -> setMaterial(m1);
     Object* inner = w.getObject(1);
-    inner -> getMaterial().setAmbient(1);
+    Material m2 = inner -> getMaterial();
+    m2.setAmbient(1);
+    inner -> setMaterial(m2);
     Ray r(Tuple::Point(0, 0, 0.75), Tuple::Vector(0, 0, -1));
     Color c = w.colorAt(r);
     REQUIRE(c == inner -> getMaterial().getColor());

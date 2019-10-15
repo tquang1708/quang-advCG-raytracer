@@ -70,12 +70,16 @@ Color World::shadeHit(const Ray r, const Intersection inter) const {
 
 Color World::colorAt(const Ray r) {
     std::vector<Intersection> ints = this -> intersectWorld(r);
+    Color black(0, 0, 0);
     if (ints.size() == 0) {
-        Color black(0, 0, 0);
         return black;
     }
     else {
-        //only calculate the color at closest inter
-        return this -> shadeHit(r, ints[0]);
+        for (size_t i = 0; i < ints.size(); i++) {
+            if (ints[i].getTime() > 0) {
+                return this -> shadeHit(r, ints[i]);
+            }
+        }
+        return black;
     }
 }
