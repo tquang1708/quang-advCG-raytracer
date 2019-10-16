@@ -5,12 +5,15 @@ Ray tracer built from the ground up as part of the Advanced Computer Graphcis co
 Shadows are done, but right now only supports 1 light source. Things get weird when I try to add a second one.
 
 Right Light
+
 ![](https://i.imgur.com/zcGEOZo.png)
 
 
 Left Light
+
 ![](https://i.imgur.com/zdU65lJ.png)
 
 
 Two Lights (right is Red)
+
 ![](https://i.imgur.com/pIhi4j0.png)
