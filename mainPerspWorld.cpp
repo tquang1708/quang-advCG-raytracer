@@ -19,26 +19,12 @@ int main(int argc, char** argv) {
         a.push_back(atof(argv[i]));
     }
 
-    //making canvas
-    Canvas canvas(CANVAS_X, CANVAS_Y);
-
     //floor
-    Sphere floor;
-    floor.setTransform(Matrix::Scaling(10, 0.01, 10));
+    Plane floor;
     Material mf;
     mf.setColor(Color(1, 0.9, 0.9));
     mf.setSpecular(0);
     floor.setMaterial(mf);
-
-    //left wall
-    Sphere leftWall;
-    leftWall.setTransform(Matrix::Translation(0, 0, 5) * Matrix::Rotation('y', -45) * Matrix::Rotation('x', 90) * Matrix::Scaling(10, 0.01, 10));
-    leftWall.setMaterial(mf);
-
-    //right wall
-    Sphere rightWall;
-    rightWall.setTransform(Matrix::Translation(0, 0, 5) * Matrix::Rotation('y', 45) * Matrix::Rotation('x', 90) * Matrix::Scaling(10, 0.01, 10));
-    rightWall.setMaterial(mf);
 
     //mid sphere
     Sphere middle;
@@ -68,37 +54,26 @@ int main(int argc, char** argv) {
     left.setMaterial(ml);
 
     //point light
-    PointLight pl(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
+    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
+    PointLight pl2(Tuple::Point(10, 10, -10), Color(1, 0, 0));
 
     //world
     World w;
-    w.addLight(&pl);
+    w.addLight(&pl1);
+    w.addLight(&pl2);
     w.addObject(&floor);
-    w.addObject(&leftWall);
-    w.addObject(&rightWall);
     w.addObject(&right);
     w.addObject(&left);
     w.addObject(&middle);
 
     //camera
-    Tuple camera = Tuple::Point(0, 0, -5);
+    Camera camera(500, 250, 60);
+    camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
+                                      Tuple::Point(0, 1, 0),
+                                      Tuple::Vector(0, 1, 0)));
 
-    double x, y;
-    for (double j = 0; j < CANVAS_Y; j++) {
-        //iterate over vert pixels
-        //calc world y
-        y = (WORLD_Y / 2) - j / (CANVAS_Y / WORLD_Y);
-        for (double i = 0; i < CANVAS_X; i++) {
-            //calc world x
-            x = -(WORLD_X / 2) + i / (CANVAS_X / WORLD_X);
-            Tuple currPoint = Tuple::Point(x, y, -4);
-            Tuple direction = (currPoint - camera).normalize();
-            Ray ray(camera, direction);
-            Color c = w.colorAt(ray);
-            canvas.write_pixel(i, j, c);
-        }
-    }
-    canvas.toPPM("out.ppm");
+    //render
+    camera.render(w, "out.ppm");
 
     return 0;
 }

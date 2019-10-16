@@ -21,6 +21,7 @@
 #include "headers/plane.hpp"
 
 #include "headers/world.hpp"
+#include "headers/camera.hpp"
 
 #include "headers/baseclass_funcs.hpp"
 
