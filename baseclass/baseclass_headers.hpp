@@ -18,6 +18,7 @@
 
 #include "headers/object.hpp"
 #include "headers/sphere.hpp"
+#include "headers/plane.hpp"
 
 #include "headers/world.hpp"
 

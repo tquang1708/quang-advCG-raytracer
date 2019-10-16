@@ -12,7 +12,6 @@
 class Sphere : public Object {
     public:
         Sphere();
-        //specifically saying we want to derive from the func in Object
         std::vector<double> intersect(const Ray r);
         Tuple normalAt(const Tuple point);
 };

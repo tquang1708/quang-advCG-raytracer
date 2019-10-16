@@ -91,21 +91,21 @@ inline Matrix Matrix::Rotation(char axis, double angleDeg) {
     double a = angleDeg * M_PI / 180.0; //angleRad
     if (axis == 'x') {
         double valArray[16] = {1, 0, 0, 0,
-                               0, cos(a), sin(a), 0,
-                               0, -sin(a), cos(a), 0,
+                               0, cos(a), -sin(a), 0,
+                               0, sin(a), cos(a), 0,
                                0, 0, 0, 1};
         rotation.fillMatrix(valArray);
     }
     else if (axis == 'y') {
-        double valArray[16] = {cos(a), 0, -sin(a), 0,
+        double valArray[16] = {cos(a), 0, sin(a), 0,
                                0, 1, 0, 0,
-                               sin(a), 0, cos(a), 0,
+                               -sin(a), 0, cos(a), 0,
                                0, 0, 0, 1};
         rotation.fillMatrix(valArray);
     }
     else if (axis == 'z') {
-        double valArray[16] = {cos(a), sin(a), 0, 0,
-                               -sin(a), cos(a), 0, 0,
+        double valArray[16] = {cos(a), -sin(a), 0, 0,
+                               sin(a), cos(a), 0, 0,
                                0, 0, 1, 0,
                                0, 0, 0, 1};
         rotation.fillMatrix(valArray);

@@ -40,7 +40,7 @@ inline World World::DefaultWorld() {
 
     static Sphere s1;
     Material m;
-    Color c(1, 1.0, 0.6);
+    Color c(0.8, 1.0, 0.6);
     m.setColor(c);
     m.setDiffuse(0.7);
     m.setSpecular(0.2);
