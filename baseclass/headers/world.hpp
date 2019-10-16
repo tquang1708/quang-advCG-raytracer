@@ -29,8 +29,9 @@ class World {
 
         //world functions
         std::vector<Intersection> intersectWorld(const Ray r);
-        Color shadeHit(const Ray r, const Intersection i) const;
+        Color shadeHit(const Ray r, const Intersection i);
         Color colorAt(const Ray r);
+        bool isShadowed(Tuple);
 };
 
 inline World World::DefaultWorld() {

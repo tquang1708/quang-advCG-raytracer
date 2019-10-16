@@ -42,15 +42,18 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
     return worldInts;
 }
 
-Color World::shadeHit(const Ray r, const Intersection inter) const {
+Color World::shadeHit(const Ray r, const Intersection inter) {
     //preparing
     Object* o = inter.getObject();
     Material m = o -> getMaterial();
     double t = inter.getTime();
     Tuple hit = r.position(t);
     Tuple normalv = o -> normalAt(hit);
+    //calculating over point to push point in correct dir
+    Tuple hitOver = hit + normalv * EPSILON;
     Tuple eye = r.getOrigin();
     Tuple eyev = -r.getDirection();
+    bool shadow = this -> isShadowed(hitOver);
 
     //checking inside
     if (dot(normalv, eyev) < 0) {
@@ -61,7 +64,7 @@ Color World::shadeHit(const Ray r, const Intersection inter) const {
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
-        c += lighting(m, currLight, hit, normalv, eye);
+        c += lighting(m, currLight, hitOver, normalv, eye, shadow);
     }
 
     c.clamp();
@@ -82,4 +85,30 @@ Color World::colorAt(const Ray r) {
         }
         return black;
     }
+}
+
+bool World::isShadowed(Tuple point) {
+    for (size_t i = 0; i < (this -> lightsArray).size(); i++) {
+        Tuple temp = lightsArray[i] -> getPosition() - point;
+        double distance = temp.magnitude();
+        Tuple direction = temp.normalize();
+
+        Ray r(point, direction);
+        std::vector<Intersection> ints = this -> intersectWorld(r);
+
+        if (ints.size() == 0) {
+            return false;
+        } else {
+            for (size_t i = 0; i < ints.size(); i++) {
+                if (ints[i].getTime() < 0) {
+                    return false;
+                } else {
+                    if (ints[i].getTime() > distance) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
