@@ -15,6 +15,10 @@ Matrix::Matrix() {
 Matrix::Matrix(int s): size(s) {
     //initialize the matrix with all 0s
     matrix_grid.resize(s, std::vector<double>(s, 0));
+
+    //other values
+    detCalc = 0;
+    inversion = NULL;
 }
 
 void Matrix::fillMatrix(double* valArray) {
@@ -176,10 +180,10 @@ Matrix Matrix::inverse() {
         return NULL;
     }
     else if (this -> inversion != NULL) {
-        return *(this -> inversion);
+        return *inversion.get();
     }
     else {
-        static Matrix out(size);
+        std::shared_ptr<Matrix> out = std::make_shared<Matrix>(4);
         double valOut[size * size];
 
         int arrayIndex = 0;
@@ -189,9 +193,9 @@ Matrix Matrix::inverse() {
                 arrayIndex++;
             }
         }
-        out.fillMatrix(valOut);
-        this -> inversion = &out;
-        return out;
+        out -> fillMatrix(valOut);
+        inversion = out;
+        return *out.get();
     }
 }
 

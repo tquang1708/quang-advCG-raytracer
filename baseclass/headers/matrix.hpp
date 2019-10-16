@@ -7,14 +7,15 @@
 
 #include <vector>
 #include <math.h>
+#include <memory>
 #include "tuple.hpp"
 
 class Matrix {
     private:
         int size;
-        int detCalc = 0;
+        int detCalc;
         double det;
-        Matrix* inversion = NULL;
+        std::shared_ptr<Matrix> inversion;
         std::vector<std::vector<double>> matrix_grid;
     public:
         //constructors
@@ -42,7 +43,7 @@ class Matrix {
         Matrix operator* (const Matrix &m) const;
         Tuple operator* (const Tuple &t) const;
         Matrix operator* (const double &d) const;
-        
+
         //calculation function
         double determinant();
         Matrix submatrix(int row, int col) const;

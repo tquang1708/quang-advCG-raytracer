@@ -22,39 +22,63 @@ int main(int argc, char** argv) {
     //making canvas
     Canvas canvas(CANVAS_X, CANVAS_Y);
 
-    //define colors
-    Color red = Color(1, 0, 0);
-    Color green = Color(0, 1, 0);
-    Color grey = Color(0.7, 0.7, 0.7);
+    //floor
+    Sphere floor;
+    floor.setTransform(Matrix::Scaling(10, 0.01, 10));
+    Material mf;
+    mf.setColor(Color(1, 0.9, 0.9));
+    mf.setSpecular(0);
+    floor.setMaterial(mf);
 
-    //plane 1
-    Plane p1;
-    Material mp1;
-    mp1.setColor(grey);
-    p1.setMaterial(mp1);
+    //left wall
+    Sphere leftWall;
+    leftWall.setTransform(Matrix::Translation(0, 0, 5) * Matrix::Rotation('y', -45) * Matrix::Rotation('x', 90) * Matrix::Scaling(10, 0.01, 10));
+    leftWall.setMaterial(mf);
 
-    //sphere 1
-    //Sphere s1;
-    //Material m1;
-    //m1.setColor(red);
-    //s1.setMaterial(m1);
+    //right wall
+    Sphere rightWall;
+    rightWall.setTransform(Matrix::Translation(0, 0, 5) * Matrix::Rotation('y', 45) * Matrix::Rotation('x', 90) * Matrix::Scaling(10, 0.01, 10));
+    rightWall.setMaterial(mf);
 
-    //sphere 2
-    //Sphere s2;
-    //Material m2;
-    //m2.setColor(green);
-    //s2.setMaterial(m2);
-    //s2.setTransform(Matrix::Translation(1, 1, 0) * Matrix::Scaling(2, 2, 2));
+    //mid sphere
+    Sphere middle;
+    middle.setTransform(Matrix::Translation(-0.5, 1, 0.5));
+    Material ms;
+    ms.setColor(Color(0.1, 1, 0.5));
+    ms.setDiffuse(0.7);
+    ms.setSpecular(0.3);
+    middle.setMaterial(ms);
 
-    //light 1
+    //right sphere
+    Sphere right;
+    right.setTransform(Matrix::Translation(1.5, 0.5, -0.5) * Matrix::Scaling(0.5, 0.5, 0.5));
+    Material mr;
+    mr.setColor(Color(0.5, 1, 0.1));
+    mr.setDiffuse(0.7);
+    mr.setSpecular(0.3);
+    right.setMaterial(mr);
+
+    //left sphere
+    Sphere left;
+    left.setTransform(Matrix::Translation(-1.5, 0.33, -0.75) * Matrix::Scaling(0.33, 0.33, 0.33));
+    Material ml;
+    ml.setColor(Color(1, 0.8, 0.1));
+    ml.setDiffuse(0.7);
+    ml.setSpecular(0.3);
+    left.setMaterial(ml);
+
+    //point light
     PointLight pl(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
 
     //world
     World w;
-    //w.addObject(&s1);
-    //w.addObject(&s2);
-    w.addObject(&p1);
     w.addLight(&pl);
+    w.addObject(&floor);
+    w.addObject(&leftWall);
+    w.addObject(&rightWall);
+    w.addObject(&right);
+    w.addObject(&left);
+    w.addObject(&middle);
 
     //camera
     Tuple camera = Tuple::Point(0, 0, -5);
