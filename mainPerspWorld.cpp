@@ -55,11 +55,11 @@ int main(int argc, char** argv) {
 
     //point light
     PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
-    PointLight pl2(Tuple::Point(10, 10, -10), Color(1, 0, 0));
+    PointLight pl2(Tuple::Point(10, 10, -10), Color(1, 1, 1));
 
     //world
     World w;
-    w.addLight(&pl1);
+    //w.addLight(&pl1);
     w.addLight(&pl2);
     w.addObject(&floor);
     w.addObject(&right);
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
                                       Tuple::Vector(0, 1, 0)));
 
     //render
-    camera.render(w, "out.ppm");
+    camera.render(w, "outLightRight.ppm");
 
     return 0;
 }

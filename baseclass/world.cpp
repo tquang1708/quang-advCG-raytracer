@@ -96,19 +96,35 @@ bool World::isShadowed(Tuple point) {
         Ray r(point, direction);
         std::vector<Intersection> ints = this -> intersectWorld(r);
 
-        if (ints.size() == 0) {
-            return false;
-        } else {
+        //tracks whether all the ints are negative
+        //int allNeg = 1;
+        //if (ints.size() == 0) {
+        //    return false;
+        //} else {
+        //    for (size_t i = 0; i < ints.size(); i++) {
+        //        if (ints[i].getTime() > 0) {
+        //            allNeg = 0;
+        //            if (ints[i].getTime() > distance) {
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //if (allNeg == 1) {
+        //    return false;
+        //}
+
+        if (ints.size() > 0) {
             for (size_t i = 0; i < ints.size(); i++) {
-                if (ints[i].getTime() < 0) {
-                    return false;
-                } else {
-                    if (ints[i].getTime() > distance) {
-                        return false;
+                if (ints[i].getTime() > 0) {
+                    if (ints[i].getTime() < distance) {
+                        return true;
                     }
                 }
             }
         }
     }
-    return true;
+    //return true;
+    return false;
 }
