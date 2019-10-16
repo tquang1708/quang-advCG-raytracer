@@ -175,8 +175,8 @@ Matrix Matrix::inverse() {
     if (det == 0) {
         return NULL;
     }
-    else if (inversion != NULL) {
-        return *inversion;
+    else if (this -> inversion != NULL) {
+        return *(this -> inversion);
     }
     else {
         static Matrix out(size);
@@ -190,7 +190,7 @@ Matrix Matrix::inverse() {
             }
         }
         out.fillMatrix(valOut);
-        inversion = &out;
+        this -> inversion = &out;
         return out;
     }
 }
