@@ -53,7 +53,6 @@ Color World::shadeHit(const Ray r, const Intersection inter) {
     Tuple hitOver = hit + normalv * EPSILON;
     Tuple eye = r.getOrigin();
     Tuple eyev = -r.getDirection();
-    bool shadow = this -> isShadowed(hitOver);
 
     //checking inside
     if (dot(normalv, eyev) < 0) {
@@ -64,6 +63,7 @@ Color World::shadeHit(const Ray r, const Intersection inter) {
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
+        bool shadow = this -> isShadowed(currLight, hitOver);
         c += lighting(m, currLight, hitOver, normalv, eye, shadow);
     }
 
@@ -87,40 +87,38 @@ Color World::colorAt(const Ray r) {
     }
 }
 
-bool World::isShadowed(Tuple point) {
-    for (size_t i = 0; i < (this -> lightsArray).size(); i++) {
-        Tuple temp = lightsArray[i] -> getPosition() - point;
-        double distance = temp.magnitude();
-        Tuple direction = temp.normalize();
+bool World::isShadowed(PointLight pl, Tuple point) {
+    Tuple temp = pl.getPosition() - point;
+    double distance = temp.magnitude();
+    Tuple direction = temp.normalize();
 
-        Ray r(point, direction);
-        std::vector<Intersection> ints = this -> intersectWorld(r);
+    Ray r(point, direction);
+    std::vector<Intersection> ints = this -> intersectWorld(r);
 
-        //tracks whether all the ints are negative
-        //int allNeg = 1;
-        //if (ints.size() == 0) {
-        //    return false;
-        //} else {
-        //    for (size_t i = 0; i < ints.size(); i++) {
-        //        if (ints[i].getTime() > 0) {
-        //            allNeg = 0;
-        //            if (ints[i].getTime() > distance) {
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //}
+    //tracks whether all the ints are negative
+    //int allNeg = 1;
+    //if (ints.size() == 0) {
+    //    return false;
+    //} else {
+    //    for (size_t i = 0; i < ints.size(); i++) {
+    //        if (ints[i].getTime() > 0) {
+    //            allNeg = 0;
+    //            if (ints[i].getTime() > distance) {
+    //                return false;
+    //            }
+    //        }
+    //    }
+    //}
 
-        //if (allNeg == 1) {
-        //    return false;
-        //}
+    //if (allNeg == 1) {
+    //    return false;
+    //}
 
-        if (ints.size() > 0) {
-            for (size_t i = 0; i < ints.size(); i++) {
-                if (ints[i].getTime() > 0) {
-                    if (ints[i].getTime() < distance) {
-                        return true;
-                    }
+    if (ints.size() > 0) {
+        for (size_t i = 0; i < ints.size(); i++) {
+            if (ints[i].getTime() > 0) {
+                if (ints[i].getTime() < distance) {
+                    return true;
                 }
             }
         }

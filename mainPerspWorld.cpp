@@ -5,13 +5,6 @@
 #include "baseclass/baseclass_headers.hpp"
 #include <vector>
 
-//defining canvas size in pixels
-const int CANVAS_X = 600;
-const int CANVAS_Y = 600;
-//defining world's dimension
-const float WORLD_X = 4;
-const float WORLD_Y = 4;
-
 int main(int argc, char** argv) {
     //handling inputs for testing
     std::vector<double> a;
@@ -62,27 +55,29 @@ int main(int argc, char** argv) {
     left.setMaterial(ml);
 
     //point light
-    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
-    PointLight pl2(Tuple::Point(10, 10, -10), Color(1, 1, 1));
+    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 0, 0));
+    PointLight pl2(Tuple::Point(0, 10, 10), Color(0, 1, 0));
+    PointLight pl3(Tuple::Point(10, 10, -10), Color(0, 0, 1));
 
     //world
     World w;
     w.addLight(&pl1);
-    //w.addLight(&pl2);
-    //w.addObject(&floor);
-    //w.addObject(&right);
-    //w.addObject(&left);
-    //w.addObject(&middle);
-    w.addObject(&triangle);
+    w.addLight(&pl2);
+    w.addLight(&pl3);
+    w.addObject(&floor);
+    w.addObject(&right);
+    w.addObject(&left);
+    w.addObject(&middle);
+    //w.addObject(&triangle);
 
     //camera
-    Camera camera(500, 250, 60);
+    Camera camera(1280, 720, 60);
     camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
                                       Tuple::Point(0, 1, 0),
                                       Tuple::Vector(0, 1, 0)));
 
     //render
-    camera.render(w, "triangle.ppm");
+    camera.render(w, "out.ppm");
 
     return 0;
 }

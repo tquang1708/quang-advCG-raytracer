@@ -31,7 +31,7 @@ class World {
         std::vector<Intersection> intersectWorld(const Ray r);
         Color shadeHit(const Ray r, const Intersection i);
         Color colorAt(const Ray r);
-        bool isShadowed(Tuple);
+        bool isShadowed(PointLight, Tuple);
 };
 
 inline World World::DefaultWorld() {
