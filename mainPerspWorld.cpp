@@ -26,6 +26,14 @@ int main(int argc, char** argv) {
     mf.setSpecular(0);
     floor.setMaterial(mf);
 
+    //a triangle
+    Triangle triangle(Tuple::Point(1, 0, 0),
+                      Tuple::Point(0, 3, 4),
+                      Tuple::Point(2, 0, 3));
+    Material t;
+    t.setColor(Color(0, 1, 0));
+    triangle.setMaterial(t);
+
     //mid sphere
     Sphere middle;
     middle.setTransform(Matrix::Translation(-0.5, 1, 0.5));
@@ -59,12 +67,13 @@ int main(int argc, char** argv) {
 
     //world
     World w;
-    //w.addLight(&pl1);
-    w.addLight(&pl2);
-    w.addObject(&floor);
-    w.addObject(&right);
-    w.addObject(&left);
-    w.addObject(&middle);
+    w.addLight(&pl1);
+    //w.addLight(&pl2);
+    //w.addObject(&floor);
+    //w.addObject(&right);
+    //w.addObject(&left);
+    //w.addObject(&middle);
+    w.addObject(&triangle);
 
     //camera
     Camera camera(500, 250, 60);
@@ -73,7 +82,7 @@ int main(int argc, char** argv) {
                                       Tuple::Vector(0, 1, 0)));
 
     //render
-    camera.render(w, "outLightRight.ppm");
+    camera.render(w, "triangle.ppm");
 
     return 0;
 }
