@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
     middle.setMaterial(ms);
 
     //right sphere
+    //lengthen var names
     Sphere right;
     right.setTransform(Matrix::Translation(1.5, 0.5, -0.5) * Matrix::Scaling(0.5, 0.5, 0.5));
     Material mr;

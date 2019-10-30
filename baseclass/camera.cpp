@@ -5,7 +5,7 @@
 #include "headers/camera.hpp"
 #include <math.h>
 
-Camera::Camera(int h, int v, int f): hsize(h), vsize(v), fov(f) {
+Camera::Camera(int h, int v, double f): hsize(h), vsize(v), fov(f) {
     transform = Matrix::Identity();
 }
 

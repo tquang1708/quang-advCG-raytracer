@@ -18,6 +18,17 @@ void World::addObject(Object* o) {
     objectsArray.push_back(o);
 }
 
+//removing stuffs funcs
+void World::removeLight(PointLight* pl) {
+    lightsArray.erase((std::remove(lightsArray.begin(), lightsArray.end(), pl)),
+                      lightsArray.end());
+}
+
+void World::removeObject(Object* o) {
+    objectsArray.erase((std::remove(objectsArray.begin(), objectsArray.end(), o)),
+                      objectsArray.end());
+}
+
 //getter funcs
 Object* World::getObject(int index) const {
     return objectsArray[index];

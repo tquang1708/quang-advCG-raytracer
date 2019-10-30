@@ -23,6 +23,10 @@ class World {
         void addLight(PointLight* pl);
         void addObject(Object* o);
 
+        //removing stuffs funcs
+        void removeLight(PointLight* pl);
+        void removeObject(Object* o);
+
         //getter funcs
         Object* getObject(int) const;
         PointLight* getLight(int) const;

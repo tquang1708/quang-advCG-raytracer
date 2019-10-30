@@ -22,7 +22,7 @@ class Camera {
         double halfH;
         double pixelS;
     public:
-        Camera(int, int, int);
+        Camera(int, int, double);
 
         //getter funcs
         int getHSize() const;
