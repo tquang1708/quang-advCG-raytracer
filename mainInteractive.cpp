@@ -12,9 +12,9 @@
 #include <sstream>
 #include <iostream>
 
-int getInt();
-double getDouble();
-std::vector<double> getDoubleList(int listLen);
+int getInt(int);
+double getDouble(double);
+std::vector<double> getDoubleList(int, std::vector<double>);
 
 int main() {
     //default world and camera
@@ -26,6 +26,7 @@ int main() {
     //welcome message
     std::cout << "Welcome to the interactive world building wizard!\n";
     std::cout << "Note: (n) in the instruction means give n inputs seperated by a whitespace character.\n";
+    std::cout << "Note: (default n) in the instruction means if you do not give an input, the default will be used.\n";
     while (true) {
         std::cout << "Would you like to use the default canvas and camera? (y/n) ";
         std::getline(std::cin, input);
@@ -86,11 +87,11 @@ int main() {
             double canvas_fov;
 
             std::cout << "Input Horizontal canvas size (default: 1280) ";
-            canvas_x = getInt();
+            canvas_x = getInt(1280);
             std::cout << "Input Vertical canvas size (default: 720) ";
-            canvas_y = getInt();
+            canvas_y = getInt(720);
             std::cout << "Input FOV (default: 60) ";
-            canvas_fov = getDouble();
+            canvas_fov = getDouble(60);
             camera.setHSize(canvas_x);
             camera.setVSize(canvas_y);
             camera.setFOV(canvas_fov);
@@ -100,11 +101,11 @@ int main() {
             std::vector<double> up_xyz;
             std::cout << std::endl << "View Transformation setup" << std::endl;
             std::cout << "(3) Camera's viewing from (x y z) (default: 0 1.5 -5) ";
-            from_xyz = getDoubleList(3);
+            from_xyz = getDoubleList(3, std::vector<double> {0, 1.5, -5});
             std::cout << "(3) Camera's viewing to (x y z) (default: 0 1 0) ";
-            to_xyz = getDoubleList(3);
+            to_xyz = getDoubleList(3, std::vector<double> {0, 1, 0});
             std::cout << "(3) Camera's up vector (x y z) (default: 0 1 0) ";
-            up_xyz = getDoubleList(3);
+            up_xyz = getDoubleList(3, std::vector<double> {0, 1, 0});
             camera.setTransform(viewTransform(Tuple::Point(from_xyz[0], from_xyz[1], from_xyz[2]),
                                               Tuple::Point(to_xyz[0], to_xyz[1], to_xyz[2]),
                                               Tuple::Vector(up_xyz[0], up_xyz[1], up_xyz[2])));
@@ -117,7 +118,7 @@ int main() {
     }
 
     //world building wizard
-    while (true) {
+        WIZ_START:while (true) {
         //commands
         std::cout << "Available commands: add remove list render end" << std::endl;
         std::getline(std::cin, input);
@@ -131,29 +132,45 @@ int main() {
             camera.render(mainWorld, output);
             std::cout << "World rendered.\n";
         } else if (input == "end") {
-            std::cout << "Ending program...\n";
+            std::cout << "Warning: Ending the program would erase all created objects.\n";
+            while (true) {
+                std::cout << "Are you sure? (y/n) ";
+                std::getline(std::cin, input);
+
+                if (input == "y") {
+                    std::cout << "Ending program...\n";
+                    return 0;
+                } else if (input == "n") {
+                    goto WIZ_START;
+                } else {
+                    std::cout << "Bad input.\n";
+                }
+            }
             break;
         } else {
             std::cout << "Bad input.\n";
         }
     }
-
-    //end the program
-    return 0;
 }
 
 //learnt from
 //http://www.keithschwarz.com/cs106l/fall2010/course-reader/Ch3_Streams.pdf
 //found from this StackOverflow question
 //https://stackoverflow.com/questions/4999650/c-how-do-i-check-if-the-cin-buffer-is-empty
-int getInt() {
+int getInt(int defaultVal) {
     while (true) { //read until user enters valid data
         //re-initialize strInp and stringstream objects
         std::string strInp;
         std::stringstream converter;
 
         std::getline(std::cin, strInp);
+        //check for empty string (default)
+        if (strInp == "") {
+            return defaultVal;
+        }
+
         converter << strInp;
+
         //check for int
         int out;
         if (converter >> out) { //if converter successfully reads to out
@@ -172,11 +189,17 @@ int getInt() {
     }
 }
 
-double getDouble() {
+double getDouble(double defaultVal) {
     while (true) {
         std::string strInp;
         std::stringstream converter;
         std::getline(std::cin, strInp);
+
+        //check for empty string (default)
+        if (strInp == "") {
+            return defaultVal;
+        }
+
         converter << strInp;
 
         //check for double;
@@ -196,12 +219,17 @@ double getDouble() {
 }
 
 //takes in a length of list then return a list of doubles
-std::vector<double> getDoubleList(int listLen) {
-    START:while (true) {
+std::vector<double> getDoubleList(int listLen, std::vector<double> defaultVal) {
+    GET_DOUBLE_LIST_START:while (true) {
         //storing the inputs
         std::string strInp;
         std::stringstream converter;
+
         std::getline(std::cin, strInp);
+        //check for empty string (default)
+        if (strInp == "") {
+            return defaultVal;
+        }
         converter << strInp;
 
         //reading out from the stringstream
@@ -210,7 +238,7 @@ std::vector<double> getDoubleList(int listLen) {
             if (!(converter >> outList[i])) {
                 std::cout << "Bad input. Please input a list of " << listLen
                           << " doubles separated by spaces. ";
-                goto START;
+                goto GET_DOUBLE_LIST_START;
             }
         }
 
