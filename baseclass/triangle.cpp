@@ -61,5 +61,5 @@ std::vector<double> Triangle::intersect(const Ray r) {
 
 Tuple Triangle::normalAt(const Tuple point) {
     (void)point;
-    return cross(point_a - point_b, point_a - point_c);
+    return cross(point_a - point_b, point_a - point_c).normalize();
 }

@@ -55,15 +55,15 @@ int main(int argc, char** argv) {
     left.setMaterial(ml);
 
     //point light
-    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 0, 0));
+    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
     PointLight pl2(Tuple::Point(0, 10, 10), Color(0, 1, 0));
     PointLight pl3(Tuple::Point(10, 10, -10), Color(0, 0, 1));
 
     //world
     World w;
     w.addLight(&pl1);
-    w.addLight(&pl2);
-    w.addLight(&pl3);
+    //w.addLight(&pl2);
+    //w.addLight(&pl3);
     w.addObject(&floor);
     w.addObject(&right);
     w.addObject(&left);
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
     //w.addObject(&triangle);
 
     //camera
-    Camera camera(1280, 720, 60);
+    Camera camera(500, 250, 60);
     camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
                                       Tuple::Point(0, 1, 0),
                                       Tuple::Vector(0, 1, 0)));

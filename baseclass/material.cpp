@@ -10,6 +10,8 @@ Material::Material() {
     diffuse = 0.9;
     specular = 0.9;
     shininess = 200;
+    reflectivity = 0.0;
+    emission = 0.0;
 }
 
 Color Material::getColor() const {
@@ -33,6 +35,14 @@ double Material::getSpecular() const {
     return specular;
 }
 
+double Material::getReflectivity() const {
+    return reflectivity;
+}
+
+double Material::getEmission() const {
+    return emission;
+}
+
 //setter
 void Material::setColor(Color c) {
     color = c;
@@ -52,6 +62,14 @@ void Material::setShininess(double s) {
 
 void Material::setSpecular(double s) {
     specular = s;
+}
+
+void Material::setReflectivity(double r) {
+    reflectivity = r;
+}
+
+void Material::setEmission(double e) {
+    emission = e;
 }
 
 //operator overloading

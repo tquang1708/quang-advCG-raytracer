@@ -12,6 +12,7 @@
 #include "headers/canvas.hpp"
 #include "headers/matrix.hpp"
 #include "headers/intersection.hpp"
+#include "headers/comps.hpp"
 
 #include "headers/material.hpp"
 #include "headers/pointlight.hpp"

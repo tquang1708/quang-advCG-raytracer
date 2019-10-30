@@ -27,15 +27,18 @@ Tuple cross(Tuple a, Tuple b){
 Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye, bool isShadowed) {
     //calculate ambient
     Color ambient = m.getColor() * light.getIntensity() * m.getAmbient();
-   
+
     //if shadowed return ambient
     if (isShadowed) {
         return ambient;
-    } 
+    }
     else {
         //calculate diffuse
         Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
         double lightIntensity = dot(normalv, unitVectorToLight);
+
+        //calculate emission
+        Color emission = m.getColor() * m.getEmission();
 
         //black default case
         Color diffuse(0, 0, 0);
@@ -55,7 +58,7 @@ Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tupl
         }
 
         //final color
-        Color out = diffuse + ambient + specular;
+        Color out = diffuse + ambient + specular + emission;
         out.clamp();
         return out;
     }

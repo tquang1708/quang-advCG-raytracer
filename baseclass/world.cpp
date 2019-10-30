@@ -42,6 +42,35 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
     return worldInts;
 }
 
+bool World::isShadowed(PointLight pl, Tuple point) {
+    Tuple temp = pl.getPosition() - point;
+    double distance = temp.magnitude();
+    Tuple direction = temp.normalize();
+
+    Ray r(point, direction);
+    std::vector<Intersection> ints = this -> intersectWorld(r);
+
+    if (ints.size() > 0) {
+        for (size_t i = 0; i < ints.size(); i++) {
+            if (ints[i].getTime() > 0) {
+                if (ints[i].getTime() < distance) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+Color World::reflectedColor(const Ray r, const Intersection i) {
+    Material m = i.getObject() -> getMaterial();
+
+    //nonreflective surface
+    if (m.getReflectivity() == 0) {
+        return Color(0, 0, 0);
+    }
+}
+
 Color World::shadeHit(const Ray r, const Intersection inter) {
     //preparing
     Object* o = inter.getObject();
@@ -85,44 +114,4 @@ Color World::colorAt(const Ray r) {
         }
         return black;
     }
-}
-
-bool World::isShadowed(PointLight pl, Tuple point) {
-    Tuple temp = pl.getPosition() - point;
-    double distance = temp.magnitude();
-    Tuple direction = temp.normalize();
-
-    Ray r(point, direction);
-    std::vector<Intersection> ints = this -> intersectWorld(r);
-
-    //tracks whether all the ints are negative
-    //int allNeg = 1;
-    //if (ints.size() == 0) {
-    //    return false;
-    //} else {
-    //    for (size_t i = 0; i < ints.size(); i++) {
-    //        if (ints[i].getTime() > 0) {
-    //            allNeg = 0;
-    //            if (ints[i].getTime() > distance) {
-    //                return false;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //if (allNeg == 1) {
-    //    return false;
-    //}
-
-    if (ints.size() > 0) {
-        for (size_t i = 0; i < ints.size(); i++) {
-            if (ints[i].getTime() > 0) {
-                if (ints[i].getTime() < distance) {
-                    return true;
-                }
-            }
-        }
-    }
-    //return true;
-    return false;
 }
