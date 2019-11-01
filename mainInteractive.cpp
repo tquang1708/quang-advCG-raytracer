@@ -155,13 +155,20 @@ int main() {
                 std::cout << "Avaiable objects: material sphere floor triangle\n";
                 std::getline(std::cin, input);
                 if (input == "material") {
-                    //
+                    std::cout << "New material added.\n";
+                    goto WIZ_START;
                 } else if (input == "sphere") {
                     //
+                    std::cout << "New sphere added.\n";
+                    goto WIZ_START;
                 } else if (input == "floor") {
                     //
+                    std::cout << "New floor added.\n";
+                    goto WIZ_START;
                 } else if (input == "triangle") {
                     //
+                    std::cout << "New triangle added.\n";
+                    goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
                 }
