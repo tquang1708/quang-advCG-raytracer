@@ -155,6 +155,13 @@ int main() {
                 std::cout << "Avaiable objects (material sphere floor triangle) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
+                    //Material interaction
+                    std::cout << "Creating a new material...\n";
+                    materialsArray.push_back(makeMaterial());
+                    std::cout << "Input material name ";
+                    std::getline(std::cin, input);
+                    materialsNameArray.push_back(input);
+                    materialsCount += 1;
                     std::cout << "New material added.\n";
                     goto WIZ_START;
                 } else if (input == "sphere") {
@@ -176,6 +183,12 @@ int main() {
                 std::getline(std::cin, input);
                 int index;
                 if (input == "object") {
+                    //check if there's more than 0 object
+                    if (objectsArray.size() == 0) {
+                        std::cout << "No object to remove.\n";
+                        goto WIZ_START;
+                    }
+
                     //relist objects
                     std::cout << "ID   Objects   Name\n";
                     for (size_t i = 0; i < objectsNameArray.size(); i++) {
@@ -184,21 +197,53 @@ int main() {
                                   << objectsNameArray[i] << std::endl;
                     }
 
-                    std::cout << "Input ID of object to remove (default 0) ";
-                    index = getInt(0);
+                    //check valid ID
+                    while (true) {
+                        std::cout << "Input ID of object to remove (default 0) ";
+                        index = getInt(0);
+                        if (index > (int) objectsNameArray.size() - 1) {
+                            std::cout << "ID out of bound.\n";
+                        }
+                        else {
+                            goto OBJ_REMOVE_START;
+                        }
+                    }
+
+                    //remove object by index
+                    OBJ_REMOVE_START:std::cout << "Object removed\n";
                     goto WIZ_START;
                 } else if (input == "material") {
+                    //check if there's more than 1 material
+                    if (materialsArray.size() <= 1) {
+                        std::cout << "No material to remove.\n";
+                        goto WIZ_START;
+                    }
+
                     //relist materials
                     std::cout << "ID   MaterialName\n";
                     for (size_t i = 0; i < materialsNameArray.size(); i++) {
                         std::cout << std::setw(5) << std::left << i
                                   << std::setw(10) << std::left << materialsNameArray[i]
                                   << std::endl;
-                    std::cout << "Input ID of material to remove (default 1) ";
-                    index = getInt(1);
-                    if (index == 0) {std::cout << "Default material cannot be removed.\n";};
-                    goto WIZ_START;
                     }
+
+                    //check valid ID
+                    while (true) {
+                        std::cout << "Input ID of material to remove (default 1) ";
+                        index = getInt(1);
+
+                        if (index == 0) {
+                            std::cout << "Default material cannot be removed.\n";
+                        } else if (index > (int) materialsNameArray.size() - 1) {
+                            std::cout << "ID out of bound.\n";
+                        } else {
+                            goto MATE_REMOVE_START;
+                        }
+                    }
+
+                    //remove material by index
+                    MATE_REMOVE_START:std::cout << "Material removed\n";
+                    goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
                 }
