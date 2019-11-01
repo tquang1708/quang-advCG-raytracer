@@ -7,14 +7,18 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <memory>
 
 #include <istream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 int getInt(int);
 double getDouble(double);
 std::vector<double> getDoubleList(int, std::vector<double>);
+
+std::shared_ptr<Material> makeMaterial();
 
 int main() {
     //default world and camera
@@ -118,7 +122,22 @@ int main() {
     }
 
     //world building wizard
-        WIZ_START:while (true) {
+    std::vector<std::shared_ptr<Object>> objectsArray;
+    std::vector<std::string> objectsNameArray;
+    std::vector<std::string> objectsTypeArray;
+    std::vector<std::shared_ptr<Material>> materialsArray;
+    std::vector<std::string> materialsNameArray;
+
+    int objectsCount = 0, materialsCount = 0;
+
+
+    //default material creation
+    std::cout << "Creating a default material.\n";
+    materialsArray.push_back(makeMaterial());
+    materialsNameArray.push_back("default");
+    materialsCount += 1;
+
+    WIZ_START:while (true) {
         //commands
         std::cout << "Available commands: add remove list render end" << std::endl;
         std::getline(std::cin, input);
@@ -131,6 +150,24 @@ int main() {
             output = "./output/" + output + ".ppm";
             camera.render(mainWorld, output);
             std::cout << "World rendered.\n";
+        } else if (input == "add") {
+            while (true) {
+                std::cout << "Avaiable objects: material sphere floor triangle\n";
+                std::getline(std::cin, input);
+                if (input == "material") {
+                    //
+                } else if (input == "sphere") {
+                    //
+                } else if (input == "floor") {
+                    //
+                } else if (input == "triangle") {
+                    //
+                } else {
+                    std::cout << "Bad input.\n";
+                }
+            }
+        } else if (input == "remove") {
+            //
         } else if (input == "end") {
             std::cout << "Warning: Ending the program would erase all created objects.\n";
             while (true) {
@@ -147,6 +184,20 @@ int main() {
                 }
             }
             break;
+        } else if (input == "list") {
+            std::cout << "ID   Objects   Name\n";
+            for (size_t i = 0; i < objectsNameArray.size(); i++) {
+                std::cout << std::setw(5) << std::left << i
+                          << std::setw(10) << std::left << objectsTypeArray[i]
+                          << objectsNameArray[i] << std::endl;
+            }
+            std::cout << "---------------------------\n";
+            std::cout << "ID   MaterialName\n";
+            for (size_t i = 0; i < materialsNameArray.size(); i++) {
+                std::cout << std::setw(5) << std::left << i
+                          << std::setw(10) << std::left << materialsNameArray[i]
+                          << std::endl;
+            }
         } else {
             std::cout << "Bad input.\n";
         }
@@ -251,4 +302,34 @@ std::vector<double> getDoubleList(int listLen, std::vector<double> defaultVal) {
             return outList;
         }
     }
+}
+
+//prompts the user for Material stuffs
+//returns a pointer to the corresponding material
+std::shared_ptr<Material> makeMaterial() {
+    std::shared_ptr<Material> newMaterial = std::make_shared<Material>();
+
+    std::cout << "(3) Input Color (default: 1 1 1) ";
+    std::vector<double> color_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
+    newMaterial -> setColor(Color (color_xyz[0], color_xyz[1], color_xyz[2]));
+
+    std::cout << "Input ambient (default: 0.1) ";
+    newMaterial -> setAmbient(getDouble(0.1));
+
+    std::cout << "Input diffuse (default: 0.9) ";
+    newMaterial -> setDiffuse(getDouble(0.9));
+
+    std::cout << "Input specular (default: 0.9) ";
+    newMaterial -> setSpecular(getDouble(0.9));
+
+    std::cout << "Input shininess (default: 200) ";
+    newMaterial -> setShininess(getDouble(200));
+
+    std::cout << "Input reflectivity (default: 0.0) ";
+    newMaterial -> setReflectivity(getDouble(0));
+
+    std::cout << "Input emission (default: 0.0) ";
+    newMaterial -> setEmission(getDouble(0));
+
+    return newMaterial;
 }
