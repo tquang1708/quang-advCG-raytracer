@@ -132,14 +132,14 @@ int main() {
 
 
     //default material creation
-    std::cout << "Creating a default material.\n";
+    std::cout << "Creating a default material...\n";
     materialsArray.push_back(makeMaterial());
     materialsNameArray.push_back("default");
     materialsCount += 1;
 
     WIZ_START:while (true) {
         //commands
-        std::cout << "Available commands: add remove list render end" << std::endl;
+        std::cout << "Available commands (add remove list render end) ";
         std::getline(std::cin, input);
 
         //input handling
@@ -152,21 +152,18 @@ int main() {
             std::cout << "World rendered.\n";
         } else if (input == "add") {
             while (true) {
-                std::cout << "Avaiable objects: material sphere floor triangle\n";
+                std::cout << "Avaiable objects (material sphere floor triangle) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
                     std::cout << "New material added.\n";
                     goto WIZ_START;
                 } else if (input == "sphere") {
-                    //
                     std::cout << "New sphere added.\n";
                     goto WIZ_START;
                 } else if (input == "floor") {
-                    //
                     std::cout << "New floor added.\n";
                     goto WIZ_START;
                 } else if (input == "triangle") {
-                    //
                     std::cout << "New triangle added.\n";
                     goto WIZ_START;
                 } else {
@@ -174,7 +171,38 @@ int main() {
                 }
             }
         } else if (input == "remove") {
-            //
+            while (true) {
+                std::cout << "Remove (material/object) ";
+                std::getline(std::cin, input);
+                int index;
+                if (input == "object") {
+                    //relist objects
+                    std::cout << "ID   Objects   Name\n";
+                    for (size_t i = 0; i < objectsNameArray.size(); i++) {
+                        std::cout << std::setw(5) << std::left << i
+                                  << std::setw(10) << std::left << objectsTypeArray[i]
+                                  << objectsNameArray[i] << std::endl;
+                    }
+
+                    std::cout << "Input ID of object to remove (default 0) ";
+                    index = getInt(0);
+                    goto WIZ_START;
+                } else if (input == "material") {
+                    //relist materials
+                    std::cout << "ID   MaterialName\n";
+                    for (size_t i = 0; i < materialsNameArray.size(); i++) {
+                        std::cout << std::setw(5) << std::left << i
+                                  << std::setw(10) << std::left << materialsNameArray[i]
+                                  << std::endl;
+                    std::cout << "Input ID of material to remove (default 1) ";
+                    index = getInt(1);
+                    if (index == 0) {std::cout << "Default material cannot be removed.\n";};
+                    goto WIZ_START;
+                    }
+                } else {
+                    std::cout << "Bad input.\n";
+                }
+            }
         } else if (input == "end") {
             std::cout << "Warning: Ending the program would erase all created objects.\n";
             while (true) {
