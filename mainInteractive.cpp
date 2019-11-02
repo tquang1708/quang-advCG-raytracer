@@ -20,6 +20,9 @@ std::vector<double> getDoubleList(int, std::vector<double>);
 
 std::shared_ptr<Material> makeMaterial();
 std::shared_ptr<Matrix> makeMatrix(std::string);
+std::shared_ptr<Sphere> makeSphere();
+std::shared_ptr<Plane> makePlane();
+std::shared_ptr<PointLight> makePointLight();
 
 void listObjects(std::vector<std::string> *, std::vector<std::string> *);
 void listMaterials(std::vector<std::string> *);
@@ -169,7 +172,7 @@ int main() {
             std::cout << "World rendered.\n";
         } else if (input == "add") {
             while (true) {
-                std::cout << "Avaiable objects (material matrix pointlight sphere floor triangle) ";
+                std::cout << "Avaiable objects (material matrix pointlight sphere plane triangle) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
                     //Material interaction
@@ -210,21 +213,34 @@ int main() {
                     std::cout << "Input point light name ";
                     std::getline(std::cin, input);
                     lightsNameArray.push_back(input);
-                    lightsTypeArray.push_back("Point");
+                    lightsTypeArray.push_back("PointLight");
                     std::cout << "New point light added.\n";
                     goto WIZ_START;
                 //add a new sphere
                 } else if (input == "sphere") {
                     std::cout << "Creating a new sphere...\n";
+                    objectsArray.push_back(makeSphere());
+                    mainWorld.addObject(objectsArray[objectsArray.size() - 1]);
+                    std::cout << "Input sphere name ";
+                    std::getline(std::cin, input);
+                    objectsNameArray.push_back(input);
+                    objectsTypeArray.push_back("Sphere");
                     std::cout << "New sphere added.\n";
                     goto WIZ_START;
                 //add a new floor
-                } else if (input == "floor") {
-                    std::cout << "New floor added.\n";
+                } else if (input == "plane") {
+                    std::cout << "Creating a new plane...\n";
+                    objectsArray.push_back(makePlane());
+                    mainWorld.addObject(objectsArray[objectsArray.size() - 1]);
+                    std::cout << "Input plane name ";
+                    std::getline(std::cin, input);
+                    objectsNameArray.push_back(input);
+                    objectsTypeArray.push_back("Plane");
+                    std::cout << "New plane added.\n";
                     goto WIZ_START;
                 //add a new triangle
                 } else if (input == "triangle") {
-                    std::cout << "New triangle added.\n";
+                    std::cout << "To be implemented.\n";
                     goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
@@ -259,6 +275,8 @@ int main() {
 
                     //remove object by index
                     OBJ_REMOVE_START:
+                    mainWorld.removeObject(objectsArray.at(index));
+                    objectsArray.erase(objectsArray.begin() + index);
                     objectsNameArray.erase(objectsNameArray.begin() + index);
                     objectsTypeArray.erase(objectsTypeArray.begin() + index);
                     std::cout << "Object removed\n";
@@ -343,6 +361,8 @@ int main() {
                     }
 
                     //remove light by index
+                    mainWorld.removeLight(lightsArray.at(index));
+                    lightsArray.erase(lightsArray.begin() + index);
                     lightsNameArray.erase(lightsNameArray.begin() + index);
                     lightsTypeArray.erase(lightsTypeArray.begin() + index);
                     std::cout << "Light removed\n";
@@ -541,6 +561,31 @@ std::shared_ptr<Matrix> makeMatrix(std::string matrixType) {
     }
 
     return newMatrix;
+}
+
+//make a sphere and return a pointer to it
+std::shared_ptr<Sphere> makeSphere() {
+    //
+}
+
+//make a plane and return a pointer to it
+std::shared_ptr<Plane> makePlane() {
+    //
+}
+
+//return a pointer to a point light
+std::shared_ptr<PointLight> makePointLight() {
+    std::cout << "(3) Input lights' origin (default: -10 10 -10) ";
+    std::vector<double> newPL_origin_xyz = getDoubleList(3, std::vector<double> {-10, 10, -10});
+    std::cout << "(3) Input lights' color (default: 1 1 1) ";
+    std::vector<double> newPL_color_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
+    std::shared_ptr<PointLight> newPL = std::make_shared<PointLight>(Tuple::Point(newPL_origin_xyz[0],
+                                                                                  newPL_origin_xyz[1],
+                                                                                  newPL_origin_xyz[2]),
+                                                                            Color(newPL_color_xyz[0],
+                                                                                  newPL_color_xyz[1],
+                                                                                  newPL_color_xyz[2]));
+    return newPL;
 }
 
 void listObjects(std::vector<std::string>* objectsNameArray, std::vector<std::string>* objectsTypeArray) {

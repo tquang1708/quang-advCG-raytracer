@@ -56,13 +56,13 @@ int main(int argc, char** argv) {
     left.setMaterial(ml);
 
     //point light
-    PointLight pl1(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
+    std::shared_ptr<PointLight> pl1 = std::make_shared<PointLight>(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
     PointLight pl2(Tuple::Point(0, 10, 10), Color(0, 1, 0));
     PointLight pl3(Tuple::Point(10, 10, -10), Color(0, 0, 1));
 
     //world
     World w;
-    w.addLight(&pl1);
+    w.addLight(pl1);
     //w.addLight(&pl2);
     //w.addLight(&pl3);
     w.addObject(&floor);
