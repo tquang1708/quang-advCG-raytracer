@@ -130,8 +130,14 @@ int main() {
     std::vector<std::shared_ptr<Object>> objectsArray;
     std::vector<std::string> objectsNameArray;
     std::vector<std::string> objectsTypeArray;
+
+    std::vector<std::shared_ptr<PointLight>> lightsArray;
+    std::vector<std::string> lightsNameArray;
+    std::vector<std::string> lightsTypeArray;
+
     std::vector<std::shared_ptr<Material>> materialsArray;
     std::vector<std::string> materialsNameArray;
+
     std::vector<std::shared_ptr<Matrix>> matricesArray;
     std::vector<std::string> matricesNameArray;
     std::vector<std::string> matricesTypeArray;
@@ -163,7 +169,7 @@ int main() {
             std::cout << "World rendered.\n";
         } else if (input == "add") {
             while (true) {
-                std::cout << "Avaiable objects (material matrix sphere floor triangle) ";
+                std::cout << "Avaiable objects (material matrix pointlight sphere floor triangle) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
                     //Material interaction
@@ -197,6 +203,16 @@ int main() {
                     matricesNameArray.push_back(input);
                     std::cout << "New matrix added.\n";
                     goto WIZ_START;
+                } else if (input == "pointlight") {
+                    std::cout << "Creating a new point light...\n";
+                    lightsArray.push_back(makePointLight());
+                    mainWorld.addLight(lightsArray[lightsArray.size() - 1]);
+                    std::cout << "Input point light name ";
+                    std::getline(std::cin, input);
+                    lightsNameArray.push_back(input);
+                    lightsTypeArray.push_back("Point");
+                    std::cout << "New point light added.\n";
+                    goto WIZ_START;
                 //add a new sphere
                 } else if (input == "sphere") {
                     std::cout << "Creating a new sphere...\n";
@@ -216,7 +232,7 @@ int main() {
             }
         } else if (input == "remove") {
             while (true) {
-                std::cout << "Remove (material/object/matrix) ";
+                std::cout << "Remove (material/matrix/object/light) ";
                 std::getline(std::cin, input);
                 int index;
                 if (input == "object") {
@@ -306,6 +322,31 @@ int main() {
                     matricesTypeArray.erase(matricesTypeArray.begin() + index);
                     std::cout << "Matrix removed\n";
                     goto WIZ_START;
+                } else if (input == "light") {
+                    //check if there's more than 0 lights
+                    if (lightsArray.size() == 0) {
+                        std::cout << "No lights to remove.\n";
+                        goto WIZ_START;
+                    }
+
+                    //relist lights
+                    listObjects(&lightsNameArray, &lightsTypeArray);
+
+                    //check valid ID
+                    while (true) {
+                        std::cout << "Input ID of light to remove (default 0) ";
+                        index = getInt(0);
+
+                        if (index > (int) lightsArray.size() - 1) {
+                            std::cout << "ID out of bound";
+                        } else {break;}
+                    }
+
+                    //remove light by index
+                    lightsNameArray.erase(lightsNameArray.begin() + index);
+                    lightsTypeArray.erase(lightsTypeArray.begin() + index);
+                    std::cout << "Light removed\n";
+                    goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
                 }
@@ -328,6 +369,8 @@ int main() {
             break;
         } else if (input == "list") {
             listObjects(&objectsNameArray, &objectsTypeArray);
+            std::cout << "---------------------------\n";
+            listObjects(&lightsNameArray, &lightsTypeArray);
             std::cout << "---------------------------\n";
             listMaterials(&materialsNameArray);
             std::cout << "---------------------------\n";

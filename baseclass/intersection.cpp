@@ -4,14 +4,14 @@
 
 #include "headers/intersection.hpp"
 
-Intersection::Intersection(double t, Object* o): time(t), object(o) {}
+Intersection::Intersection(double t, std::shared_ptr<Object> o): time(t), object(o) {}
 
 //getter funcs
 double Intersection::getTime() const {
     return time;
 }
 
-Object* Intersection::getObject() const {
+std::shared_ptr<Object> Intersection::getObject() const {
     return object;
 }
 

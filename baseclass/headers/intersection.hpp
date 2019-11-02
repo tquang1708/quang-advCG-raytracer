@@ -5,17 +5,18 @@
 #pragma once
 
 #include "object.hpp"
+#include <memory>
 
 class Intersection {
     private:
         double time;
-        Object* object;
+        std::shared_ptr<Object> object;
     public:
-        Intersection(double t, Object* o);
+        Intersection(double t, std::shared_ptr<Object> o);
 
         //getter funcs
         double getTime() const;
-        Object* getObject() const;
+        std::shared_ptr<Object> getObject() const;
 
         //for use with sort
         bool operator<(const Intersection &i) const;

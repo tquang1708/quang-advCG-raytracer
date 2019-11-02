@@ -10,31 +10,31 @@ World::World() {
 }
 
 //adding stuffs funcs
-void World::addLight(PointLight* pl) {
+void World::addLight(std::shared_ptr<PointLight> pl) {
     lightsArray.push_back(pl);
 }
 
-void World::addObject(Object* o) {
+void World::addObject(std::shared_ptr<Object> o) {
     objectsArray.push_back(o);
 }
 
 //removing stuffs funcs
-void World::removeLight(PointLight* pl) {
+void World::removeLight(std::shared_ptr<PointLight> pl) {
     lightsArray.erase((std::remove(lightsArray.begin(), lightsArray.end(), pl)),
                       lightsArray.end());
 }
 
-void World::removeObject(Object* o) {
+void World::removeObject(std::shared_ptr<Object> o) {
     objectsArray.erase((std::remove(objectsArray.begin(), objectsArray.end(), o)),
                       objectsArray.end());
 }
 
 //getter funcs
-Object* World::getObject(int index) const {
+std::shared_ptr<Object> World::getObject(int index) const {
     return objectsArray[index];
 }
 
-PointLight* World::getLight(int index) const {
+std::shared_ptr<PointLight> World::getLight(int index) const {
     return lightsArray[index];
 }
 
@@ -84,7 +84,7 @@ Color World::reflectedColor(const Ray r, const Intersection i) {
 
 Color World::shadeHit(const Ray r, const Intersection inter) {
     //preparing
-    Object* o = inter.getObject();
+    std::shared_ptr<Object> o = inter.getObject();
     Material m = o -> getMaterial();
     double t = inter.getTime();
     Tuple hit = r.position(t);
