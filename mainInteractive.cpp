@@ -19,6 +19,11 @@ double getDouble(double);
 std::vector<double> getDoubleList(int, std::vector<double>);
 
 std::shared_ptr<Material> makeMaterial();
+std::shared_ptr<Matrix> makeMatrix(std::string);
+
+void listObjects(std::vector<std::string> *, std::vector<std::string> *);
+void listMaterials(std::vector<std::string> *);
+void listMatrices(std::vector<std::string> *, std::vector<std::string> *);
 
 int main() {
     //default world and camera
@@ -127,15 +132,21 @@ int main() {
     std::vector<std::string> objectsTypeArray;
     std::vector<std::shared_ptr<Material>> materialsArray;
     std::vector<std::string> materialsNameArray;
-
-    int objectsCount = 0, materialsCount = 0;
-
+    std::vector<std::shared_ptr<Matrix>> matricesArray;
+    std::vector<std::string> matricesNameArray;
+    std::vector<std::string> matricesTypeArray;
 
     //default material creation
     std::cout << "Creating a default material...\n";
     materialsArray.push_back(makeMaterial());
     materialsNameArray.push_back("default");
-    materialsCount += 1;
+
+    //default matrix creation
+    std::cout << "Creating a default transformation matrix...\n";
+    std::cout << "The default transformation matrix is an identity matrix.\n";
+    matricesArray.push_back(makeMatrix("Identity"));
+    matricesNameArray.push_back("identity");
+    matricesTypeArray.push_back("Translation");
 
     WIZ_START:while (true) {
         //commands
@@ -152,7 +163,7 @@ int main() {
             std::cout << "World rendered.\n";
         } else if (input == "add") {
             while (true) {
-                std::cout << "Avaiable objects (material sphere floor triangle) ";
+                std::cout << "Avaiable objects (material matrix sphere floor triangle) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
                     //Material interaction
@@ -161,15 +172,41 @@ int main() {
                     std::cout << "Input material name ";
                     std::getline(std::cin, input);
                     materialsNameArray.push_back(input);
-                    materialsCount += 1;
                     std::cout << "New material added.\n";
                     goto WIZ_START;
+                //add a new matrix
+                } else if (input == "matrix") {
+                    std::cout << "Creating a new matrix...\n";
+
+                    //find matrix type
+                    while (true) {
+                        std::cout << "Input matrix type (Translation/Scaling/Rotation) ";
+                        std::getline(std::cin, input);
+                        if ((input != "Translation") and (input != "Scaling") and (input != "Rotation")) {
+                            std::cout << "Bad input.\n";
+                        }
+                        else {
+                            goto MAKE_MATRIX;
+                        }
+                    }
+
+                    MAKE_MATRIX:matricesArray.push_back(makeMatrix(input));
+                    matricesTypeArray.push_back(input);
+                    std::cout << "Input matrix name ";
+                    std::getline(std::cin, input);
+                    matricesNameArray.push_back(input);
+                    std::cout << "New matrix added.\n";
+                    goto WIZ_START;
+                //add a new sphere
                 } else if (input == "sphere") {
+                    std::cout << "Creating a new sphere...\n";
                     std::cout << "New sphere added.\n";
                     goto WIZ_START;
+                //add a new floor
                 } else if (input == "floor") {
                     std::cout << "New floor added.\n";
                     goto WIZ_START;
+                //add a new triangle
                 } else if (input == "triangle") {
                     std::cout << "New triangle added.\n";
                     goto WIZ_START;
@@ -179,7 +216,7 @@ int main() {
             }
         } else if (input == "remove") {
             while (true) {
-                std::cout << "Remove (material/object) ";
+                std::cout << "Remove (material/object/matrix) ";
                 std::getline(std::cin, input);
                 int index;
                 if (input == "object") {
@@ -190,12 +227,7 @@ int main() {
                     }
 
                     //relist objects
-                    std::cout << "ID   Objects   Name\n";
-                    for (size_t i = 0; i < objectsNameArray.size(); i++) {
-                        std::cout << std::setw(5) << std::left << i
-                                  << std::setw(10) << std::left << objectsTypeArray[i]
-                                  << objectsNameArray[i] << std::endl;
-                    }
+                    listObjects(&objectsNameArray, &objectsTypeArray);
 
                     //check valid ID
                     while (true) {
@@ -210,7 +242,10 @@ int main() {
                     }
 
                     //remove object by index
-                    OBJ_REMOVE_START:std::cout << "Object removed\n";
+                    OBJ_REMOVE_START:
+                    objectsNameArray.erase(objectsNameArray.begin() + index);
+                    objectsTypeArray.erase(objectsTypeArray.begin() + index);
+                    std::cout << "Object removed\n";
                     goto WIZ_START;
                 } else if (input == "material") {
                     //check if there's more than 1 material
@@ -220,12 +255,7 @@ int main() {
                     }
 
                     //relist materials
-                    std::cout << "ID   MaterialName\n";
-                    for (size_t i = 0; i < materialsNameArray.size(); i++) {
-                        std::cout << std::setw(5) << std::left << i
-                                  << std::setw(10) << std::left << materialsNameArray[i]
-                                  << std::endl;
-                    }
+                    listMaterials(&materialsNameArray);
 
                     //check valid ID
                     while (true) {
@@ -242,7 +272,39 @@ int main() {
                     }
 
                     //remove material by index
-                    MATE_REMOVE_START:std::cout << "Material removed\n";
+                    MATE_REMOVE_START:
+                    materialsNameArray.erase(materialsNameArray.begin() + index);
+                    std::cout << "Material removed\n";
+                    goto WIZ_START;
+                } else if (input == "matrix") {
+                    //check if there's more than 1 matrix
+                    if (matricesArray.size() <= 1) {
+                        std::cout << "No matrix to remove.\n";
+                        goto WIZ_START;
+                    }
+
+                    //relist matrices
+                    listMatrices(&matricesNameArray, &matricesTypeArray);
+
+                    //check valid ID
+                    while (true) {
+                        std::cout << "Input ID of matrix to remove (default 1) ";
+                        index = getInt(1);
+
+                        if (index == 0) {
+                            std::cout << "Default material cannot be removed.\n";
+                        } else if (index > (int) materialsNameArray.size() - 1) {
+                            std::cout << "ID out of bound.\n";
+                        } else {
+                            goto MATRIX_REMOVE_START;
+                        }
+                    }
+
+                    //remove material by index
+                    MATRIX_REMOVE_START:
+                    matricesNameArray.erase(matricesNameArray.begin() + index);
+                    matricesTypeArray.erase(matricesTypeArray.begin() + index);
+                    std::cout << "Matrix removed\n";
                     goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
@@ -265,19 +327,11 @@ int main() {
             }
             break;
         } else if (input == "list") {
-            std::cout << "ID   Objects   Name\n";
-            for (size_t i = 0; i < objectsNameArray.size(); i++) {
-                std::cout << std::setw(5) << std::left << i
-                          << std::setw(10) << std::left << objectsTypeArray[i]
-                          << objectsNameArray[i] << std::endl;
-            }
+            listObjects(&objectsNameArray, &objectsTypeArray);
             std::cout << "---------------------------\n";
-            std::cout << "ID   MaterialName\n";
-            for (size_t i = 0; i < materialsNameArray.size(); i++) {
-                std::cout << std::setw(5) << std::left << i
-                          << std::setw(10) << std::left << materialsNameArray[i]
-                          << std::endl;
-            }
+            listMaterials(&materialsNameArray);
+            std::cout << "---------------------------\n";
+            listMatrices(&matricesNameArray, &matricesTypeArray);
         } else {
             std::cout << "Bad input.\n";
         }
@@ -412,4 +466,63 @@ std::shared_ptr<Material> makeMaterial() {
     newMaterial -> setEmission(getDouble(0));
 
     return newMaterial;
+}
+
+//prompts the user for matrix stuffs
+//returns a pointer to the corresponding matrix
+std::shared_ptr<Matrix> makeMatrix(std::string matrixType) {
+    std::shared_ptr<Matrix> newMatrix = std::make_shared<Matrix>(4);
+    if (matrixType == "Translation") {
+        std::cout << "(3) Input translation (default: 0 0 0) ";
+        std::vector<double> trans_xyz = getDoubleList(3, std::vector<double> {0, 0, 0});
+        *newMatrix = Matrix::Translation(trans_xyz[0], trans_xyz[1], trans_xyz[2]);
+    } else if (matrixType == "Scaling") {
+        std::cout << "(3) Input scaling factor (default: 1 1 1) ";
+        std::vector<double> scale_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
+        *newMatrix = Matrix::Translation(scale_xyz[0], scale_xyz[1], scale_xyz[2]);
+    } else if (matrixType == "Rotation") {
+        std::string input;
+        while (true) {
+            std::cout << "Input axis of rotation (x/y/z) ";
+            std::getline(std::cin, input);
+            if ((input != "x") and (input != "y") and (input != "z")) {
+                std::cout << "Bad input.\n";
+            } else {break;}
+        }
+        std::cout << "Input degree of rotation in DEG (default 0) ";
+        *newMatrix = Matrix::Rotation(input[0], getInt(0));
+
+    } else {
+        std::cout << "Returning an identity matrix.\n";
+        *newMatrix = Matrix::Identity();
+    }
+
+    return newMatrix;
+}
+
+void listObjects(std::vector<std::string>* objectsNameArray, std::vector<std::string>* objectsTypeArray) {
+    std::cout << "ID   Objects        Name\n";
+    for (size_t i = 0; i < objectsNameArray -> size(); i++) {
+        std::cout << std::setw(5) << std::left << i
+                  << std::setw(15) << std::left << objectsTypeArray -> at(i)
+                  << objectsNameArray -> at(i) << std::endl;
+    }
+}
+
+void listMaterials(std::vector<std::string>* materialsNameArray) {
+    std::cout << "ID   Material Name\n";
+    for (size_t i = 0; i < materialsNameArray -> size(); i++) {
+        std::cout << std::setw(5) << std::left << i
+                  << std::setw(15) << std::left << materialsNameArray -> at(i)
+                  << std::endl;
+    }
+}
+
+void listMatrices(std::vector<std::string>* matricesNameArray, std::vector<std::string>* matricesTypeArray) {
+    std::cout << "ID   Matrix         Name\n";
+    for (size_t i = 0; i < matricesNameArray -> size(); i++) {
+        std::cout << std::setw(5) << std::left << i
+                  << std::setw(15) << std::left << matricesTypeArray -> at(i)
+                  << matricesNameArray -> at(i) << std::endl;
+    }
 }
