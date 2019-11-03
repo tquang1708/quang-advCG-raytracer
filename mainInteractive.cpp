@@ -19,7 +19,7 @@ double getDouble(double);
 std::vector<double> getDoubleList(int, std::vector<double>);
 
 std::shared_ptr<Material> makeMaterial();
-std::shared_ptr<Matrix> makeMatrix(std::string);
+std::shared_ptr<Matrix> makeMatrix();
 std::shared_ptr<Sphere> makeSphere();
 std::shared_ptr<Plane> makePlane();
 std::shared_ptr<PointLight> makePointLight();
@@ -27,6 +27,23 @@ std::shared_ptr<PointLight> makePointLight();
 void listObjects(std::vector<std::string> *, std::vector<std::string> *);
 void listMaterials(std::vector<std::string> *);
 void listMatrices(std::vector<std::string> *, std::vector<std::string> *);
+
+//world building wizard
+//using global variables
+std::vector<std::shared_ptr<Object>> objectsArray;
+std::vector<std::string> objectsNameArray;
+std::vector<std::string> objectsTypeArray;
+
+std::vector<std::shared_ptr<PointLight>> lightsArray;
+std::vector<std::string> lightsNameArray;
+std::vector<std::string> lightsTypeArray;
+
+std::vector<std::shared_ptr<Material>> materialsArray;
+std::vector<std::string> materialsNameArray;
+
+std::vector<std::shared_ptr<Matrix>> matricesArray;
+std::vector<std::string> matricesNameArray;
+std::vector<std::string> matricesTypeArray;
 
 int main() {
     //default world and camera
@@ -129,22 +146,6 @@ int main() {
         }
     }
 
-    //world building wizard
-    std::vector<std::shared_ptr<Object>> objectsArray;
-    std::vector<std::string> objectsNameArray;
-    std::vector<std::string> objectsTypeArray;
-
-    std::vector<std::shared_ptr<PointLight>> lightsArray;
-    std::vector<std::string> lightsNameArray;
-    std::vector<std::string> lightsTypeArray;
-
-    std::vector<std::shared_ptr<Material>> materialsArray;
-    std::vector<std::string> materialsNameArray;
-
-    std::vector<std::shared_ptr<Matrix>> matricesArray;
-    std::vector<std::string> matricesNameArray;
-    std::vector<std::string> matricesTypeArray;
-
     //default material creation
     std::cout << "Creating a default material...\n";
     materialsArray.push_back(makeMaterial());
@@ -153,9 +154,8 @@ int main() {
     //default matrix creation
     std::cout << "Creating a default transformation matrix...\n";
     std::cout << "The default transformation matrix is an identity matrix.\n";
-    matricesArray.push_back(makeMatrix("Identity"));
-    matricesNameArray.push_back("identity");
-    matricesTypeArray.push_back("Translation");
+    matricesArray.push_back(makeMatrix());
+    matricesNameArray.push_back("default");
 
     WIZ_START:while (true) {
         //commands
@@ -187,19 +187,7 @@ int main() {
                 } else if (input == "matrix") {
                     std::cout << "Creating a new matrix...\n";
 
-                    //find matrix type
-                    while (true) {
-                        std::cout << "Input matrix type (Translation/Scaling/Rotation) ";
-                        std::getline(std::cin, input);
-                        if ((input != "Translation") and (input != "Scaling") and (input != "Rotation")) {
-                            std::cout << "Bad input.\n";
-                        }
-                        else {
-                            goto MAKE_MATRIX;
-                        }
-                    }
-
-                    MAKE_MATRIX:matricesArray.push_back(makeMatrix(input));
+                    matricesArray.push_back(makeMatrix());
                     matricesTypeArray.push_back(input);
                     std::cout << "Input matrix name ";
                     std::getline(std::cin, input);
@@ -533,8 +521,19 @@ std::shared_ptr<Material> makeMaterial() {
 
 //prompts the user for matrix stuffs
 //returns a pointer to the corresponding matrix
-std::shared_ptr<Matrix> makeMatrix(std::string matrixType) {
+std::shared_ptr<Matrix> makeMatrix() {
     std::shared_ptr<Matrix> newMatrix = std::make_shared<Matrix>(4);
+    std::string matrixType;
+
+    while (true) {
+        std::cout << "Input matrix type (Translation/Scaling/Rotation/Identity) ";
+        std::getline(std::cin, matrixType);
+        if ((matrixType != "Translation") and (matrixType != "Scaling") and (matrixType != "Rotation") and (matrixType != "Identity")) {
+            std::cout << "Bad input.\n";
+        }
+        else {break;}
+    }
+
     if (matrixType == "Translation") {
         std::cout << "(3) Input translation (default: 0 0 0) ";
         std::vector<double> trans_xyz = getDoubleList(3, std::vector<double> {0, 0, 0});
@@ -559,18 +558,109 @@ std::shared_ptr<Matrix> makeMatrix(std::string matrixType) {
         std::cout << "Returning an identity matrix.\n";
         *newMatrix = Matrix::Identity();
     }
+    matricesTypeArray.push_back(matrixType);
 
     return newMatrix;
 }
 
 //make a sphere and return a pointer to it
 std::shared_ptr<Sphere> makeSphere() {
-    //
+    std::shared_ptr<Sphere> newSphere = std::make_shared<Sphere>();
+    std::cout << "New sphere created at 0 0 0 with the default material.\n";
+
+    std::string input;
+    std::cout << "Set a different material? (y/n) ";
+    std::getline(std::cin, input);
+
+    int index;
+    if (input == "y") {
+        listMaterials(&materialsNameArray);
+        while (true) {
+            std::cout << "Input ID of material to use, or leave blank to make a new material ";
+            index = getInt(-1);
+            if (index == -1) {
+                newSphere -> setMaterial(*makeMaterial());
+                break;
+            } else if ((index < (int) materialsArray.size()) and (index > -1)) {
+                newSphere -> setMaterial(*materialsArray.at(index));
+                break;
+            } else {
+                std::cout << "Invalid ID.\n";
+            }
+        }
+    }
+
+    std::cout << "Set a transformation matrix? (y/n) ";
+    std::getline(std::cin, input);
+
+    if (input == "y") {
+        listMatrices(&matricesNameArray, &matricesTypeArray);
+        while (true) {
+            std::cout << "Input ID of matrix to use, or leave blank to make a new matrix ";
+            index = getInt(-1);
+            if (index == -1) {
+                newSphere -> setTransform(*makeMatrix());
+                break;
+            } else if ((index < (int) materialsArray.size()) and (index > -1)) {
+                newSphere -> setTransform(*matricesArray.at(index));
+                break;
+            } else {
+                std::cout << "Invalid ID.\n";
+            }
+        }
+    }
+
+    return newSphere;
 }
 
 //make a plane and return a pointer to it
 std::shared_ptr<Plane> makePlane() {
-    //
+    std::shared_ptr<Plane> newPlane = std::make_shared<Plane>();
+    std::cout << "New default xz-plane created with the default material.\n";
+
+    std::string input;
+    std::cout << "Set a different material? (y/n) ";
+    std::getline(std::cin, input);
+
+    int index;
+    if (input == "y") {
+        listMaterials(&materialsNameArray);
+        while (true) {
+            std::cout << "Input ID of material to use, or leave blank to make a new material ";
+            index = getInt(-1);
+            if (index == -1) {
+                newPlane -> setMaterial(*makeMaterial());
+                break;
+            } else if ((index < (int) materialsArray.size()) and (index > -1)) {
+                newPlane -> setMaterial(*materialsArray.at(index));
+                break;
+            } else {
+                std::cout << "Invalid ID.\n";
+            }
+        }
+    }
+
+    std::cout << "Set a transformation matrix? (y/n) ";
+    std::getline(std::cin, input);
+
+    if (input == "y") {
+        listMatrices(&matricesNameArray, &matricesTypeArray);
+        while (true) {
+            std::cout << "Input ID of matrix to use, or leave blank to make a new matrix ";
+            index = getInt(-1);
+            if (index == -1) {
+                newPlane -> setTransform(*makeMatrix());
+                break;
+            } else if ((index < (int) materialsArray.size()) and (index > -1)) {
+                newPlane -> setTransform(*matricesArray.at(index));
+                break;
+            } else {
+                std::cout << "Invalid ID.\n";
+            }
+        }
+    }
+
+    return newPlane;
 }
 
 //return a pointer to a point light
