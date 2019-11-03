@@ -523,44 +523,63 @@ std::shared_ptr<Material> makeMaterial() {
 //returns a pointer to the corresponding matrix
 std::shared_ptr<Matrix> makeMatrix() {
     std::shared_ptr<Matrix> newMatrix = std::make_shared<Matrix>(4);
+    *newMatrix = Matrix::Identity();
     std::string matrixType;
+    std::string matrixTypeFinal = "";
 
     while (true) {
-        std::cout << "Input matrix type (Translation/Scaling/Rotation/Identity) ";
-        std::getline(std::cin, matrixType);
-        if ((matrixType != "Translation") and (matrixType != "Scaling") and (matrixType != "Rotation") and (matrixType != "Identity")) {
-            std::cout << "Bad input.\n";
-        }
-        else {break;}
-    }
-
-    if (matrixType == "Translation") {
-        std::cout << "(3) Input translation (default: 0 0 0) ";
-        std::vector<double> trans_xyz = getDoubleList(3, std::vector<double> {0, 0, 0});
-        *newMatrix = Matrix::Translation(trans_xyz[0], trans_xyz[1], trans_xyz[2]);
-    } else if (matrixType == "Scaling") {
-        std::cout << "(3) Input scaling factor (default: 1 1 1) ";
-        std::vector<double> scale_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
-        *newMatrix = Matrix::Translation(scale_xyz[0], scale_xyz[1], scale_xyz[2]);
-    } else if (matrixType == "Rotation") {
-        std::string input;
         while (true) {
-            std::cout << "Input axis of rotation (x/y/z) ";
-            std::getline(std::cin, input);
-            if ((input != "x") and (input != "y") and (input != "z")) {
+            std::cout << "Input matrix type (Translation/Scaling/Rotation/Identity) ";
+            std::getline(std::cin, matrixType);
+            if ((matrixType != "Translation") and (matrixType != "Scaling") and (matrixType != "Rotation") and (matrixType != "Identity")) {
                 std::cout << "Bad input.\n";
-            } else {break;}
+            }
+            else {break;}
         }
-        std::cout << "Input degree of rotation in DEG (default 0) ";
-        *newMatrix = Matrix::Rotation(input[0], getInt(0));
 
-    } else {
-        std::cout << "Returning an identity matrix.\n";
-        *newMatrix = Matrix::Identity();
+        if (matrixType == "Translation") {
+            std::cout << "(3) Input translation (default: 0 0 0) ";
+            std::vector<double> trans_xyz = getDoubleList(3, std::vector<double> {0, 0, 0});
+            *newMatrix = *newMatrix * Matrix::Translation(trans_xyz[0], trans_xyz[1], trans_xyz[2]);
+            matrixTypeFinal += "T";
+        } else if (matrixType == "Scaling") {
+            std::cout << "(3) Input scaling factor (default: 1 1 1) ";
+            std::vector<double> scale_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
+            *newMatrix = *newMatrix * Matrix::Scaling(scale_xyz[0], scale_xyz[1], scale_xyz[2]);
+            matrixTypeFinal += "S";
+        } else if (matrixType == "Rotation") {
+            std::string input;
+            while (true) {
+                std::cout << "Input axis of rotation (x/y/z) ";
+                std::getline(std::cin, input);
+                if ((input != "x") and (input != "y") and (input != "z")) {
+                    std::cout << "Bad input.\n";
+                } else {break;}
+            }
+            std::cout << "Input degree of rotation in DEG (default 0) ";
+            *newMatrix = *newMatrix * Matrix::Rotation(input[0], getInt(0));
+            matrixTypeFinal += "R";
+
+        } else if (matrixType == "Identity") {
+            std::cout << "Returning an identity matrix.\n";
+            *newMatrix = *newMatrix * Matrix::Identity();
+            matrixTypeFinal += "I";
+        }
+
+        while (true) {
+            std::string input;
+            std::cout << "Do you want to chain another transformation? (y/n) ";
+            std::getline(std::cin, input);
+            if (input == "n") {
+                matricesTypeArray.push_back(matrixTypeFinal);
+                return newMatrix;
+            } else if (input == "y") {
+                break;
+            } else {
+                std::cout << "Bad input.\n";
+            }
+        }
     }
-    matricesTypeArray.push_back(matrixType);
-
-    return newMatrix;
 }
 
 //make a sphere and return a pointer to it
