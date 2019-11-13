@@ -73,8 +73,8 @@ bool World::isShadowed(PointLight pl, Tuple point) {
     return false;
 }
 
-Color World::reflectedColor(const Ray r, const Intersection i) {
-    Material m = i.getObject() -> getMaterial();
+Color World::reflectedColor(const Comps c) {
+    Material m = c.object -> getMaterial();
 
     //nonreflective surface
     if (m.getReflectivity() == 0) {
@@ -82,33 +82,24 @@ Color World::reflectedColor(const Ray r, const Intersection i) {
     }
 }
 
-Color World::shadeHit(const Ray r, const Intersection inter) {
+Color World::shadeHit(const Comps c) {
     //preparing
-    std::shared_ptr<Object> o = inter.getObject();
+    std::shared_ptr<Object> o = c.object;
     Material m = o -> getMaterial();
-    double t = inter.getTime();
-    Tuple hit = r.position(t);
-    Tuple normalv = o -> normalAt(hit);
-    //calculating over point to push point in correct dir
-    Tuple hitOver = hit + normalv * EPSILON;
-    Tuple eye = r.getOrigin();
-    Tuple eyev = -r.getDirection();
+    Tuple normalv = c.normalv;
+    Tuple hitOver = c.over_point;
+    Tuple eye = c.eye;
 
-    //checking inside
-    if (dot(normalv, eyev) < 0) {
-        normalv = -normalv;
-    }
-
-    Color c(0, 0, 0);
+    Color out(0, 0, 0);
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
         bool shadow = this -> isShadowed(currLight, hitOver);
-        c += lighting(m, currLight, hitOver, normalv, eye, shadow);
+        out += lighting(m, currLight, hitOver, normalv, eye, shadow);
     }
 
-    c.clamp();
-    return c;
+    out.clamp();
+    return out;
 }
 
 Color World::colorAt(const Ray r) {
@@ -120,7 +111,7 @@ Color World::colorAt(const Ray r) {
     else {
         for (size_t i = 0; i < ints.size(); i++) {
             if (ints[i].getTime() > 0) {
-                return this -> shadeHit(r, ints[i]);
+                return this -> shadeHit(Comps(r, ints[i]));
             }
         }
         return black;

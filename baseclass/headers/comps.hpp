@@ -4,7 +4,21 @@
 
 #pragma once
 
+#include "intersection.hpp"
+#include "ray.hpp"
+
 class Comps {
-    private:
     public:
+        double time;
+        std::shared_ptr<Object> object;
+        Tuple point;
+        Tuple eye;
+        Tuple eyev;
+        Tuple normalv;
+        Tuple reflectv;
+        Tuple over_point;
+        Tuple under_point;
+
+        //constructors
+        Comps(Ray, Intersection);
 };

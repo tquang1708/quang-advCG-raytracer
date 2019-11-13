@@ -13,72 +13,59 @@ int main(int argc, char** argv) {
     }
 
     //floor
-    Plane floor;
+    std::shared_ptr<Plane> floor = std::make_shared<Plane>();
     Material mf;
     mf.setColor(Color(1, 0.9, 0.9));
-    mf.setSpecular(0);
-    floor.setMaterial(mf);
+    mf.setSpecular(0.5);
+    floor -> setMaterial(mf);
 
-    //a triangle
-    Triangle triangle(Tuple::Point(1, 0, 0),
-                      Tuple::Point(0, 3, 4),
-                      Tuple::Point(2, 0, 3));
-    Material t;
-    t.setColor(Color(0, 1, 0));
-    triangle.setMaterial(t);
+    //leftwall
+    std::shared_ptr<Plane> leftwall = std::make_shared<Plane>();
+    Material mlw;
+    mlw.setColor(Color(0.9, 0.5, 0.4));
+    mlw.setSpecular(0);
+    leftwall -> setMaterial(mlw);
+    leftwall -> setTransform(Matrix::Translation(0, 0, 5) * Matrix::Rotation('y', 45) * Matrix::Rotation('x', 90));
 
     //mid sphere
-    Sphere middle;
-    middle.setTransform(Matrix::Translation(-0.5, 1, 0.5));
+    std::shared_ptr<Sphere> middle = std::make_shared<Sphere>();
+    middle -> setTransform(Matrix::Translation(-0.5, 1, 0.5)
+                         * Matrix::Scaling(1, 2, 1));
     Material ms;
     ms.setColor(Color(0.1, 1, 0.5));
     ms.setDiffuse(0.7);
     ms.setSpecular(0.3);
-    middle.setMaterial(ms);
-
-    //right sphere
-    //lengthen var names
-    Sphere right;
-    right.setTransform(Matrix::Translation(1.5, 0.5, -0.5) * Matrix::Scaling(0.5, 0.5, 0.5));
-    Material mr;
-    mr.setColor(Color(0.5, 1, 0.1));
-    mr.setDiffuse(0.7);
-    mr.setSpecular(0.3);
-    right.setMaterial(mr);
+    ms.setEmission(0.4);
+    middle -> setMaterial(ms);
 
     //left sphere
-    Sphere left;
-    left.setTransform(Matrix::Translation(-1.5, 0.33, -0.75) * Matrix::Scaling(0.33, 0.33, 0.33));
-    Material ml;
-    ml.setColor(Color(1, 0.8, 0.1));
-    ml.setDiffuse(0.7);
-    ml.setSpecular(0.3);
-    left.setMaterial(ml);
+    std::shared_ptr<Sphere> left = std::make_shared<Sphere>();
+    left -> setTransform(Matrix::Translation(0.75, 2, -0.25) * Matrix::Scaling(1, 1.5, 2));
+    Material msl;
+    msl.setColor(Color(0.2, 0.4, 0.6));
+    msl.setDiffuse(0.3);
+    msl.setSpecular(0.9);
+    left -> setMaterial(msl);
 
     //point light
-    std::shared_ptr<PointLight> pl1 = std::make_shared<PointLight>(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
-    PointLight pl2(Tuple::Point(0, 10, 10), Color(0, 1, 0));
-    PointLight pl3(Tuple::Point(10, 10, -10), Color(0, 0, 1));
+    std::shared_ptr<PointLight> pl1 = std::make_shared<PointLight>(Tuple::Point(-10, 0, -10), Color(1, 1, 1));
 
     //world
     World w;
     w.addLight(pl1);
-    //w.addLight(&pl2);
-    //w.addLight(&pl3);
-    w.addObject(&floor);
-    w.addObject(&right);
-    w.addObject(&left);
-    w.addObject(&middle);
-    //w.addObject(&triangle);
+    w.addObject(floor);
+    w.addObject(leftwall);
+    w.addObject(middle);
+    w.addObject(left);
 
     //camera
-    Camera camera(500, 250, 60);
+    Camera camera(800, 480, 90);
     camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
                                       Tuple::Point(0, 1, 0),
                                       Tuple::Vector(0, 1, 0)));
 
     //render
-    camera.render(w, "out.ppm");
+    camera.render(w, "output/out.ppm");
 
     return 0;
 }

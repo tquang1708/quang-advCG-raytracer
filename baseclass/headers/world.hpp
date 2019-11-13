@@ -9,6 +9,7 @@
 #include "pointlight.hpp"
 #include "ray.hpp"
 #include "intersection.hpp"
+#include "comps.hpp"
 #include <vector>
 #include <memory>
 
@@ -34,7 +35,7 @@ class World {
         //world functions
         std::vector<Intersection> intersectWorld(const Ray r);
         bool isShadowed(PointLight, Tuple);
-        Color reflectedColor(const Ray, const Intersection);
-        Color shadeHit(const Ray r, const Intersection i);
+        Color reflectedColor(const Comps);
+        Color shadeHit(const Comps);
         Color colorAt(const Ray r);
 };
