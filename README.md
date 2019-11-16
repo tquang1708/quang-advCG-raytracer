@@ -4,7 +4,7 @@ Ray tracer built from the ground up as part of the Advanced Computer Graphcis co
 ## 1 Month Left From Finals!
 Reflection works now.
 
-![](https://i.imgur.com/DKWpiaM.png)
+![](https://i.imgur.com/DKWpiaM.png) ![](https://files.catbox.moe/5z8gie.ppm)
 
 And also the above image was built with the interactive executable. Other stuffs built pre-reflection, as well as a screenshot of the program (completely command-line):
 
