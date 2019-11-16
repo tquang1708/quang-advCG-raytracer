@@ -159,7 +159,7 @@ int main() {
 
     WIZ_START:while (true) {
         //commands
-        std::cout << "Available commands (add remove list render end) ";
+        std::cout << "Available commands (add remove camera list render end) ";
         std::getline(std::cin, input);
 
         //input handling
@@ -383,7 +383,48 @@ int main() {
             listMaterials(&materialsNameArray);
             std::cout << "---------------------------\n";
             listMatrices(&matricesNameArray, &matricesTypeArray);
-        } else {
+        } else if (input == "camera") {
+            while (true) {
+                std::cout << "Would you like to change settings for the camera? (y/n) ";
+                std::getline(std::cin, input);
+                if (input == "y") {
+                    break;
+                } else if (input == "n") {
+                    std::cout << "Operation cancelled.\n";
+                    goto WIZ_START;
+                } else {
+                    std::cout << "Bad input.\n";
+                }
+            }
+
+            int new_cx, new_cy, new_fov;
+            std::cout << "Input Horizontal canvas size (default: 1280) ";
+            new_cx = getInt(1280);
+            std::cout << "Input Vertical canvas size (default: 720) ";
+            new_cy = getInt(720);
+            std::cout << "Input FOV (default: 60) ";
+            new_fov = getDouble(60);
+            camera.setHSize(new_cx);
+            camera.setVSize(new_cy);
+            camera.setFOV(new_fov);
+
+            std::vector<double> new_from_xyz;
+            std::vector<double> new_to_xyz;
+            std::vector<double> new_up_xyz;
+            std::cout << std::endl << "View Transformation setup" << std::endl;
+            std::cout << "(3) Camera's viewing from (x y z) (default: 0 1.5 -5) ";
+            new_from_xyz = getDoubleList(3, std::vector<double> {0, 1.5, -5});
+            std::cout << "(3) Camera's viewing to (x y z) (default: 0 1 0) ";
+            new_to_xyz = getDoubleList(3, std::vector<double> {0, 1, 0});
+            std::cout << "(3) Camera's up vector (x y z) (default: 0 1 0) ";
+            new_up_xyz = getDoubleList(3, std::vector<double> {0, 1, 0});
+            camera.setTransform(viewTransform(Tuple::Point(new_from_xyz[0], new_from_xyz[1], new_from_xyz[2]),
+                                              Tuple::Point(new_to_xyz[0], new_to_xyz[1], new_to_xyz[2]),
+                                              Tuple::Vector(new_up_xyz[0], new_up_xyz[1], new_up_xyz[2])));
+
+            std::cout << "Custom camera set up.\n";
+            goto WIZ_START;
+        }else {
             std::cout << "Bad input.\n";
         }
     }
@@ -588,6 +629,10 @@ std::shared_ptr<Sphere> makeSphere() {
     std::cout << "New sphere created at 0 0 0 with the default material.\n";
 
     std::string input;
+    
+    while (true) {
+
+    }
     std::cout << "Set a different material? (y/n) ";
     std::getline(std::cin, input);
 
