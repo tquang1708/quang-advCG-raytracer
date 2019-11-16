@@ -86,7 +86,7 @@ void Camera::render(World w, std::string filename) {
     for (double y = 0; y < vsize; y++) {
         for (double x = 0; x < hsize; x++) {
             Ray r = this -> cameraRay(x, y);
-            Color c = w.colorAt(r);
+            Color c = w.colorAt(r, 5);
             image.write_pixel(x, y, c);
         }
     }

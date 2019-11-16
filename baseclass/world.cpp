@@ -73,22 +73,27 @@ bool World::isShadowed(PointLight pl, Tuple point) {
     return false;
 }
 
-Color World::reflectedColor(const Comps c) {
-    Material m = c.object -> getMaterial();
+Color World::reflectedColor(const Comps comps, const int remaining) {
+    Material m = comps.object -> getMaterial();
 
     //nonreflective surface
-    if (m.getReflectivity() == 0) {
+    if (m.getReflectivity() == 0 || remaining == 0) {
         return Color(0, 0, 0);
     }
+
+    //reflected ray
+    Ray reflected(comps.over_point, comps.reflectv);
+    Color out = this -> colorAt(reflected, remaining - 1) * m.getReflectivity();
+    return out;
 }
 
-Color World::shadeHit(const Comps c) {
+Color World::shadeHit(const Comps comps, const int remaining) {
     //preparing
-    std::shared_ptr<Object> o = c.object;
+    std::shared_ptr<Object> o = comps.object;
     Material m = o -> getMaterial();
-    Tuple normalv = c.normalv;
-    Tuple hitOver = c.over_point;
-    Tuple eye = c.eye;
+    Tuple normalv = comps.normalv;
+    Tuple hitOver = comps.over_point;
+    Tuple eye = comps.eye;
 
     Color out(0, 0, 0);
     //iterate over lights
@@ -96,13 +101,14 @@ Color World::shadeHit(const Comps c) {
         PointLight currLight = *lightsArray[i];
         bool shadow = this -> isShadowed(currLight, hitOver);
         out += lighting(m, currLight, hitOver, normalv, eye, shadow);
+        out += this -> reflectedColor(comps, remaining);
     }
 
     out.clamp();
     return out;
 }
 
-Color World::colorAt(const Ray r) {
+Color World::colorAt(const Ray r, const int remaining) {
     std::vector<Intersection> ints = this -> intersectWorld(r);
     Color black(0, 0, 0);
     if (ints.size() == 0) {
@@ -111,7 +117,7 @@ Color World::colorAt(const Ray r) {
     else {
         for (size_t i = 0; i < ints.size(); i++) {
             if (ints[i].getTime() > 0) {
-                return this -> shadeHit(Comps(r, ints[i]));
+                return this -> shadeHit(Comps(r, ints[i]), remaining);
             }
         }
         return black;
