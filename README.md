@@ -1,6 +1,15 @@
 # quang-advCG-raytracer
 Ray tracer built from the ground up as part of the Advanced Computer Graphcis course taught by Prof. Justin Vasselli at Bennington College, Spring 2019 using the book "The Ray Tracer Challenge" by Jamis Buck from The Pragmatic Bookshelf.
 
+## 1 Month Left From Finals!
+Reflection works now.
+
+![](https://i.imgur.com/DKWpiaM.png)
+
+And also the above image was built with the interactive executable. Other stuffs built pre-reflection, as well as a screenshot of the program (completely command-line):
+
+![](https://i.imgur.com/OfKMzQ9.png) ![](https://i.imgur.com/rd2rNE9.png) ![](https://i.imgur.com/FQrVN7X.png)
+
 ## Midterm+1 Progress
 
 Multiple Lights work now.
