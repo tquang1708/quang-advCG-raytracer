@@ -629,10 +629,7 @@ std::shared_ptr<Sphere> makeSphere() {
     std::cout << "New sphere created at 0 0 0 with the default material.\n";
 
     std::string input;
-    
-    while (true) {
 
-    }
     std::cout << "Set a different material? (y/n) ";
     std::getline(std::cin, input);
 
