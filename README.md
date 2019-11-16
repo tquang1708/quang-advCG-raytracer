@@ -6,9 +6,9 @@ Reflection works now.
 
 ![](https://i.imgur.com/DKWpiaM.png) ![](https://i.imgur.com/jiNxUQw.png)
 
-And also the above image was built with the interactive executable. Other stuffs built pre-reflection, as well as a screenshot of the program (completely command-line):
+And also the above image was built with the interactive executable. Other stuffs built pre-reflection:
 
-![](https://i.imgur.com/OfKMzQ9.png) ![](https://i.imgur.com/rd2rNE9.png) ![](https://i.imgur.com/FQrVN7X.png)
+![](https://i.imgur.com/OfKMzQ9.png) ![](https://i.imgur.com/rd2rNE9.png)
 
 ## Midterm+1 Progress
 
