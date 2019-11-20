@@ -2,7 +2,7 @@
 Ray tracer built from the ground up as part of the Advanced Computer Graphcis course taught by Prof. Justin Vasselli at Bennington College, Spring 2019 using the book "The Ray Tracer Challenge" by Jamis Buck from The Pragmatic Bookshelf.
 
 ## 1 Month Left From Finals!
-Reflection works now.
+Reflection works now. (Also transparency works but the image is still on my computer)
 
 ![](https://i.imgur.com/DKWpiaM.png) ![](https://i.imgur.com/jiNxUQw.png)
 
