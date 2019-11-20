@@ -12,8 +12,19 @@
 class Sphere : public Object {
     public:
         Sphere();
+        static Sphere GlassSphere();
         std::vector<double> intersect(const Ray r);
         Tuple normalAt(const Tuple point);
 };
+
+inline Sphere Sphere::GlassSphere() {
+    Sphere s;
+    Material m;
+    s.setTransform(Matrix::Identity());
+    m.setTransparency(1.0);
+    m.setRefractiveIndex(1.5);
+    s.setMaterial(m);
+    return s;
+}
 
 #endif

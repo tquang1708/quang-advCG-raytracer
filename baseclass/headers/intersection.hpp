@@ -12,6 +12,7 @@ class Intersection {
         double time;
         std::shared_ptr<Object> object;
     public:
+        Intersection();
         Intersection(double t, std::shared_ptr<Object> o);
 
         //getter funcs
@@ -20,4 +21,7 @@ class Intersection {
 
         //for use with sort
         bool operator<(const Intersection &i) const;
+
+        //for use with refract
+        bool operator==(const Intersection &i) const;
 };

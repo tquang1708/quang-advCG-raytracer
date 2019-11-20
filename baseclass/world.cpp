@@ -87,6 +87,30 @@ Color World::reflectedColor(const Comps comps, const int remaining) {
     return out;
 }
 
+Color World::refractedColor(const Comps comps, int remaining) {
+    //opaque obj // reflect over
+    Material m = comps.object -> getMaterial();
+    if (m.getTransparency() == 0 || remaining == 0) {
+        return Color(0, 0, 0);
+    }
+
+    //snell's law for total internal reflection
+    double n_ratio = comps.n1 / comps.n2;
+    double cos_i = dot(comps.eyev, comps.normalv);
+    double sin2_t = n_ratio * n_ratio * (1- cos_i * cos_i);
+    if (sin2_t > 1) {
+        return Color(0, 0, 0);
+    }
+
+    //calculation
+    double cos_t = sqrt(1 - sin2_t);
+    Tuple refractedRay_dir = comps.normalv * (n_ratio * cos_i - cos_t) -
+                             comps.eyev * n_ratio;
+    Ray refractedRay(comps.under_point, refractedRay_dir);
+    Color out = this -> colorAt(refractedRay, remaining - 1) * m.getTransparency();
+    return out;
+}
+
 Color World::shadeHit(const Comps comps, const int remaining) {
     //preparing
     std::shared_ptr<Object> o = comps.object;
@@ -96,12 +120,24 @@ Color World::shadeHit(const Comps comps, const int remaining) {
     Tuple eye = comps.eye;
 
     Color out(0, 0, 0);
+    bool shadow;
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
-        bool shadow = this -> isShadowed(currLight, hitOver);
+        if (m.getShadowCast()) {
+            shadow = this -> isShadowed(currLight, hitOver);
+        } else {
+            shadow = false;
+        }
         out += lighting(m, currLight, hitOver, normalv, eye, shadow);
-        out += this -> reflectedColor(comps, remaining);
+        Color reflected = this -> reflectedColor(comps, remaining);
+        Color refracted = this -> refractedColor(comps, remaining);
+        if (m.getReflectivity() > 0 && m.getTransparency() > 0) {
+            double reflectance = comps.schlick();
+            out = out + reflected * reflectance + reflected * (1 - reflectance);
+        } else {
+            out = out + reflected + refracted;
+        }
     }
 
     out.clamp();

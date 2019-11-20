@@ -12,6 +12,9 @@ Material::Material() {
     shininess = 200;
     reflectivity = 0.0;
     emission = 0.0;
+    transparency = 0.0;
+    refractive_index = 1.0;
+    shadow_cast = true;
 }
 
 Color Material::getColor() const {
@@ -43,33 +46,67 @@ double Material::getEmission() const {
     return emission;
 }
 
+double Material::getTransparency() const {
+    return transparency;
+}
+
+double Material::getRefractiveIndex() const {
+    return refractive_index;
+}
+
+bool Material::getShadowCast() const {
+    return shadow_cast;
+}
+
 //setter
-void Material::setColor(Color c) {
+Material Material::setColor(Color c) {
     color = c;
+    return *this;
 }
 
-void Material::setDiffuse(double d) {
+Material Material::setDiffuse(double d) {
     diffuse = d;
+    return *this;
 }
 
-void Material::setAmbient(double a) {
+Material Material::setAmbient(double a) {
     ambient = a;
+    return *this;
 }
 
-void Material::setShininess(double s) {
+Material Material::setShininess(double s) {
     shininess = s;
+    return *this;
 }
 
-void Material::setSpecular(double s) {
+Material Material::setSpecular(double s) {
     specular = s;
+    return *this;
 }
 
-void Material::setReflectivity(double r) {
+Material Material::setReflectivity(double r) {
     reflectivity = r;
+    return *this;
 }
 
-void Material::setEmission(double e) {
+Material Material::setEmission(double e) {
     emission = e;
+    return *this;
+}
+
+Material Material::setTransparency(double t) {
+    transparency = t;
+    return *this;
+}
+
+Material Material::setRefractiveIndex(double ri) {
+    refractive_index = ri;
+    return *this;
+}
+
+Material Material::setShadowCast(bool sc) {
+    shadow_cast = sc;
+    return *this;
 }
 
 //operator overloading

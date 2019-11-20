@@ -15,8 +15,11 @@ class Material {
         double diffuse;
         double shininess;
         double specular;
-        double reflectivity;
         double emission;
+        double reflectivity;
+        double transparency;
+        double refractive_index;
+        bool shadow_cast;
     public:
         Material();
 
@@ -28,15 +31,21 @@ class Material {
         double getSpecular() const;
         double getReflectivity() const;
         double getEmission() const;
+        double getTransparency() const;
+        double getRefractiveIndex() const;
+        bool getShadowCast() const;
 
         //setter funcs
-        void setColor(Color c);
-        void setDiffuse(double d);
-        void setAmbient(double a);
-        void setShininess(double s);
-        void setSpecular(double s);
-        void setReflectivity(double);
-        void setEmission(double);
+        Material setColor(Color c);
+        Material setDiffuse(double d);
+        Material setAmbient(double a);
+        Material setShininess(double s);
+        Material setSpecular(double s);
+        Material setReflectivity(double);
+        Material setEmission(double);
+        Material setTransparency(double);
+        Material setRefractiveIndex(double);
+        Material setShadowCast(bool);
 
         //operator overloading
         bool operator== (const Material &m) const;

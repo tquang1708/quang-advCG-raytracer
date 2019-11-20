@@ -18,3 +18,7 @@ std::shared_ptr<Object> Intersection::getObject() const {
 bool Intersection::operator<(const Intersection &i) const {
     return (time < i.getTime());
 }
+
+bool Intersection::operator==(const Intersection &i) const {
+    return (time == i.getTime() && object == i.getObject());
+}

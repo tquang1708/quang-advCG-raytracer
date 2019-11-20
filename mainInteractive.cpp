@@ -551,11 +551,32 @@ std::shared_ptr<Material> makeMaterial() {
     std::cout << "Input shininess (default: 200) ";
     newMaterial -> setShininess(getDouble(200));
 
+    std::cout << "Input emission (default: 0.0) ";
+    newMaterial -> setEmission(getDouble(0));
+
     std::cout << "Input reflectivity (default: 0.0) ";
     newMaterial -> setReflectivity(getDouble(0));
 
-    std::cout << "Input emission (default: 0.0) ";
-    newMaterial -> setEmission(getDouble(0));
+    std::cout << "Input transparency (default: 0.0) ";
+    newMaterial -> setTransparency(getDouble(0));
+
+    std::cout << "Input refractive index (default: 1.0) ";
+    newMaterial -> setRefractiveIndex(getDouble(1.0));
+
+    std::string input;
+    while(true) {
+        std::cout << "Does this object cast a shadow? (default: y) (y/n) ";
+        std::getline(std::cin, input);
+        if (input == "y" || input == "") {
+            newMaterial -> setShadowCast(true);
+            break;
+        } else if (input == "n") {
+            newMaterial -> setShadowCast(false);
+            break;
+        } else {
+            std::cout << "Bad input.\n";
+        }
+    }
 
     return newMaterial;
 }

@@ -18,7 +18,12 @@ class Comps {
         Tuple reflectv;
         Tuple over_point;
         Tuple under_point;
+        double n1;
+        double n2;
 
         //constructors
-        Comps(Ray, Intersection);
+        Comps(Ray, Intersection, std::vector<Intersection> is = std::vector<Intersection>());
+
+        //schlick_reflectance
+        double schlick() const;
 };
