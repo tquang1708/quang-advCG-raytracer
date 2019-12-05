@@ -1,6 +1,8 @@
 /* prototyping for a command line application
  * mainInteractive.cpp - Interactive world builder
  * Quang Tran - 10/30/19
+ *
+ * compile with flag -fopenmp
  * */
 
 #include "baseclass/baseclass_headers.hpp"
