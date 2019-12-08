@@ -3,6 +3,7 @@
  * */
 
 #include "headers/material.hpp"
+#include "headers/stripePattern.hpp"
 
 Material::Material() {
     color = Color(1, 1, 1);
@@ -15,6 +16,7 @@ Material::Material() {
     transparency = 0.0;
     refractive_index = 1.0;
     shadow_cast = true;
+    pattern = nullptr;
 }
 
 Color Material::getColor() const {
@@ -56,6 +58,10 @@ double Material::getRefractiveIndex() const {
 
 bool Material::getShadowCast() const {
     return shadow_cast;
+}
+
+std::shared_ptr<Pattern> Material::getPattern() const {
+    return pattern;
 }
 
 //setter
@@ -106,6 +112,11 @@ Material Material::setRefractiveIndex(double ri) {
 
 Material Material::setShadowCast(bool sc) {
     shadow_cast = sc;
+    return *this;
+}
+
+Material Material::setPattern(std::shared_ptr<Pattern> p) {
+    pattern = p;
     return *this;
 }
 

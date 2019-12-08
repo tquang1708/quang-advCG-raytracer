@@ -14,7 +14,7 @@
 
 double dot(Tuple a, Tuple b);
 Tuple cross(Tuple a, Tuple b);
-Color lighting(Material m, PointLight light, Tuple hitPoint,
+Color lighting(std::shared_ptr<Object> o, PointLight light, Tuple hitPoint,
                Tuple normalv, Tuple camera, bool isShadowed);
 Matrix viewTransform(Tuple, Tuple, Tuple);
 

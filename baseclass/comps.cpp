@@ -64,7 +64,7 @@ double Comps::schlick() const {
     double cosEN = dot(eyev, normalv);
     if (n1 > n2) {
         double n = n1 / n2;
-        double sin2_t = n *n * (1 - cosEN * cosEN);
+        double sin2_t = n *n * (1.0 - cosEN * cosEN);
         if (sin2_t > 1.0) {
             return 1.0;
         }

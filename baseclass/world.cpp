@@ -5,6 +5,7 @@
 #include "headers/world.hpp"
 #include "headers/baseclass_funcs.hpp"
 #include <algorithm>
+#include <iostream>
 
 World::World() {
 }
@@ -97,17 +98,18 @@ Color World::refractedColor(const Comps comps, int remaining) {
     //snell's law for total internal reflection
     double n_ratio = comps.n1 / comps.n2;
     double cos_i = dot(comps.eyev, comps.normalv);
-    double sin2_t = n_ratio * n_ratio * (1- cos_i * cos_i);
+    double sin2_t = n_ratio * n_ratio * (1.0 - cos_i * cos_i);
     if (sin2_t > 1) {
         return Color(0, 0, 0);
     }
 
     //calculation
-    double cos_t = sqrt(1 - sin2_t);
+    double cos_t = sqrt(1.0 - sin2_t);
     Tuple refractedRay_dir = comps.normalv * (n_ratio * cos_i - cos_t) -
                              comps.eyev * n_ratio;
     Ray refractedRay(comps.under_point, refractedRay_dir);
     Color out = this -> colorAt(refractedRay, remaining - 1) * m.getTransparency();
+
     return out;
 }
 
@@ -129,12 +131,12 @@ Color World::shadeHit(const Comps comps, const int remaining) {
         } else {
             shadow = false;
         }
-        out += lighting(m, currLight, hitOver, normalv, eye, shadow);
+        out += lighting(o, currLight, hitOver, normalv, eye, shadow);
         Color reflected = this -> reflectedColor(comps, remaining);
         Color refracted = this -> refractedColor(comps, remaining);
         if (m.getReflectivity() > 0 && m.getTransparency() > 0) {
             double reflectance = comps.schlick();
-            out = out + reflected * reflectance + reflected * (1 - reflectance);
+            out = out + reflected * reflectance + refracted * (1.0 - reflectance);
         } else {
             out = out + reflected + refracted;
         }

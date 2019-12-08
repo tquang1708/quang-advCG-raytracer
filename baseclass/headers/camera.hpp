@@ -21,7 +21,10 @@ class Camera {
         double halfW;
         double halfH;
         double pixelS;
+        
     public:
+        bool aaOn;
+
         Camera(int, int, double);
 
         //getter funcs
@@ -40,4 +43,5 @@ class Camera {
         double pixelSize();
         Ray cameraRay(double, double);
         void render(World, std::string);
+        Color antiAliasing(World w, double x, double y);
 };

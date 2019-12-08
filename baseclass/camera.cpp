@@ -4,6 +4,8 @@
 
 #include "headers/camera.hpp"
 #include <math.h>
+#include <chrono>
+#include <random>
 
 #include <iostream>
 #include <omp.h>
@@ -98,8 +100,13 @@ void Camera::render(World w, std::string filename) {
         int numthreads = omp_get_num_threads();
         for (double y = id; y < vsize; y = y + numthreads) {
             for (double x = 0; x < hsize; x++) {
-                Ray r = this -> cameraRay(x, y);
-                Color c = w.colorAt(r, 5);
+                Color c;
+                if (aaOn) {
+                    c = antiAliasing(w, x, y);
+                } else {
+                    Ray r = this -> cameraRay(x, y);
+                    c = w.colorAt(r, 5);
+                }
                 image.write_pixel(x, y, c);
             }
         }
@@ -109,4 +116,29 @@ void Camera::render(World w, std::string filename) {
 
     run_time = omp_get_wtime() - start_time;
     std::cout << "Runtime: " << run_time << std::endl;
+}
+
+//antialiasing attempt
+//jittered sampling
+Color Camera::antiAliasing(World w, double x, double y) {
+    Color out(0, 0, 0);
+
+    int seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 generator(seed);
+    std::uniform_real_distribution<double> dis(-0.1, 0.1);
+
+    //4 random rays in 4 subspixels
+    for (int subX = 0; subX < 2; subX++) {
+        for (int subY = 0; subY < 2; subY++) {
+            double rayX = x - 0.25 + subX * 0.5 + dis(generator);
+            double rayY = y - 0.25 + subY * 0.5 + dis(generator);
+            Ray r = this -> cameraRay(rayX, rayY);
+            Color c = w.colorAt(r, 5);
+            out = out + c;
+        }
+    }
+
+    out = out * (1.0/4.0);
+
+    return out;
 }

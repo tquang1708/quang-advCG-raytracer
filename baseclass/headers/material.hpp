@@ -2,15 +2,18 @@
  * Quang Tran - 9/14/19
  * */
 
-#ifndef MATERIAL_HPP
-#define MATERIAL_HPP
+#pragma once
 
 #include "color.hpp"
 #include "tuple.hpp"
+#include <memory>
+
+class Pattern;
 
 class Material {
     private:
         Color color;
+        std::shared_ptr<Pattern> pattern;
         double ambient;
         double diffuse;
         double shininess;
@@ -25,6 +28,7 @@ class Material {
 
         //getter funcs
         Color getColor() const;
+        std::shared_ptr<Pattern> getPattern() const;
         double getDiffuse() const;
         double getAmbient() const;
         double getShininess() const;
@@ -37,6 +41,7 @@ class Material {
 
         //setter funcs
         Material setColor(Color c);
+        Material setPattern(std::shared_ptr<Pattern> p);
         Material setDiffuse(double d);
         Material setAmbient(double a);
         Material setShininess(double s);
@@ -50,5 +55,3 @@ class Material {
         //operator overloading
         bool operator== (const Material &m) const;
 };
-
-#endif

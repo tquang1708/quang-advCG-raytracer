@@ -107,3 +107,80 @@ TEST_CASE("refracted color - total internal reflection") {
     Color c = w.refractedColor(comps, 5);
     REQUIRE(c == Color(0, 0, 0));
 }
+
+TEST_CASE("refracted color - refracted ray") {
+    World w = World::DefaultWorld();
+    std::shared_ptr<TestPattern> test = std::make_shared<TestPattern>();
+    std::shared_ptr<Sphere> shape = std::dynamic_pointer_cast<Sphere>(w.getObject(0));
+
+    Material newmat = shape -> getMaterial();
+    newmat.setAmbient(1.0);
+    newmat.setPattern(test);
+    shape -> setMaterial(newmat);
+
+    std::shared_ptr<Sphere> shape2 = std::dynamic_pointer_cast<Sphere>(w.getObject(1));
+    Material newmat2 = shape2 -> getMaterial();
+    newmat2.setTransparency(1.0);
+    newmat2.setRefractiveIndex(1.5);
+    shape2 -> setMaterial(newmat2);
+
+    Ray r(Tuple::Point(0, 0, 0.1), Tuple::Vector(0, 1, 0));
+    std::vector<Intersection> xs{Intersection(-0.9899, shape), Intersection(-0.4899, shape2), Intersection(0.4899, shape2), Intersection(0.9899, shape)};
+    Comps comps(r, xs[2], xs);
+    Color c = w.refractedColor(comps, 5);
+    REQUIRE(c == Color(0, 0.99888, 0.04725));
+}
+
+TEST_CASE("schlick - tir") {
+    std::shared_ptr<Sphere> glass = std::make_shared<Sphere>(Sphere::GlassSphere());
+    Ray r(Tuple::Point(0, 0, sqrt(2) / 2), Tuple::Vector(0, 1, 0));
+    std::vector<Intersection> xs{Intersection(-sqrt(2)/2, glass), Intersection(sqrt(2)/2, glass)};
+    Comps comps(r, xs[1], xs);
+    double reflectance = comps.schlick();
+    REQUIRE(reflectance == 1.0);
+}
+
+TEST_CASE("perpendicular ray") {
+    std::shared_ptr<Sphere> glass = std::make_shared<Sphere>(Sphere::GlassSphere());
+    Ray r(Tuple::Point(0, 0, 0), Tuple::Vector(0, 1, 0));
+    std::vector<Intersection> xs{Intersection(-1, glass), Intersection(1, glass)};
+    Comps comps(r, xs[1], xs);
+    double reflectance = comps.schlick();
+    REQUIRE(reflectance == 0.04);
+}
+
+TEST_CASE("n2 > n1") {
+    std::shared_ptr<Sphere> glass = std::make_shared<Sphere>(Sphere::GlassSphere());
+    Ray r(Tuple::Point(0, 0.99, -2), Tuple::Vector(0, 0, 1));
+    std::vector<Intersection> xs{Intersection(1.8589, glass)};
+    Comps comps(r, xs[0], xs);
+    double reflectance = comps.schlick();
+    REQUIRE(reflectance == 0.48873);
+}
+
+TEST_CASE("reflectance reflection refraction") {
+    World w = World::DefaultWorld();
+    Ray r(Tuple::Point(0, 0, -3), Tuple::Vector(0, -sqrt(2)/2, sqrt(2)/2));
+
+    std::shared_ptr<Plane> floor = std::make_shared<Plane>();
+    floor -> setTransform(Matrix::Translation(0, -1, 0));
+    Material mf;
+    mf.setReflectivity(0.5);
+    mf.setTransparency(0.5);
+    mf.setRefractiveIndex(1.5);
+    floor -> setMaterial(mf);
+    w.addObject(floor);
+
+    std::shared_ptr<Sphere> ball = std::make_shared<Sphere>();
+    ball -> setTransform(Matrix::Translation(0, -3.5, -0.5));
+    Material mb;
+    mb.setColor(Color(1, 0, 0));
+    mb.setAmbient(0.5);
+    ball -> setMaterial(mb);
+    w.addObject(ball);
+
+    std::vector<Intersection> xs{Intersection(sqrt(2), floor)};
+    Comps comps(r, xs[0], xs);
+    Color c = w.shadeHit(comps, 5);
+    REQUIRE(c == Color(0.93391, 0.69643, 0.69243));
+}

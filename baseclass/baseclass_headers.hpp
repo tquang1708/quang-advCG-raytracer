@@ -17,6 +17,10 @@
 #include "headers/material.hpp"
 #include "headers/pointlight.hpp"
 
+#include "headers/pattern.hpp"
+#include "headers/stripePattern.hpp"
+#include "headers/testPattern.hpp"
+
 #include "headers/object.hpp"
 #include "headers/sphere.hpp"
 #include "headers/plane.hpp"

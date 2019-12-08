@@ -24,9 +24,18 @@ Tuple cross(Tuple a, Tuple b){
 }
 
 //lighting objects
-Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye, bool isShadowed) {
+Color lighting(std::shared_ptr<Object> o, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye, bool isShadowed) {
+    //determine color at point based on pattern
+    Color color;
+    Material m = o -> getMaterial();
+    if (m.getPattern() == nullptr) {
+        color = m.getColor();
+    } else {
+        color = m.getPattern() -> patternAtObject(o, hitPoint);
+    }
+
     //calculate ambient
-    Color ambient = m.getColor() * light.getIntensity() * m.getAmbient();
+    Color ambient = color * light.getIntensity() * m.getAmbient();
 
     //if shadowed return ambient
     if (isShadowed) {
@@ -38,14 +47,14 @@ Color lighting(Material m, PointLight light, Tuple hitPoint, Tuple normalv, Tupl
         double lightIntensity = dot(normalv, unitVectorToLight);
 
         //calculate emission
-        Color emission = m.getColor() * m.getEmission();
+        Color emission = color * m.getEmission();
 
         //black default case
         Color diffuse(0, 0, 0);
         Color specular(0, 0, 0);
         if (lightIntensity > 0) {
             //calc diffuse if lightInt > 0
-            diffuse = m.getColor() * light.getIntensity() * lightIntensity * m.getDiffuse();
+            diffuse = color * light.getIntensity() * lightIntensity * m.getDiffuse();
 
             //calculate specular
             Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
