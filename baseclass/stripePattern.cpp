@@ -3,7 +3,6 @@
  * */
 
 #include "headers/stripePattern.hpp"
-#include <iostream>
 
 StripePattern::StripePattern(std::vector<Color> colorVector) {
     transform = Matrix::Identity();
@@ -14,11 +13,4 @@ StripePattern::StripePattern(std::vector<Color> colorVector) {
 Color StripePattern::patternAt(Tuple point) {
     int x = abs(floor(point.getx()));
     return stripeColors[x % colorsNo];
-}
-
-Color StripePattern::patternAtObject(std::shared_ptr<Object> object, Tuple point) {
-    Tuple objectPoint = object -> getTransform().inverse() * point;
-    Tuple patternPoint = transform.inverse() * objectPoint;
-
-    return patternAt(patternPoint);
 }

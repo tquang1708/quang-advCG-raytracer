@@ -20,6 +20,7 @@
 #include "headers/pattern.hpp"
 #include "headers/stripePattern.hpp"
 #include "headers/testPattern.hpp"
+#include "headers/checkerPattern.hpp"
 
 #include "headers/object.hpp"
 #include "headers/sphere.hpp"

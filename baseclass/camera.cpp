@@ -128,10 +128,11 @@ Color Camera::cameraAperture(World w, double x, double y) {
         std::mt19937 generator(seed);
         std::uniform_real_distribution<double> dis(-apertureRadius/4, apertureRadius/4);
 
-        std::vector<std::vector<double>> offset_matrix = {{-0.25, 0.75}, {0.25, 0.75}, {-0.5, 0.5}, {0.5, 0.5},
-                                                          {-0.75, 0.25}, {-0.25, 0.25}, {0.25, 0.25}, {0.75, 0.25},
-                                                          {-0.75, -0.25}, {-0.25, -0.25}, {0.25, -0.25}, {0.75, -0.25},
-                                                          {-0.25, -0.75}, {0.25, -0.75}, {-0.5, -0.5}, {0.5, -0.5}};
+        //std::vector<std::vector<double>> offset_matrix = {{-0.25, 0.75}, {0.25, 0.75}, {-0.5, 0.5}, {0.5, 0.5},
+        //                                                  {-0.75, 0.25}, {-0.25, 0.25}, {0.25, 0.25}, {0.75, 0.25},
+        //                                                  {-0.75, -0.25}, {-0.25, -0.25}, {0.25, -0.25}, {0.75, -0.25},
+        //                                                  {-0.25, -0.75}, {0.25, -0.75}, {-0.5, -0.5}, {0.5, -0.5}};
+        std::vector<std::vector<double>> offset_matrix = {{-0.5, 0.5}, {0.5, 0.5}, {-0.5, -0.5}, {0.5, -0.5}};
 
         //loop calculating origin then adding up color
         //calculating x and y in four quadrants of the aperture

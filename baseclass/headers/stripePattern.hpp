@@ -15,5 +15,4 @@ class StripePattern : public Pattern{
     public:
         StripePattern(std::vector<Color>);
         Color patternAt(Tuple point);
-        Color patternAtObject(std::shared_ptr<Object> object, Tuple point);
 };

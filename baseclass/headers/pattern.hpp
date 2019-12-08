@@ -25,5 +25,6 @@ class Pattern {
 
         //pure virtual func
         virtual Color patternAt(Tuple point) = 0;
-        virtual Color patternAtObject(std::shared_ptr<Object> object, Tuple point) = 0;
+        
+        Color patternAtObject(std::shared_ptr<Object> object, Tuple point);
 };

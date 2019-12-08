@@ -16,3 +16,10 @@ Matrix Pattern::getTransform() const {
 void Pattern::setTransform(Matrix t) {
     transform = t;
 }
+
+Color Pattern::patternAtObject(std::shared_ptr<Object> object, Tuple point) {
+    Tuple objectPoint = object -> getTransform().inverse() * point;
+    Tuple patternPoint = transform.inverse() * objectPoint;
+
+    return patternAt(patternPoint);
+}
