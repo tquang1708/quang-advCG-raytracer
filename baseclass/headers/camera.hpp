@@ -16,6 +16,8 @@ class Camera {
         int hsize;
         int vsize;
         double fov;
+        double apertureRadius;
+        double focal;
         Matrix transform;
 
         double halfW;
@@ -25,23 +27,28 @@ class Camera {
     public:
         bool aaOn;
 
-        Camera(int, int, double);
+        Camera(int, int, double, double, double);
 
         //getter funcs
         int getHSize() const;
         int getVSize() const;
+        double getApertureRadius() const;
+        double getFocal() const;
         double getFOV() const;
         Matrix getTransform() const;
 
         //setter funcs
         void setHSize(int);
         void setVSize(int);
+        void setApertureRadius(double);
+        void setFocal(double);
         void setFOV(double);
         void setTransform(Matrix);
 
         //camera funcs
         double pixelSize();
-        Ray cameraRay(double, double);
+        //Ray cameraRay(double, double);
+        Color cameraAperture(World w, double, double);
         void render(World, std::string);
         Color antiAliasing(World w, double x, double y);
 };
