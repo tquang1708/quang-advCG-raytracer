@@ -23,7 +23,7 @@ int main() {
                 Color(0.9, 0.9, 0.9), Color(0.7, 0.7, 0.7), Color(0.5, 0.5, 0.5),
                 Color(0.3, 0.3, 0.3), Color(0.1, 0.1, 0.1), Color(0.2, 0.2, 0.2),
                 Color(0.4, 0.4, 0.4), Color(0.6, 0.6, 0.6), Color(0.8, 0.8, 0.8)});
-    testPattern -> setTransform(Matrix::Rotation('z', 45) * Matrix::Scaling(0.1, 0.1, 0.1));
+    testPattern -> setTransform(Matrix::Rotation('y', -45) * Matrix::Scaling(0.1, 0.1, 0.1));
     wall1 -> setTransform(Matrix::Translation(0, 0, 30) * Matrix::Rotation('y', -45) * Matrix::Rotation('x', 90));
     wall1Mat.setPattern(testPattern);
     wall1Mat.setSpecular(0);
@@ -37,9 +37,9 @@ int main() {
                 Color(0.9, 0.9, 0.9), Color(0.7, 0.7, 0.7), Color(0.5, 0.5, 0.5),
                 Color(0.3, 0.3, 0.3), Color(0.1, 0.1, 0.1), Color(0.2, 0.2, 0.2),
                 Color(0.4, 0.4, 0.4), Color(0.6, 0.6, 0.6), Color(0.8, 0.8, 0.8)});
-    testPattern -> setTransform(Matrix::Scaling(0.1, 0.1, 0.1));
+    testPattern2 -> setTransform(Matrix::Rotation('y', 45) * Matrix::Scaling(0.1, 0.1, 0.1) * Matrix::Translation(1, 1, 1));
     wall2 -> setTransform(Matrix::Translation(0, 0, 30) * Matrix::Rotation('y', 45) * Matrix::Rotation('x', 90));
-    wall1Mat.setPattern(testPattern2);
+    wall2Mat.setPattern(testPattern2);
     wall2Mat.setSpecular(0);
     wall2 -> setMaterial(wall2Mat);
 
@@ -78,12 +78,12 @@ int main() {
     w.addObject(behind);
 
     //camera
-    Camera camera(1280, 720, 60, 0.003, -1);
+    Camera camera(640, 320, 60, 0, -1);
     camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
                                       Tuple::Point(0, 1, 0),
                                       Tuple::Vector(0, 1, 0)));
     //aa
-    camera.aaOn = true;
+    camera.aaOn = false;
     //render
     camera.render(w, "output/test.ppm");
 

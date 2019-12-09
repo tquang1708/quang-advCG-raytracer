@@ -54,7 +54,7 @@ std::vector<Intersection> World::intersectWorld(const Ray r) {
     return worldInts;
 }
 
-bool World::isShadowed(PointLight pl, Tuple point) {
+double World::isShadowed(PointLight pl, Tuple point) {
     Tuple temp = pl.getPosition() - point;
     double distance = temp.magnitude();
     Tuple direction = temp.normalize();
@@ -66,12 +66,12 @@ bool World::isShadowed(PointLight pl, Tuple point) {
         for (size_t i = 0; i < ints.size(); i++) {
             if (ints[i].getTime() > 0) {
                 if (ints[i].getTime() < distance) {
-                    return true;
+                    return 1.0;
                 }
             }
         }
     }
-    return false;
+    return 0.0;
 }
 
 Color World::reflectedColor(const Comps comps, const int remaining) {
@@ -122,14 +122,14 @@ Color World::shadeHit(const Comps comps, const int remaining) {
     Tuple eye = comps.eye;
 
     Color out(0, 0, 0);
-    bool shadow;
+    double shadow;
     //iterate over lights
     for (size_t i = 0; i < lightsArray.size(); i++) {
         PointLight currLight = *lightsArray[i];
         if (m.getShadowCast()) {
             shadow = this -> isShadowed(currLight, hitOver);
         } else {
-            shadow = false;
+            shadow = 0.0;
         }
         out += lighting(o, currLight, hitOver, normalv, eye, shadow);
         Color reflected = this -> reflectedColor(comps, remaining);

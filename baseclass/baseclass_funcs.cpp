@@ -24,7 +24,7 @@ Tuple cross(Tuple a, Tuple b){
 }
 
 //lighting objects
-Color lighting(std::shared_ptr<Object> o, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye, bool isShadowed) {
+Color lighting(std::shared_ptr<Object> o, PointLight light, Tuple hitPoint, Tuple normalv, Tuple eye, double shadow) {
     //determine color at point based on pattern
     Color color;
     Material m = o -> getMaterial();
@@ -38,39 +38,34 @@ Color lighting(std::shared_ptr<Object> o, PointLight light, Tuple hitPoint, Tupl
     Color ambient = color * light.getIntensity() * m.getAmbient();
 
     //if shadowed return ambient
-    if (isShadowed) {
-        return ambient;
-    }
-    else {
-        //calculate diffuse
-        Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
-        double lightIntensity = dot(normalv, unitVectorToLight);
+    //calculate diffuse
+    Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
+    double lightIntensity = dot(normalv, unitVectorToLight);
 
-        //calculate emission
-        Color emission = color * m.getEmission();
+    //calculate emission
+    Color emission = color * m.getEmission();
 
-        //black default case
-        Color diffuse(0, 0, 0);
-        Color specular(0, 0, 0);
-        if (lightIntensity > 0) {
-            //calc diffuse if lightInt > 0
-            diffuse = color * light.getIntensity() * lightIntensity * m.getDiffuse();
+    //black default case
+    Color diffuse(0, 0, 0);
+    Color specular(0, 0, 0);
+    if (lightIntensity > 0) {
+        //calc diffuse if lightInt > 0
+        diffuse = color * light.getIntensity() * lightIntensity * m.getDiffuse();
 
-            //calculate specular
-            Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
-            Tuple unitVectorToEye = (eye - hitPoint).normalize();
-            double reflectDotEye = dot(reflectionVector, unitVectorToEye);
-            if (reflectDotEye > 0) {
-                double specularIntensity = pow(reflectDotEye, m.getShininess());
-                specular = light.getIntensity() * specularIntensity * m.getSpecular();
-            }
+        //calculate specular
+        Tuple reflectionVector = (normalv * lightIntensity * 2- unitVectorToLight).normalize();
+        Tuple unitVectorToEye = (eye - hitPoint).normalize();
+        double reflectDotEye = dot(reflectionVector, unitVectorToEye);
+        if (reflectDotEye > 0) {
+            double specularIntensity = pow(reflectDotEye, m.getShininess());
+            specular = light.getIntensity() * specularIntensity * m.getSpecular();
         }
-
-        //final color
-        Color out = diffuse + ambient + specular + emission;
-        out.clamp();
-        return out;
     }
+
+    //final color
+    Color out = (diffuse + emission + specular) * (1.0 - shadow) + ambient;
+    out.clamp();
+    return out;
 }
 
 //view transformation
