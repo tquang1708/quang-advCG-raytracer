@@ -26,8 +26,10 @@ class Camera {
         
     public:
         bool aaOn;
+        int aaSamples;
+        int aperSamples;
 
-        Camera(int, int, double, double, double);
+        Camera(int, int, double, double, double, int, int);
 
         //getter funcs
         int getHSize() const;

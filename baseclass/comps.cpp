@@ -5,6 +5,7 @@
 #include "headers/comps.hpp"
 #include "headers/baseclass_funcs.hpp"
 #include <algorithm>
+#include <iostream>
 
 //constructor
 Comps::Comps(Ray r, Intersection i, std::vector<Intersection> is) {
@@ -18,14 +19,14 @@ Comps::Comps(Ray r, Intersection i, std::vector<Intersection> is) {
     eye = r.getOrigin();
     eyev = -r.getDirection();
     normalv = object -> normalAt(point);
-    over_point = point + normalv * EPSILON;
-    under_point = point - normalv * EPSILON;
 
     //checking inside
     if (dot(normalv, eyev) < 0) {
         normalv = -normalv;
     }
 
+    over_point = point + normalv * EPSILON;
+    under_point = point - normalv * EPSILON;
     reflectv = r.getDirection() - normalv * 2 * dot(r.getDirection(), normalv);
 
     //n1n2

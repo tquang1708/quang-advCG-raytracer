@@ -9,10 +9,9 @@
 
 #include <iostream>
 #include <omp.h>
-#define NUM_THREADS 6
+#define NUM_THREADS 1
 
-
-Camera::Camera(int h, int v, double f, double a, double foc): hsize(h), vsize(v), fov(f), apertureRadius(a), focal(foc) {
+Camera::Camera(int h, int v, double f, double a, double foc, int apS, int aaS): hsize(h), vsize(v), fov(f), apertureRadius(a), focal(foc), aaSamples(aaS), aperSamples(apS) {
     transform = Matrix::Identity();
 }
 
@@ -126,31 +125,35 @@ Color Camera::cameraAperture(World w, double x, double y) {
         //rng
         int seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::mt19937 generator(seed);
-        std::uniform_real_distribution<double> dis(-apertureRadius/4, apertureRadius/4);
+        std::uniform_real_distribution<double> dis(0.25, 0.75);
+
+        //samplesize
+        int sampSide = (int) sqrt(aperSamples);
+        double unit = apertureRadius / sampSide * 2.0;
+        Tuple corner = Tuple::Point(-apertureRadius, -apertureRadius, 0);
+        Tuple unitX = Tuple::Vector(unit, 0, 0);
+        Tuple unitY = Tuple::Vector(0, unit, 0);
 
         //std::vector<std::vector<double>> offset_matrix = {{-0.25, 0.75}, {0.25, 0.75}, {-0.5, 0.5}, {0.5, 0.5},
         //                                                  {-0.75, 0.25}, {-0.25, 0.25}, {0.25, 0.25}, {0.75, 0.25},
         //                                                  {-0.75, -0.25}, {-0.25, -0.25}, {0.25, -0.25}, {0.75, -0.25},
         //                                                  {-0.25, -0.75}, {0.25, -0.75}, {-0.5, -0.5}, {0.5, -0.5}};
-        std::vector<std::vector<double>> offset_matrix = {{-0.5, 0.5}, {0.5, 0.5}, {-0.5, -0.5}, {0.5, -0.5}};
+        //std::vector<std::vector<double>> offset_matrix = {{-0.5, 0.5}, {0.5, 0.5}, {-0.5, -0.5}, {0.5, -0.5}};
 
         //loop calculating origin then adding up color
         //calculating x and y in four quadrants of the aperture
-        for (int offset = 0; offset < (int) offset_matrix.size(); offset++) {
-            /*double rayX = x_gen(generator) * subX;
-            std::uniform_real_distribution<double> y_gen(0, sqrt(apertureRadius - rayX * rayX));
-            double rayY = y_gen(generator) * subY;*/
-            double rayX = apertureRadius * offset_matrix[offset][0] + dis(generator);
-            double rayY = apertureRadius * offset_matrix[offset][1] + dis(generator);
+        for (int offsetX = 0; offsetX < sampSide; offsetX++) {
+            for (int offsetY = 0; offsetY < sampSide; offsetY++) {
+                Tuple origin = transform.inverse() *
+                    (corner + unitY * (offsetY + dis(generator)) + unitX * (offsetX + dis(generator)));
+                Tuple direction = (pixel - origin).normalize();
+                Ray r(origin, direction);
 
-            Tuple origin = transform.inverse() * Tuple::Point(rayX, rayY, 0);
-            Tuple direction = (pixel - origin).normalize();
-            Ray r(origin, direction);
-
-            out += w.colorAt(r, 5);
+                out += w.colorAt(r, 5);
+            }
         }
 
-        out = out * (1.0 / offset_matrix.size());
+        out = out * (1.0 / aperSamples);
     }
 
     return out;
@@ -191,13 +194,15 @@ void Camera::render(World w, std::string filename) {
 Color Camera::antiAliasing(World w, double x, double y) {
     Color out(0, 0, 0);
 
+    int sideSamp = (int) sqrt(aaSamples);
+
     int seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 generator(seed);
     std::uniform_real_distribution<double> dis(-0.15, 0.15);
 
-    //4 random rays in 4 subspixels
-    for (int subX = 0; subX < 2; subX++) {
-        for (int subY = 0; subY < 2; subY++) {
+    //random rays in subspixels
+    for (int subX = 0; subX < sideSamp; subX++) {
+        for (int subY = 0; subY < sideSamp; subY++) {
             double rayX = x - 0.25 + subX * 0.5 + dis(generator);
             double rayY = y - 0.25 + subY * 0.5 + dis(generator);
             Color c = this -> cameraAperture(w, rayX, rayY);
@@ -205,7 +210,7 @@ Color Camera::antiAliasing(World w, double x, double y) {
         }
     }
 
-    out = out * 0.25;
+    out = out * (1.0 / aaSamples);
 
     return out;
 }

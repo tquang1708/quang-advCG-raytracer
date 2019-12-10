@@ -1,6 +1,7 @@
 /* pattern.cpp - implementation of pattern class
  * */
 #include "headers/pattern.hpp"
+#include "headers/object.hpp"
 
 //constructor
 Pattern::Pattern() {

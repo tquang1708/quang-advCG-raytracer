@@ -7,9 +7,10 @@
 #include "color.hpp"
 #include "tuple.hpp"
 #include "matrix.hpp"
-#include "object.hpp"
 
 #include <memory>
+
+class Object;
 
 class Pattern {
     protected:

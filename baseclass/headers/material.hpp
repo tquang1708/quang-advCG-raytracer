@@ -6,9 +6,8 @@
 
 #include "color.hpp"
 #include "tuple.hpp"
+#include "pattern.hpp"
 #include <memory>
-
-class Pattern;
 
 class Material {
     private:

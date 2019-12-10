@@ -24,7 +24,7 @@ std::shared_ptr<Material> makeMaterial();
 std::shared_ptr<Matrix> makeMatrix();
 std::shared_ptr<Sphere> makeSphere();
 std::shared_ptr<Plane> makePlane();
-std::shared_ptr<PointLight> makePointLight();
+std::shared_ptr<AreaLight> makePointLight();
 
 void listObjects(std::vector<std::string> *, std::vector<std::string> *);
 void listMaterials(std::vector<std::string> *);
@@ -36,7 +36,7 @@ std::vector<std::shared_ptr<Object>> objectsArray;
 std::vector<std::string> objectsNameArray;
 std::vector<std::string> objectsTypeArray;
 
-std::vector<std::shared_ptr<PointLight>> lightsArray;
+std::vector<std::shared_ptr<AreaLight>> lightsArray;
 std::vector<std::string> lightsNameArray;
 std::vector<std::string> lightsTypeArray;
 
@@ -50,7 +50,7 @@ std::vector<std::string> matricesTypeArray;
 int main() {
     //default world and camera
     World mainWorld;
-    Camera camera(1280, 720, 60);
+    Camera camera(1280, 720, 60, 0, -1, 1, 1);
 
     //input
     std::string input;
@@ -123,6 +123,8 @@ int main() {
             canvas_y = getInt(720);
             std::cout << "Input FOV (default: 60) ";
             canvas_fov = getDouble(60);
+            std::cout << "Input distance of camera from canvas (default: -1) ";
+            camera.setFocal(getDouble(-1));
             camera.setHSize(canvas_x);
             camera.setVSize(canvas_y);
             camera.setFOV(canvas_fov);
@@ -167,6 +169,43 @@ int main() {
         //input handling
         if (input == "render") {
             std::string output;
+            //anti-aliasing
+            while (true) {
+                std::cout << "Turn on anti-aliasing for this render? ";
+                std::getline(std::cin, input);
+
+                if (input == "n") {
+                    camera.aaOn = false;
+                    break;
+                } else if (input == "y") {
+                    std::cout << "Input number of samples (default: 4) ";
+                    camera.aaOn = true;
+                    camera.aaSamples = getInt(4);
+                    break;
+                } else {
+                    std::cout << "Invalid input." << std::endl;
+                }
+            }
+            
+            //dof
+            while (true) {
+                std::cout << "Turn on depth of field for this render? ";
+                std::getline(std::cin, input);
+
+                if (input == "n") {
+                    camera.setApertureRadius(0);
+                    break;
+                } else if (input == "y") {
+                    std::cout << "Input aperture radius (default: 0.003) ";
+                    camera.setApertureRadius(getDouble(0.003));
+                    std::cout << "Input number of samples (default: 4) ";
+                    camera.aperSamples = getInt(4);
+                    break;
+                } else {
+                    std::cout << "Invalid input." << std::endl;
+                }
+            }
+            
             std::cout << "Output file name (don't include extension): ";
             std::getline(std::cin, output);
             output = "./output/" + output + ".ppm";
@@ -174,7 +213,7 @@ int main() {
             std::cout << "World rendered.\n";
         } else if (input == "add") {
             while (true) {
-                std::cout << "Avaiable objects (material matrix pointlight sphere plane triangle) ";
+                std::cout << "Avaiable objects (material matrix pattern pointlight arealight sphere plane) ";
                 std::getline(std::cin, input);
                 if (input == "material") {
                     //Material interaction
@@ -188,9 +227,7 @@ int main() {
                 //add a new matrix
                 } else if (input == "matrix") {
                     std::cout << "Creating a new matrix...\n";
-
                     matricesArray.push_back(makeMatrix());
-                    matricesTypeArray.push_back(input);
                     std::cout << "Input matrix name ";
                     std::getline(std::cin, input);
                     matricesNameArray.push_back(input);
@@ -232,13 +269,19 @@ int main() {
                 } else if (input == "triangle") {
                     std::cout << "To be implemented.\n";
                     goto WIZ_START;
+                } else if (input == "arealight") {
+                    std::cout << "To be implemented.\n";
+                    goto WIZ_START;
+                } else if (input == "pattern") {
+                    std::cout << "TBI\n";
+                    goto WIZ_START;
                 } else {
                     std::cout << "Bad input.\n";
                 }
             }
         } else if (input == "remove") {
             while (true) {
-                std::cout << "Remove (material/matrix/object/light) ";
+                std::cout << "Remove (material/matrix/pattern/object/light) ";
                 std::getline(std::cin, input);
                 int index;
                 if (input == "object") {
@@ -298,6 +341,7 @@ int main() {
                     //remove material by index
                     MATE_REMOVE_START:
                     materialsNameArray.erase(materialsNameArray.begin() + index);
+                    materialsArray.erase(materialsArray.begin() + index);
                     std::cout << "Material removed\n";
                     goto WIZ_START;
                 } else if (input == "matrix") {
@@ -328,6 +372,7 @@ int main() {
                     MATRIX_REMOVE_START:
                     matricesNameArray.erase(matricesNameArray.begin() + index);
                     matricesTypeArray.erase(matricesTypeArray.begin() + index);
+                    matricesArray.erase(matricesArray.begin() + index);
                     std::cout << "Matrix removed\n";
                     goto WIZ_START;
                 } else if (input == "light") {
@@ -406,6 +451,8 @@ int main() {
             new_cy = getInt(720);
             std::cout << "Input FOV (default: 60) ";
             new_fov = getDouble(60);
+            std::cout << "Input distance of camera from canvas (default: -1) ";
+            camera.setFocal(getDouble(-1));
             camera.setHSize(new_cx);
             camera.setVSize(new_cy);
             camera.setFOV(new_fov);
@@ -748,18 +795,17 @@ std::shared_ptr<Plane> makePlane() {
 }
 
 //return a pointer to a point light
-std::shared_ptr<PointLight> makePointLight() {
+std::shared_ptr<AreaLight> makePointLight() {
     std::cout << "(3) Input lights' origin (default: -10 10 -10) ";
     std::vector<double> newPL_origin_xyz = getDoubleList(3, std::vector<double> {-10, 10, -10});
     std::cout << "(3) Input lights' color (default: 1 1 1) ";
     std::vector<double> newPL_color_xyz = getDoubleList(3, std::vector<double> {1, 1, 1});
-    std::shared_ptr<PointLight> newPL = std::make_shared<PointLight>(Tuple::Point(newPL_origin_xyz[0],
-                                                                                  newPL_origin_xyz[1],
-                                                                                  newPL_origin_xyz[2]),
+    Tuple origin = Tuple::Point(newPL_origin_xyz[0], newPL_origin_xyz[1], newPL_origin_xyz[2]);
+    std::shared_ptr<AreaLight> newAL = std::make_shared<AreaLight>(origin, origin, origin, 1, 1,
                                                                             Color(newPL_color_xyz[0],
                                                                                   newPL_color_xyz[1],
                                                                                   newPL_color_xyz[2]));
-    return newPL;
+    return newAL;
 }
 
 void listObjects(std::vector<std::string>* objectsNameArray, std::vector<std::string>* objectsTypeArray) {
@@ -781,7 +827,7 @@ void listMaterials(std::vector<std::string>* materialsNameArray) {
 }
 
 void listMatrices(std::vector<std::string>* matricesNameArray, std::vector<std::string>* matricesTypeArray) {
-    std::cout << "ID   Matrix         Name\n";
+    std::cout << "ID   Mx/Ptn         Name\n";
     for (size_t i = 0; i < matricesNameArray -> size(); i++) {
         std::cout << std::setw(5) << std::left << i
                   << std::setw(15) << std::left << matricesTypeArray -> at(i)

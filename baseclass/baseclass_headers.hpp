@@ -15,7 +15,7 @@
 #include "headers/comps.hpp"
 
 #include "headers/material.hpp"
-#include "headers/pointlight.hpp"
+#include "headers/arealight.hpp"
 
 #include "headers/pattern.hpp"
 #include "headers/stripePattern.hpp"

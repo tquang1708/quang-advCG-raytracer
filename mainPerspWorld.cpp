@@ -1,4 +1,5 @@
 /* mainPerspWorld.cpp - Main of program with mult obj support
+ *
  * Quang Tran - 10/14/2019
  * */
 
@@ -47,6 +48,10 @@ int main() {
     std::shared_ptr<Sphere> middle = std::make_shared<Sphere>();
     middle -> setTransform(Matrix::Translation(1, 1, 0));
     Material ms;
+    ms.setTransparency(1.0);
+    ms.setRefractiveIndex(1.5);
+    ms.setAmbient(0);
+    ms.setDiffuse(0);
     ms.setColor(Color(0.9, 0.5, 0.6));
     middle -> setMaterial(ms);
 
@@ -65,7 +70,7 @@ int main() {
     behind -> setMaterial(bs);
 
     //point light
-    std::shared_ptr<PointLight> pl1 = std::make_shared<PointLight>(Tuple::Point(-10, 10, -10), Color(1, 1, 1));
+    std::shared_ptr<AreaLight> pl1 = std::make_shared<AreaLight>(Tuple::Point(-10, 10, -10), Tuple::Point(-10, 10, -10), Tuple::Point(-10, 10, -10), 1, 1, Color(1, 1, 1));
 
     //world
     World w;
@@ -74,11 +79,11 @@ int main() {
     w.addObject(wall1);
     w.addObject(wall2);
     w.addObject(middle);
-    w.addObject(halfbehind);
-    w.addObject(behind);
+    //w.addObject(halfbehind);
+    //w.addObject(behind);
 
     //camera
-    Camera camera(640, 320, 60, 0, -1);
+    Camera camera(640, 360, 60, 0, -1, 1, 1);
     camera.setTransform(viewTransform(Tuple::Point(0, 1.5, -5),
                                       Tuple::Point(0, 1, 0),
                                       Tuple::Vector(0, 1, 0)));

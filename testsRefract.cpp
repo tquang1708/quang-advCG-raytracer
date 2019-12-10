@@ -128,7 +128,34 @@ TEST_CASE("refracted color - refracted ray") {
     std::vector<Intersection> xs{Intersection(-0.9899, shape), Intersection(-0.4899, shape2), Intersection(0.4899, shape2), Intersection(0.9899, shape)};
     Comps comps(r, xs[2], xs);
     Color c = w.refractedColor(comps, 5);
+
     REQUIRE(c == Color(0, 0.99888, 0.04725));
+}
+
+TEST_CASE("shade hit with transparent") {
+    World w = World::DefaultWorld();
+
+    std::shared_ptr<Plane> floor = std::make_shared<Plane>();
+    floor -> setTransform(Matrix::Translation(0, -1, 0));
+    Material floorMat = floor -> getMaterial();
+    floorMat.setTransparency(0.5);
+    floorMat.setRefractiveIndex(1.5);
+    floor -> setMaterial(floorMat);
+    w.addObject(floor);
+
+    std::shared_ptr<Sphere> ball = std::make_shared<Sphere>();
+    ball -> setTransform(Matrix::Translation(0, -3.5, -0.5));
+    Material ballMat = ball -> getMaterial();
+    ballMat.setColor(Color(1, 0, 0));
+    ballMat.setAmbient(0.5);
+    ball -> setMaterial(ballMat);
+    w.addObject(ball);
+
+    Ray r(Tuple::Point(0, 0, -3), Tuple::Vector(0, -sqrt(2)/2, sqrt(2)/2));
+    std::vector<Intersection> xs{Intersection(sqrt(2), floor)};
+    Comps comps(r, xs[0], xs);
+    Color color = w.shadeHit(comps, 5);
+    REQUIRE (color == Color(0.93642, 0.68642, 0.68642));
 }
 
 TEST_CASE("schlick - tir") {
