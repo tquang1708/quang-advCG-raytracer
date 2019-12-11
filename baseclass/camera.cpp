@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <omp.h>
-#define NUM_THREADS 1
+#define NUM_THREADS 6
 
 Camera::Camera(int h, int v, double f, double a, double foc, int apS, int aaS): hsize(h), vsize(v), fov(f), apertureRadius(a), focal(foc), aaSamples(aaS), aperSamples(apS) {
     transform = Matrix::Identity();
@@ -179,6 +179,7 @@ void Camera::render(World w, std::string filename) {
                     c = this -> cameraAperture(w, x, y);
                 }
                 image.write_pixel(x, y, c);
+                std::cout << "Written Pixel: (" << (int) x << ", " << (int) y << ")" << std::endl;
             }
         }
     }

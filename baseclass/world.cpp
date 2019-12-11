@@ -146,6 +146,8 @@ Color World::lighting(const std::shared_ptr<Object> o, const AreaLight light, co
 
             //calculate ambient
             Color ambient = color * light.intensity * m.getAmbient();
+            //calculate emission
+            Color emission = color * m.getEmission();
 
             //determine shadow
             bool shadow;
@@ -157,14 +159,11 @@ Color World::lighting(const std::shared_ptr<Object> o, const AreaLight light, co
 
             //if shadowed return ambient
             if (shadow) {
-                out += ambient;
+                out += ambient + emission;
             } else {
                 //calculate diffuse
                 Tuple unitVectorToLight = (position - hitPoint).normalize();
                 double lightIntensity = dot(normalv, unitVectorToLight);
-
-                //calculate emission
-                Color emission = color * m.getEmission();
 
                 //black default case
                 Color diffuse(0, 0, 0);
@@ -212,12 +211,13 @@ Color World::shadeHit(const Comps comps, const int remaining) {
         Color refracted = refractedColor(comps, remaining);
         if (m.getReflectivity() > 0 && m.getTransparency() > 0) {
             double reflectance = comps.schlick();
-            out = main + reflected * reflectance + refracted * (1 - reflectance);
+            out += main + reflected * reflectance + refracted * (1 - reflectance);
         } else {
-            out = main + reflected + refracted;
+            out += main + reflected + refracted;
         }
     }
 
+    out = out * (1.0 / lightsArray.size());
     out.clamp();
     return out;
 }
