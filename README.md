@@ -1,6 +1,8 @@
 # quang-advCG-raytracer
 Ray tracer built from the ground up as part of the Advanced Computer Graphcis course taught by Prof. Justin Vasselli at Bennington College, Spring 2019 using the book "The Ray Tracer Challenge" by Jamis Buck from The Pragmatic Bookshelf.
 
+Build instruction: It probably works with `clang++` too. Last i checked, it works by compiling all .cpp files with g++ and an fopenmp flag: `g++ -fopenmp baseclass/*.cpp mainInteractive.cpp`. The executable will be an `a.out` by default. Outputs have the .ppm file extension in the `output` folder.
+
 ## Finals Samples
 Refraction (&transparency)
 ![](https://i.imgur.com/uS7cs5k.png)
